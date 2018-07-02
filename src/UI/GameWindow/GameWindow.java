@@ -2,6 +2,8 @@ package UI.GameWindow;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 
 public class GameWindow extends JFrame {
     public GameWindow() {
@@ -12,13 +14,26 @@ public class GameWindow extends JFrame {
     private void setMenuBars() {
         JMenuBar menuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("Файл");
-        JMenuItem openItem = new JMenuItem("Открыть");
-        JMenuItem saveItem = new JMenuItem("Coxранить");
-        fileMenu.add(openItem);
-        fileMenu.add(saveItem);
+        JMenu gameMenu = new JMenu("Игра");
+        JMenuItem openMenuItem = new JMenuItem("Открыть");
+        openMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
+        JMenuItem saveMenuItem = new JMenuItem("Coxранить");
+        saveMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
+        JMenuItem saveMistakesMenuItem = new JMenuItem("Сохранить ошибки");
+        JMenuItem exitMenuItem = new JMenuItem("Выйти");
+        JMenuItem undoMenuItem = new JMenuItem("Отменить действие");
+        JMenuItem mixMenuItem = new JMenuItem("Перемешать");
+        JMenuItem settingsMenuItem = new JMenuItem("Настройки поля");
+        gameMenu.add(undoMenuItem);
+        gameMenu.add(mixMenuItem);
+        gameMenu.add(settingsMenuItem);
+        fileMenu.add(openMenuItem);
+        fileMenu.add(saveMenuItem);
+        fileMenu.add(saveMistakesMenuItem);
+        fileMenu.add(exitMenuItem);
         menuBar.add(fileMenu);
+        menuBar.add(gameMenu);
         setJMenuBar(menuBar);
-
     }
 
     private void init() {
@@ -37,6 +52,7 @@ public class GameWindow extends JFrame {
         setMinimumSize(new Dimension(600, 500));
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("Kana");
+        setLocationRelativeTo(null);
     }
 
 }

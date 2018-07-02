@@ -28,12 +28,15 @@ public class StartWindow extends JFrame{
         add(panel);
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+        setMinimumSize(new Dimension(300, 100));
         setSize(new Dimension(200,300));
 
 
         startButton.addActionListener(e -> {
             GameWindow gameWindow = new GameWindow();
             gameWindow.setVisible(true);
+            this.dispose();
         });
 
         continueButton.addActionListener(e -> {
@@ -42,6 +45,7 @@ public class StartWindow extends JFrame{
         });
 
         exitButton.addActionListener(e -> this.dispose());
+        setTitle("Kana");
     }
 
 
