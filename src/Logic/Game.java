@@ -64,6 +64,7 @@ public class Game {
             if (NumCorrectAnsw == NumElemOfMatrix.getFirst()) {
                 NumElemOfMatrix.removeFirst();
                 localErrs = 0;
+                NumCorrectAnsw = 0;
                 setLastMove(null);
                 return true;
             }
