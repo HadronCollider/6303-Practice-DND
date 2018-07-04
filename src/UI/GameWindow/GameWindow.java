@@ -6,6 +6,11 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
 public class GameWindow extends JFrame {
+
+    private FieldPanel field;
+    private InfoPanel info;
+
+
     public GameWindow() {
         init();
         setMenuBars();
@@ -15,15 +20,28 @@ public class GameWindow extends JFrame {
         JMenuBar menuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("Файл");
         JMenu gameMenu = new JMenu("Игра");
-        JMenuItem openMenuItem = new JMenuItem("Открыть");
+        JMenuItem openMenuItem = new JMenuItem("Открыть игру");
+        openMenuItem.addActionListener(e -> {
+            JFileChooser fileDialog = new JFileChooser();
+            fileDialog.showOpenDialog(this);
+        });
         openMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
-        JMenuItem saveMenuItem = new JMenuItem("Coxранить");
+        JMenuItem saveMenuItem = new JMenuItem("Coxранить игру");
+        saveMenuItem.addActionListener(e -> {
+            JFileChooser fileDialog = new JFileChooser();
+            fileDialog.showSaveDialog(this);
+        });
+
         saveMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
         JMenuItem saveMistakesMenuItem = new JMenuItem("Сохранить ошибки");
         JMenuItem exitMenuItem = new JMenuItem("Выйти");
+        exitMenuItem.addActionListener(e -> dispose());
+        JMenuItem loadLessonMenuItem = new JMenuItem("Загрузить словарь");
+        loadLessonMenuItem.addActionListener(e -> field.openDictionary());
         JMenuItem undoMenuItem = new JMenuItem("Отменить действие");
         JMenuItem mixMenuItem = new JMenuItem("Перемешать");
         JMenuItem settingsMenuItem = new JMenuItem("Настройки поля");
+        gameMenu.add(loadLessonMenuItem);
         gameMenu.add(undoMenuItem);
         gameMenu.add(mixMenuItem);
         gameMenu.add(settingsMenuItem);
@@ -44,15 +62,23 @@ public class GameWindow extends JFrame {
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 0.1;
-        panel.add(new FieldPanel(6,6), gridBagConstraints);
+        FieldPanel fieldPanel = new FieldPanel(4, 4);
+        this.field = fieldPanel;
+        panel.add(fieldPanel, gridBagConstraints);
         gridBagConstraints.gridx = 1;
         gridBagConstraints.weightx = 0;
-        panel.add(new InfoPanel(), gridBagConstraints);
+        InfoPanel infoPanel = new InfoPanel(this);
+        this.info = infoPanel;
+        panel.add(infoPanel, gridBagConstraints);
         setContentPane(panel);
         setMinimumSize(new Dimension(600, 500));
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("Kana");
         setLocationRelativeTo(null);
+    }
+
+    FieldPanel getField() {
+        return field;
     }
 
 }

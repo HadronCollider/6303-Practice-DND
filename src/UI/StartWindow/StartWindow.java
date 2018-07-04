@@ -1,9 +1,11 @@
 package UI.StartWindow;
 
 import UI.GameWindow.GameWindow;
+import sun.reflect.generics.tree.FormalTypeParameter;
 
 import javax.swing.*;
 import java.awt.*;
+import java.text.Format;
 
 
 public class StartWindow extends JFrame{
@@ -25,6 +27,7 @@ public class StartWindow extends JFrame{
         panel.add(continueButton);
         exitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel.add(exitButton);
+        //panel.add(new JFormattedTextField());
         add(panel);
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
