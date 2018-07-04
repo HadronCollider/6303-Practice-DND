@@ -18,10 +18,9 @@ public class InfoTimer extends JLabel {
 
     private void increase() {
 
-        if(seconds < 59) {
+        if (seconds < 59) {
             seconds++;
-        }
-        else {
+        } else {
             seconds = 0;
             minutes++;
         }
@@ -31,12 +30,12 @@ public class InfoTimer extends JLabel {
     private void rewrite() {
         StringBuilder out = new StringBuilder();
         out.append("   ");
-        if(minutes < 10) {
+        if (minutes < 10) {
             out.append('0');
         }
         out.append(minutes);
         out.append(':');
-        if(seconds < 10) {
+        if (seconds < 10) {
             out.append('0');
         }
         out.append(seconds);
