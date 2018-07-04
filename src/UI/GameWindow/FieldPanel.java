@@ -60,7 +60,6 @@ public class FieldPanel extends JPanel {
         }
         setSelected(null);
         if(numberOfCorrectCells == rows * columns) {
-            game.getNumElemOfMatrix().removeFirst();
             if(game.nextField()) {
                 displayField();
             } else {

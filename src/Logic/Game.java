@@ -5,7 +5,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Random;
-import java.util.Scanner;
 
 public class Game {
     private Lesson curLesson;                                       // Текущий урок
@@ -47,52 +46,6 @@ public class Game {
     }
 
 
-    // "Получение" первой кнопки
-    private Position getFirstCell() {
-        Random rand = new Random();
-        int a = rand.nextInt(FieldSize.vertical);
-        int b = rand.nextInt(FieldSize.horizontal);
-        while (Field[a][b] == null) {
-            a = rand.nextInt(FieldSize.vertical);
-            b = rand.nextInt(FieldSize.horizontal);
-        }
-        return new Position(a, b);
-    }
-
-    // "Получение" второй кнопки
-    private void getSecondCell() {
-        Position a = getFirstCell();
-        Cell first = Field[curCellCoor.vertical][curCellCoor.horizontal];
-        Cell second = Field[a.vertical][a.horizontal];
-        if (!curCellCoor.equals(a))             // Нажатие саму себя
-        {
-            if (first.getFlag() == second.getFlag())   // проверка на "одинаковость стороны" стображаемых слов
-            {
-                curCellCoor = a;               // Замена кнопки
-                return;
-            } else {
-                LastMove = new Move(first, second);
-                // Если стороны отображаемых слов отличаются
-                if (compareCell(first.getPosition(), second.getPosition())) {
-                    // Если поля совпали
-                    NumCorrectAnsw++;
-                    Field[curCellCoor.vertical][curCellCoor.horizontal] = null;
-                    Field[a.vertical][a.horizontal] = null;
-                    System.out.println(this);
-                } else {
-                    // Не совпали, ошибка - увеличение счетчика, сохранение правильных пар
-                    localErrs++;
-                    LessonErr1.addLast(first.getPair());
-                    LessonErr2.addLast(second.getPair());
-                    System.out.println("В первый " + first.getPair() + "\t Во второй " + second.getPair());
-                    /*System.out.println("Ошибка - 1 сек");
-                    Thread.sleep(1000);                             // окраска в красный
-                    System.out.println("Время ошибки прошло");*/
-                }
-            }
-        }
-    }
-
     /**
      * Сравнивает выбранные ячейки
      *
@@ -101,9 +54,68 @@ public class Game {
      * @return
      */
     public boolean compareCell(Position a, Position b) {
-        DictionaryPair A = Field[a.vertical][a.horizontal].getPair();
-        DictionaryPair B = Field[b.vertical][b.horizontal].getPair();
+        DictionaryPair first = Field[a.vertical][a.horizontal].getPair();
+        DictionaryPair second = Field[b.vertical][b.horizontal].getPair();
+        boolean compareFlag = comparePair(first, second);
+        if (compareFlag) {
+            Field[a.vertical][a.horizontal] = null;
+            Field[b.vertical][b.horizontal] = null;
+            NumCorrectAnsw++;
+            if (NumCorrectAnsw == NumElemOfMatrix.getFirst()) {
+                NumElemOfMatrix.removeFirst();
+                localErrs = 0;
+                setLastMove(null);
+                return true;
+            }
+        } else {
+            localErrs++;
+            LessonErr1.addLast(first);
+            LessonErr2.addLast(second);
+        }
+        setLastMove(new Move(Field[a.vertical][a.horizontal], Field[b.vertical][b.horizontal]));
+        return compareFlag;
+    }
+
+    /**
+     * Сравнивает поданные пары
+     *
+     * @param A - первая пара
+     * @param B - вторая пара
+     * @return - true - если пары совместимы
+     */
+    boolean comparePair(DictionaryPair A, DictionaryPair B) {
         return A.getFirst().equals(B.getFirst()) || A.getSecond().equals(B.getSecond());
+    }
+
+    /**
+     * Сеттер последнего хода
+     *
+     * @param lastMove - последний ход
+     */
+    void setLastMove(Move lastMove) {
+        LastMove = lastMove;
+    }
+
+    /**
+     * Отмена хода
+     * - верного - уменьшение кол-ва верных ответов
+     * - неверного - удаление из таблицы ошибок (уменьшение кол-ва ошибок)
+     */
+    void Сancellation() {
+        if (LastMove != null) {
+            System.out.println("Отменa " + LastMove.first.getPosition() + " " + LastMove.second.getPosition());
+            Position f = LastMove.first.getPosition();
+            Position s = LastMove.second.getPosition();
+            Field[f.vertical][f.horizontal] = LastMove.first;
+            Field[s.vertical][s.horizontal] = LastMove.second;
+            if (comparePair(LastMove.first.getPair(), LastMove.second.getPair())) {
+                NumCorrectAnsw--;
+            } else {
+                LessonErr1.removeLast();
+                LessonErr2.removeLast();
+            }
+            setLastMove(null);
+        }
     }
 
     /**
@@ -226,19 +238,6 @@ public class Game {
         }
     }
 
-
-    void Сancellation() {
-        if (LastMove != null) {
-            System.out.println("Отменa " + LastMove.first.getPosition() + " " + LastMove.second.getPosition());
-            Position f = LastMove.first.getPosition();
-            Position s = LastMove.second.getPosition();
-            Field[f.vertical][f.horizontal] = LastMove.first;
-            Field[s.vertical][s.horizontal] = LastMove.second;
-            if (compareCell(LastMove.first.getPosition(), LastMove.second.getPosition()))
-                NumCorrectAnsw--;
-            LastMove = null;
-        }
-    }
 
     // принимает fileName поданное пользователем
 
