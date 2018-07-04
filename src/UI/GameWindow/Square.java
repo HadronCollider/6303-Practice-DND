@@ -36,7 +36,9 @@ public class Square extends JButton {
             this.content = cell.getFlag() ? cell.getPair().getSecond() : cell.getPair().getFirst();
         } else {
             this.type = SquareType.FINAL;
+            this.content = "";
         }
+        this.selected = false;
         setText(content);
         redraw();
     }
