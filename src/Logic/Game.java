@@ -16,9 +16,11 @@ public class Game {
     private LinkedList<Integer> NumElemOfMatrix;                   // Распределение элементов по матрицам
     private Position FieldSize;                                    // Размеры поля
     private Move LastMove;                                         // Последный ход
-    private int localErrs = 0;                                     // Кол-во ошибок на этапе
+    private int localErrs;                                         // Кол-во ошибок на этапе
     private boolean MixFlag;                                       // Флаг перемешивания (при загрузке этапа)
     private boolean OddFlagForDistribution;                                 //
+    private int NumberOfSteps;
+
 
     public Game(int vertical, int horizontal) {
         setSize(vertical, horizontal);
@@ -48,12 +50,12 @@ public class Game {
         NumCorrectAnsw = 0;
         offset = 0;
         localErrs = 0;
+        NumberOfSteps = 0;
         MixFlag = true;
         NumElemOfMatrix = new LinkedList<>();
         curLesson.MixDictionary();
-        CalculateFields();  // рассчёт матричного заполнения
+        NumberOfSteps = CalculateFields();  // рассчёт матричного заполнения
     }
-
 
     /**
      * Сравнивает выбранные ячейки
@@ -157,7 +159,7 @@ public class Game {
     /**
      * Вычисляет оптимальное кол-во элементов в матрицах, для умещения всего урока на "доске"
      */
-    void CalculateFields() {
+    int CalculateFields() {
         int NumElem = curLesson.Dictionary.size();                          // всего элементов
         int MatrixElem = FieldSize.horizontal * FieldSize.vertical / 2;         // пар в матрице заданного размера
         int NumOfMatrix = (int) Math.ceil((double) NumElem / MatrixElem);    // количество необходимых матриц
@@ -173,7 +175,7 @@ public class Game {
             }
             NumElemOfMatrix.addLast(Num);
         }
-
+        return NumOfMatrix;
     }
 
     public LinkedList<Integer> getNumElemOfMatrix() {
@@ -255,6 +257,22 @@ public class Game {
                         Field[i][j].setPosition(new Position(i, j));
                 }
         }
+    }
+
+    /**
+     * Сеттер флага автоматического перемешивания
+     * @param mixFlag - true/false - перемешивать / не перемешивать
+     */
+    public void setMixFlag(boolean mixFlag) {
+        MixFlag = mixFlag;
+    }
+
+    /**
+     *
+     * @return - количество этапов урока
+     */
+    public int getNumberOfSteps() {
+        return NumberOfSteps;
     }
 
     /**
