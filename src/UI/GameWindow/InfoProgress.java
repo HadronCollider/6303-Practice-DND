@@ -5,27 +5,28 @@ import java.awt.*;
 
 public class InfoProgress extends JLabel {
 
-    private int numberOfStages = 1;
-    private int currentStage;
+    private int numberOfSteps = 1;
+    private int currentStep;
 
     public InfoProgress() {
-        currentStage = 1;
+        currentStep = 1;
         setFont(new Font("Arial", Font.BOLD, 20));
         display();
     }
 
     void increase() {
-        if(currentStage != numberOfStages) {
-            currentStage++;
+        if(currentStep != numberOfSteps) {
+            currentStep++;
         }
         display();
     }
 
-    public void setNumberOfStages(int numberOfStages) {
-        this.numberOfStages = numberOfStages;
+    public void setNumberOfSteps(int numberOfSteps) {
+        this.numberOfSteps = numberOfSteps;
+        display();
     }
 
     void display() {
-        setText("Этап " + currentStage + "/" + numberOfStages);
+        setText("Этап " + currentStep + "/" + numberOfSteps);
     }
 }
