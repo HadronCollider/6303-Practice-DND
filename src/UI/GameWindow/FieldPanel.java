@@ -15,13 +15,15 @@ public class FieldPanel extends JPanel {
     private Game game;
     private Square[][] field;
     private int numberOfCorrectCells;
+    private GameWindow window;
 
 
-    public FieldPanel(int rows, int columns){
+    public FieldPanel(GameWindow window, int rows, int columns) {
+        this.window = window;
         this.rows = rows;
         this.columns = columns;
-        setLayout(new GridLayout(rows, columns));
         this.game = new Game(rows, columns);
+        setLayout(new GridLayout(rows, columns));
 
 
         field = new Square[rows][columns];
@@ -33,7 +35,6 @@ public class FieldPanel extends JPanel {
             }
         }
 
-       // displayField();
         setMinimumSize(new Dimension(400, 300));
     }
 
@@ -83,6 +84,9 @@ public class FieldPanel extends JPanel {
 
     public void mixField() {
         game.mixField();
+        if(game.getField() == null) {
+            return;
+        }
         displayField();
     }
 
@@ -94,7 +98,15 @@ public class FieldPanel extends JPanel {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        window.getInfoPanel().getProgress().setVisible(true);
+        window.getInfoPanel().getErrorCounter().setVisible(true);
+        window.getInfoPanel().getTimer().start();
+
         game.nextField();
+        if(window.getInfoPanel().getMixCheckBox().isEnabled()) {
+
+
+        }
         displayField();
     }
 

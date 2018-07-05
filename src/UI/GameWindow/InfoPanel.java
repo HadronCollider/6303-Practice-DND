@@ -9,6 +9,11 @@ public class InfoPanel extends JPanel {
     private InfoTimer timer;
     private InfoErrorCounter errorCounter;
     private InfoProgress progress;
+    private JCheckBox mixCheckBox;
+
+    public JCheckBox getMixCheckBox() {
+        return mixCheckBox;
+    }
 
     public InfoPanel(GameWindow window) {
         this.window = window;
@@ -41,6 +46,8 @@ public class InfoPanel extends JPanel {
         constraints.gridy++;
         constraints.weighty = 0.5;
         JCheckBox mixCheckBox = new JCheckBox("Премешивать");
+        this.mixCheckBox = mixCheckBox;
+        mixCheckBox.setFont(new Font("Arial", Font.BOLD ,13));
         add(mixCheckBox, constraints);
 
 
@@ -48,15 +55,25 @@ public class InfoPanel extends JPanel {
         constraints.weighty = 0;
         JButton mixButton = new JButton("Перемешать");
         mixButton.setFont(new Font("Arial", Font.BOLD, 15));
-        mixButton.addActionListener(e -> getWindow().getField().mixField());
+        mixButton.addActionListener(e -> getWindow().getFieldPanel().mixField());
         add(mixButton, constraints);
 
 
+        progress.setVisible(false);
+        errorCounter.setVisible(false);
         setMinimumSize(new Dimension(150, 300));
     }
 
     private GameWindow getWindow() {
         return window;
+    }
+
+    public InfoErrorCounter getErrorCounter() {
+        return errorCounter;
+    }
+
+    public InfoProgress getProgress() {
+        return progress;
     }
 
     public InfoTimer getTimer() {
