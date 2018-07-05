@@ -3,6 +3,7 @@ package Logic;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -18,7 +19,7 @@ public class Game {
     private Move LastMove;                                         // Последный ход
     private int localErrs = 0;                                     // Кол-во ошибок на этапе
     private boolean MixFlag;                                       // Флаг перемешивания (при загрузке этапа)
-    private boolean OddFlag;                                       //
+    private boolean OddFlagForDistribution;                                 //
 
     public Game(int vertical, int horizontal) {
         setSize(vertical, horizontal);
@@ -35,15 +36,21 @@ public class Game {
             curLesson = new Lesson();
         }
         if (curLesson.Init(file)) {
-            LessonErr1 = new LinkedList<>();
-            LessonErr2 = new LinkedList<>();
-            NumCorrectAnsw = 0;
-            offset = 0;
-            NumElemOfMatrix = new LinkedList<>();
-            CalculateFields();  // рассчёт матричного заполнения
+            prepareLesson();
             return true;
         } else
             return false;
+    }
+
+    private void prepareLesson()
+    {
+        LessonErr1 = new LinkedList<>();
+        LessonErr2 = new LinkedList<>();
+        NumCorrectAnsw = 0;
+        offset = 0;
+        MixFlag = true;
+        NumElemOfMatrix = new LinkedList<>();
+        CalculateFields();  // рассчёт матричного заполнения
     }
 
 
@@ -165,20 +172,42 @@ public class Game {
             Field = new Cell[FieldSize.vertical][FieldSize.horizontal];
             int NumElem = NumElemOfMatrix.getFirst();                       // необходимое кол-во пар в текущей матрице
             int i = 0;
-            for (int j = 0; j < Field.length / 2; j++) {
-                for (int k = 0; k < Field[j].length; k++) {
+            if (!OddFlagForDistribution) {
+                for (int j = 0; j < Field.length / 2; j++) {
+                    for (int k = 0; k < Field[j].length; k++) {
+                        if (i < NumElem) {
+                            Cell first = new Cell(curLesson.Dictionary.get(offset + i), new Position(j, k), false);
+                            Cell second = new Cell(curLesson.Dictionary.get(offset + i), new Position(Field.length / 2 + j, k), true); // Для второй(парной) ячейки в матрице
+                            i++;
+                            Field[j][k] = first;
+                            Field[Field.length / 2 + j][k] = second;
+                        } else
+                            break;
+                    }
+                }
+            }
+            else
+            {
+                int j = 0;
+                while ( j < FieldSize.vertical*FieldSize.horizontal) {
+                    int row1 = j / FieldSize.horizontal;
+                    int column1 = j % FieldSize.horizontal;
+                    j++;
+                    int row2 = j / FieldSize.horizontal;
+                    int column2 = j % FieldSize.horizontal;
+                    j++;
                     if (i < NumElem) {
-                        Cell first = new Cell(curLesson.Dictionary.get(offset + i), new Position(j, k), false);
-                        Cell second = new Cell(curLesson.Dictionary.get(offset + i), new Position(Field.length / 2 + j, k), true); // Для второй(парной) ячейки в матрице
+                        Cell first = new Cell(curLesson.Dictionary.get(offset + i), new Position(row1, column1), false);
+                        Cell second = new Cell(curLesson.Dictionary.get(offset + i), new Position(row2, column2), true); // Для второй(парной) ячейки в матрице
                         i++;
-                        Field[j][k] = first;
-                        Field[Field.length / 2 + j][k] = second;
+                        Field[row1][column1] = first;
+                        Field[row2][column2] = second;
                     } else
                         break;
                 }
             }
-            /*if (MixFlag)
-                mixField();*/
+            if (MixFlag)
+                mixField();
             offset = offset + NumElem;
             return true;
         }
@@ -222,12 +251,10 @@ public class Game {
             FieldSize.vertical = vertical;
         }
         if (vertical % 2 == 1) {
-            OddFlag = true;
-            MixFlag = false;
+            OddFlagForDistribution = true;
         }
         else {
-            OddFlag = false;
-            MixFlag = true;
+            OddFlagForDistribution = false;
         }
     }
 
@@ -292,6 +319,46 @@ public class Game {
         }
     }
 
+    void ErrorToLesson(SaveErrorType type)
+    {
+        StringBuilder build = new StringBuilder();
+        build.append(curLesson.getLessonName());
+        build.setLength(build.length() - 4);
+        switch (type)
+        {
+            case FIRST: {
+                build.append("(err1).txt");
+                curLesson.LessonFromList(LinkedToArrayList(LessonErr1), build.toString());
+                break;
+            }
+            case SECOND:
+            {
+                build.append("(err2).txt");
+                curLesson.LessonFromList(LinkedToArrayList(LessonErr2), build.toString());
+                break;
+            }
+            case BOTH:
+            {
+                build.append("(allerr).txt");
+
+                curLesson.LessonFromList(LinkedToArrayList(LessonErr1), build.toString());
+                break;
+            }
+        }
+    }
+
+    private ArrayList<DictionaryPair> LinkedToArrayList(LinkedList<DictionaryPair> Llist)
+    {
+        return new ArrayList<>(Llist);
+    }
+
+    enum SaveErrorType
+    {
+        FIRST,
+        SECOND,
+        BOTH
+    }
+
     /*@Override
     public String toString() {
         StringBuilder build = new StringBuilder();
@@ -309,4 +376,5 @@ public class Game {
         }
         return build.toString();
     }*/
+
 }

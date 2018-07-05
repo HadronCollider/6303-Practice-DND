@@ -3,6 +3,7 @@ package Logic;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.Scanner;
 
 public class Lesson {
@@ -39,5 +40,11 @@ public class Lesson {
 
     public String getLessonName() {
         return LessonName;
+    }
+
+    public void LessonFromList(ArrayList <DictionaryPair> dictionary, String lessonName)
+    {
+        Dictionary = dictionary;
+        this.setLessonName(lessonName);
     }
 }
