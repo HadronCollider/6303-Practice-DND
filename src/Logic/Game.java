@@ -315,42 +315,62 @@ public class Game {
      *
      * @throws IOException
      */
-    void SaveProgress() throws IOException {
+    void SaveProgress(){
         StringBuilder build = new StringBuilder();
         build.append(curLesson.getLessonName());
         build.setLength(build.length() - 4);
         build.append("(save).savepr");
         try (FileWriter save = new FileWriter(build.toString())) {
-            save.write(curLesson.getLessonName() + "\n");                            // Путь к используемому словарю
-            save.write(offset + "\n");                                          // Смещение в словаре
-            for (int a : NumElemOfMatrix)                                            // Матричное распределение
+            save.write(curLesson.getLessonName() + "\n"); // Путь к используемому словарю
+            save.write(offset + "\n"); // Смещение в словаре
+            for (int a : NumElemOfMatrix) // Матричное распределение
                 save.write(a + " ");
             save.write("\n");
-            save.write(FieldSize.vertical + " " + FieldSize.horizontal);        // Размер поля
+            save.write(FieldSize.vertical + " " + FieldSize.horizontal); // Размер поля
             save.write("\n");
-            for (Cell[] arr : Field)                                                 // Запись поля
+            for (Cell[] arr : Field) // Запись поля
             {
                 for (Cell a : arr) {
-                    if (a != null) {                                                // Индекс пары в словаре + флаг
+                    if (a != null) { // Индекс пары в словаре + флаг
                         if (a.getFlag())
                             save.write(curLesson.Dictionary.indexOf(a.getPair()) + " 1 ");
                         else
                             save.write(curLesson.Dictionary.indexOf(a.getPair()) + " 0 ");
                     } else
-                        save.write("-1 ");                                      // Если ячейка пуста, то -1
+                        save.write("-1 0 "); // Если ячейка пуста, то -1
                 }
                 save.write("\n");
             }
-            // Последний сделанный ход
-            save.write(NumCorrectAnsw + " " + LessonErr1.size() + "\n");   // Кол-во верных ответов, ошибок
-            for (DictionaryPair a : LessonErr1)                        // Сохранение первого списка ошибок
+            Cell cell = LastMove.first;
+//--- Заменить на вызов функции
+            if(cell.getFlag())
+                save.write(curLesson.Dictionary.indexOf(cell.getPair()) + " 1 ");
+            else
+                save.write(curLesson.Dictionary.indexOf(cell.getPair()) + " 0 ");
+            save.write(cell.getPosition().toString() + " ");
+            cell = LastMove.second;
+            if(cell.getFlag())
+                save.write(curLesson.Dictionary.indexOf(cell.getPair()) + " 1 ");
+            else
+                save.write(curLesson.Dictionary.indexOf(cell.getPair()) + " 0 ");
+            save.write(cell.getPosition().toString() + " ");
+//---
+            save.write("\n");
+// Последний сделанный ход
+            save.write(NumCorrectAnsw + " " + LessonErr1.size() + "\n"); // Кол-во верных ответов, ошибок
+            for (DictionaryPair a : LessonErr1) // Сохранение первого списка ошибок
                 save.write(curLesson.Dictionary.indexOf(a.getFirst()) + " ");
             save.write("\n");
-            for (DictionaryPair a : LessonErr2)                        // Сохранение второго списка ошибок
+            for (DictionaryPair a : LessonErr2) // Сохранение второго списка ошибок
                 save.write(curLesson.Dictionary.indexOf(a.getFirst()) + " ");
             save.write("\n");
 
         }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+
     }
 
 
