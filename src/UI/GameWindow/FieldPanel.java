@@ -56,9 +56,9 @@ public class FieldPanel extends JPanel {
             checked.setFinal();
             numberOfCorrectCells += 2;
         } else {
-            selected.dispalayWrong();
-            checked.dispalayWrong();
-            window.getInfoPanel().getErrorCounter().increase();
+            selected.setWrong();
+            checked.setWrong();
+            window.getInfoPanel().getErrorCounter().setNumberOfMistakes(game.getNumErrors());
         }
         setSelected(null);
         if (numberOfCorrectCells == rows * columns) {
@@ -103,12 +103,20 @@ public class FieldPanel extends JPanel {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        window.getInfoPanel().getProgress().setVisible(true);
+        window.getInfoPanel().startAll();
         window.getInfoPanel().getProgress().setNumberOfSteps(game.getNumberOfSteps());
-        window.getInfoPanel().getErrorCounter().setVisible(true);
-        window.getInfoPanel().getTimer().start();
         game.nextField();
         displayField();
+    }
+
+    public void undo() {
+        int numberBefore = game.getNumErrors();
+        game.undo();
+        if(game.getNumErrors() < numberBefore) {
+            window.getInfoPanel().getErrorCounter().setNumberOfMistakes(game.getNumErrors());
+        } else {
+            displayField();
+        }
     }
 
 }

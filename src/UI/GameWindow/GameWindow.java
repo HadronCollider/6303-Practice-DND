@@ -52,6 +52,7 @@ public class GameWindow extends JFrame {
         fileMenu.add(openMenuItem);
         fileMenu.add(saveMenuItem);
         fileMenu.add(settingsMenuItem);
+        fileMenu.addSeparator();
         fileMenu.add(exitMenuItem);
         menuBar.add(fileMenu);
         menuBar.add(gameMenu);

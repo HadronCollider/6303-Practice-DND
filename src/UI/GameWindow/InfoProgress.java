@@ -27,6 +27,6 @@ public class InfoProgress extends JLabel {
     }
 
     void display() {
-        setText("Этап " + currentStep + "/" + numberOfSteps);
+        setText("Этап " + currentStep + " из " + numberOfSteps);
     }
 }

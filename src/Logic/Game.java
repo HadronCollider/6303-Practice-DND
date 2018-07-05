@@ -128,7 +128,7 @@ public class Game {
      * - верного - уменьшение кол-ва верных ответов
      * - неверного - удаление из таблицы ошибок (уменьшение кол-ва ошибок)
      */
-    void Cancellation() {
+    public void undo() {
         if (LastMove != null) {
 //            System.out.println("Отменa " + LastMove.first.getPosition() + " " + LastMove.second.getPosition());
             Position f = LastMove.first.getPosition();

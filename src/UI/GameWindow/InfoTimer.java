@@ -12,6 +12,7 @@ public class InfoTimer extends JLabel {
     public InfoTimer() {
         setFont(new Font("Arial", Font.BOLD, 30));
         timer = new Timer(1000, e -> increase());
+        setBorder(BorderFactory.createLineBorder(Color.BLACK, 1));
         display();
     }
 
