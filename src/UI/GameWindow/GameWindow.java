@@ -7,8 +7,12 @@ import java.awt.event.KeyEvent;
 
 public class GameWindow extends JFrame {
 
-    private FieldPanel field;
-    private InfoPanel info;
+    public InfoPanel getInfoPanel() {
+        return infoPanel;
+    }
+
+    private FieldPanel fieldPanel;
+    private InfoPanel infoPanel;
 
 
     public GameWindow() {
@@ -37,7 +41,7 @@ public class GameWindow extends JFrame {
         JMenuItem exitMenuItem = new JMenuItem("Выйти");
         exitMenuItem.addActionListener(e -> dispose());
         JMenuItem loadLessonMenuItem = new JMenuItem("Загрузить словарь");
-        loadLessonMenuItem.addActionListener(e -> field.openDictionary());
+        loadLessonMenuItem.addActionListener(e -> fieldPanel.openDictionary());
         JMenuItem undoMenuItem = new JMenuItem("Отменить действие");
         JMenuItem mixMenuItem = new JMenuItem("Перемешать");
         JMenuItem settingsMenuItem = new JMenuItem("Настройки");
@@ -62,13 +66,13 @@ public class GameWindow extends JFrame {
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 0.1;
-        FieldPanel fieldPanel = new FieldPanel(4, 4);
-        this.field = fieldPanel;
+        FieldPanel fieldPanel = new FieldPanel(this, 4, 4);
+        this.fieldPanel = fieldPanel;
         panel.add(fieldPanel, gridBagConstraints);
         gridBagConstraints.gridx = 1;
         gridBagConstraints.weightx = 0;
         InfoPanel infoPanel = new InfoPanel(this);
-        this.info = infoPanel;
+        this.infoPanel = infoPanel;
         panel.add(infoPanel, gridBagConstraints);
         setContentPane(panel);
         setMinimumSize(new Dimension(600, 500));
@@ -77,8 +81,8 @@ public class GameWindow extends JFrame {
         setLocationRelativeTo(null);
     }
 
-    FieldPanel getField() {
-        return field;
+    FieldPanel getFieldPanel() {
+        return fieldPanel;
     }
 
 }
