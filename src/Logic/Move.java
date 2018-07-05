@@ -1,6 +1,5 @@
 package Logic;
 
-import Logic.Cell;
 
 public class Move {
     Cell first;

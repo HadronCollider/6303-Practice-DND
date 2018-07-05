@@ -12,6 +12,7 @@ import java.awt.event.MouseListener;
 
 public class Square extends JButton {
 
+    private boolean pressed;
     private boolean selected;
     private boolean wrong;
     private SquareType type;
@@ -22,7 +23,7 @@ public class Square extends JButton {
 
 
     public Square(FieldPanel parent, Cell cell) {
-        super();
+        //super();
         this.parent = parent;
         setFont(new Font("APJapanesefont", Font.BOLD, 20));
         setCell(cell);
@@ -39,6 +40,7 @@ public class Square extends JButton {
             this.content = "";
         }
         this.selected = false;
+        this.pressed = false;
         setText(content);
         redraw();
     }
