@@ -27,7 +27,6 @@ public class StartWindow extends JFrame{
         panel.add(continueButton);
         exitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel.add(exitButton);
-        //panel.add(new JFormattedTextField());
         add(panel);
 
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

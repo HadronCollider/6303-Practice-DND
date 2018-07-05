@@ -20,7 +20,7 @@ public class GameWindow extends JFrame {
         JMenuBar menuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("Файл");
         JMenu gameMenu = new JMenu("Игра");
-        JMenuItem openMenuItem = new JMenuItem("Открыть игру");
+        JMenuItem openMenuItem = new JMenuItem("Продолжить игру");
         openMenuItem.addActionListener(e -> {
             JFileChooser fileDialog = new JFileChooser();
             fileDialog.showOpenDialog(this);
@@ -40,14 +40,14 @@ public class GameWindow extends JFrame {
         loadLessonMenuItem.addActionListener(e -> field.openDictionary());
         JMenuItem undoMenuItem = new JMenuItem("Отменить действие");
         JMenuItem mixMenuItem = new JMenuItem("Перемешать");
-        JMenuItem settingsMenuItem = new JMenuItem("Настройки поля");
+        JMenuItem settingsMenuItem = new JMenuItem("Настройки");
         gameMenu.add(loadLessonMenuItem);
+        gameMenu.add(saveMistakesMenuItem);
         gameMenu.add(undoMenuItem);
         gameMenu.add(mixMenuItem);
-        gameMenu.add(settingsMenuItem);
         fileMenu.add(openMenuItem);
         fileMenu.add(saveMenuItem);
-        fileMenu.add(saveMistakesMenuItem);
+        fileMenu.add(settingsMenuItem);
         fileMenu.add(exitMenuItem);
         menuBar.add(fileMenu);
         menuBar.add(gameMenu);
@@ -62,7 +62,7 @@ public class GameWindow extends JFrame {
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 0.1;
-        FieldPanel fieldPanel = new FieldPanel(5, 4);
+        FieldPanel fieldPanel = new FieldPanel(4, 4);
         this.field = fieldPanel;
         panel.add(fieldPanel, gridBagConstraints);
         gridBagConstraints.gridx = 1;
