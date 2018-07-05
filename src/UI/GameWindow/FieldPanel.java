@@ -20,7 +20,7 @@ public class FieldPanel extends JPanel {
     public FieldPanel(int rows, int columns){
         this.rows = rows;
         this.columns = columns;
-        setLayout(new GridLayout(columns, rows));
+        setLayout(new GridLayout(rows, columns));
         this.game = new Game(rows, columns);
 
 

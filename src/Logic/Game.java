@@ -177,8 +177,8 @@ public class Game {
                         break;
                 }
             }
-            if (MixFlag)
-                mixField();
+            /*if (MixFlag)
+                mixField();*/
             offset = offset + NumElem;
             return true;
         }
@@ -221,7 +221,7 @@ public class Game {
             FieldSize.horizontal = horizontal;
             FieldSize.vertical = vertical;
         }
-        if (horizontal*vertical % 2 == 1) {
+        if (vertical % 2 == 1) {
             OddFlag = true;
             MixFlag = false;
         }
