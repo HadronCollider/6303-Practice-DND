@@ -3,7 +3,6 @@ package Logic;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -48,8 +47,10 @@ public class Game {
         LessonErr2 = new LinkedList<>();
         NumCorrectAnsw = 0;
         offset = 0;
+        localErrs = 0;
         MixFlag = true;
         NumElemOfMatrix = new LinkedList<>();
+        curLesson.MixDictionary();
         CalculateFields();  // рассчёт матричного заполнения
     }
 
@@ -106,13 +107,29 @@ public class Game {
     }
 
     /**
+     *
+     * @return - количество совершенных ошибок за этап
+     */
+    public int getLocalErrs() {
+        return localErrs;
+    }
+
+    /**
+     *
+     * @return - количество совершенных ошибок за урок
+     */
+    public int getNumErrors() {
+        return LessonErr1.size();
+    }
+
+    /**
      * Отмена хода
      * - верного - уменьшение кол-ва верных ответов
      * - неверного - удаление из таблицы ошибок (уменьшение кол-ва ошибок)
      */
-    void Сancellation() {
+    void Cancellation() {
         if (LastMove != null) {
-            System.out.println("Отменa " + LastMove.first.getPosition() + " " + LastMove.second.getPosition());
+//            System.out.println("Отменa " + LastMove.first.getPosition() + " " + LastMove.second.getPosition());
             Position f = LastMove.first.getPosition();
             Position s = LastMove.second.getPosition();
             Field[f.vertical][f.horizontal] = LastMove.first;
@@ -122,6 +139,7 @@ public class Game {
             } else {
                 LessonErr1.removeLast();
                 LessonErr2.removeLast();
+                localErrs--;
             }
             setLastMove(null);
         }
@@ -218,23 +236,25 @@ public class Game {
      * Перемешивание
      */
     public void mixField() {
-        for (int i = 0; i < Field.length; i++)
-            for (int j = 0; j < Field[i].length; j++) {
-                Random rand = new Random();
-                int a = rand.nextInt(Field.length);
-                int b = rand.nextInt(Field[i].length);
-                while (a == i && b == j) {
-                    a = rand.nextInt(Field.length);
-                    b = rand.nextInt(Field[i].length);
+        if (Field != null) {
+            for (int i = 0; i < Field.length; i++)
+                for (int j = 0; j < Field[i].length; j++) {
+                    Random rand = new Random();
+                    int a = rand.nextInt(Field.length);
+                    int b = rand.nextInt(Field[i].length);
+                    while (a == i && b == j) {
+                        a = rand.nextInt(Field.length);
+                        b = rand.nextInt(Field[i].length);
+                    }
+                    Cell tmp = Field[a][b];
+                    Field[a][b] = Field[i][j];
+                    Field[i][j] = tmp;
+                    if (Field[a][b] != null)
+                        Field[a][b].setPosition(new Position(a, b));
+                    if (Field[i][j] != null)
+                        Field[i][j].setPosition(new Position(i, j));
                 }
-                Cell tmp = Field[a][b];
-                Field[a][b] = Field[i][j];
-                Field[i][j] = tmp;
-                if (Field[a][b] != null)
-                    Field[a][b].setPosition(new Position(a, b));
-                if (Field[i][j] != null)
-                    Field[i][j].setPosition(new Position(i, j));
-            }
+        }
     }
 
     /**
@@ -244,12 +264,7 @@ public class Game {
      * @param vertical - высота
      */
     public void setSize(int vertical, int horizontal) {
-        if (FieldSize == null)
-            FieldSize = new Position(vertical, horizontal);
-        else {
-            FieldSize.horizontal = horizontal;
-            FieldSize.vertical = vertical;
-        }
+        FieldSize = new Position(vertical, horizontal);
         if (vertical % 2 == 1) {
             OddFlagForDistribution = true;
         }
@@ -262,14 +277,16 @@ public class Game {
      * -------------- МЕТОД НАХОДИТСЯ В РАЗРАБОТКЕ --------------
      * Запись ошибок в файл для возможности повторного запуска
      *
-     * @param a
-     * @param fileName
-     * @throws IOException
+     * @param a - список для сохранения
+     * @param fileName - имя файла
+     * @throws IOException - Input/Output Exception
      */
-    void ErrorToStr(LinkedList<DictionaryPair> a, String fileName) throws IOException {
-        try (FileWriter out = new FileWriter(fileName)) {
-            for (DictionaryPair err : a)
-                out.write(err.getFirst() + "\t" + err.getSecond() + "\n");
+    private void ErrorsToFile(LinkedList<DictionaryPair> a, String fileName) throws IOException {
+        if (a != null) {
+            try (FileWriter out = new FileWriter(fileName)) {
+                for (DictionaryPair err : a)
+                    out.write(err.getFirst() + "\t" + err.getSecond() + "\n");
+            }
         }
     }
 
@@ -319,44 +336,55 @@ public class Game {
         }
     }
 
-    void ErrorToLesson(SaveErrorType type)
-    {
+
+    void ErrorsTo(ActionErrorType actionType, NumErrorType numType) throws IOException {
         StringBuilder build = new StringBuilder();
         build.append(curLesson.getLessonName());
         build.setLength(build.length() - 4);
-        switch (type)
-        {
+        LinkedList<DictionaryPair> LList = null;
+        switch (numType) {
             case FIRST: {
                 build.append("(err1).txt");
-                curLesson.LessonFromList(LinkedToArrayList(LessonErr1), build.toString());
+                LList = LessonErr1;
                 break;
             }
-            case SECOND:
-            {
+            case SECOND: {
                 build.append("(err2).txt");
-                curLesson.LessonFromList(LinkedToArrayList(LessonErr2), build.toString());
+                LList = LessonErr2;
                 break;
             }
-            case BOTH:
-            {
+            case BOTH: {
                 build.append("(allerr).txt");
-
-                curLesson.LessonFromList(LinkedToArrayList(LessonErr1), build.toString());
+                LList = LessonErr1;
+                LList.addAll(LessonErr2);
                 break;
+            }
+        }
+        switch (actionType)
+        {
+            case SAVE:
+            {
+                ErrorsToFile(LList, build.toString());
+            }
+            case LOAD:
+            {
+                curLesson.LessonFromErrors(LList, build.toString());
+                prepareLesson();
             }
         }
     }
 
-    private ArrayList<DictionaryPair> LinkedToArrayList(LinkedList<DictionaryPair> Llist)
-    {
-        return new ArrayList<>(Llist);
-    }
-
-    enum SaveErrorType
+    enum NumErrorType
     {
         FIRST,
         SECOND,
         BOTH
+    }
+
+    enum ActionErrorType
+    {
+        SAVE,
+        LOAD
     }
 
     /*@Override
@@ -378,3 +406,4 @@ public class Game {
     }*/
 
 }
+

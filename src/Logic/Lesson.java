@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Lesson {
@@ -30,7 +31,6 @@ public class Lesson {
             }
         }
         setLessonName(file.getName());
-
         return true;
     }
 
@@ -42,9 +42,20 @@ public class Lesson {
         return LessonName;
     }
 
-    public void LessonFromList(ArrayList <DictionaryPair> dictionary, String lessonName)
+    void LessonFromErrors(LinkedList <DictionaryPair> dictionary, String lessonName)
     {
-        Dictionary = dictionary;
-        this.setLessonName(lessonName);
+        Dictionary = LinkedToArrayList(dictionary);
+        setLessonName(lessonName);
     }
+
+    void MixDictionary()
+    {
+        Dictionary.sort((o1, o2) -> (new Random()).nextInt()%3-1);
+    }
+
+    private ArrayList<DictionaryPair> LinkedToArrayList(LinkedList<DictionaryPair> Llist)
+    {
+        return new ArrayList<>(Llist);
+    }
+
 }
