@@ -84,6 +84,9 @@ public class Game {
             LessonErr1.addLast(first);
             LessonErr2.addLast(second);
         }
+/// ПРОВЕРКА СОХРАНЕНИЯ
+        if (new Random().nextInt() % 5 == 0)
+            SaveProgress();
         return compareFlag;
     }
 
@@ -359,10 +362,10 @@ public class Game {
 // Последний сделанный ход
             save.write(NumCorrectAnsw + " " + LessonErr1.size() + "\n"); // Кол-во верных ответов, ошибок
             for (DictionaryPair a : LessonErr1) // Сохранение первого списка ошибок
-                save.write(curLesson.Dictionary.indexOf(a.getFirst()) + " ");
+                save.write(curLesson.Dictionary.indexOf(a) + " ");
             save.write("\n");
             for (DictionaryPair a : LessonErr2) // Сохранение второго списка ошибок
-                save.write(curLesson.Dictionary.indexOf(a.getFirst()) + " ");
+                save.write(curLesson.Dictionary.indexOf(a) + " ");
             save.write("\n");
 
         }
