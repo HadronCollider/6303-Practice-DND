@@ -64,7 +64,7 @@ public class Square extends JButton {
         addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (type == SquareType.FINAL) {
+                if (type == SquareType.FINAL || wrong) {
                     return;
                 }
                 clicked();
@@ -137,8 +137,9 @@ public class Square extends JButton {
         return position;
     }
 
-    void dispalayWrong() {
+    void setWrong() {
         setBackground(Color.RED);
+        wrong = true;
         selected = false;
         timer = new Timer(1000, e -> setNormal());
         timer.start();
@@ -146,6 +147,7 @@ public class Square extends JButton {
 
     private void setNormal() {
         timer.stop();
+        wrong = false;
         setBackground(Color.WHITE);
     }
 

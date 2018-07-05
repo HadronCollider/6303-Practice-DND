@@ -7,9 +7,10 @@ import java.awt.*;
 public class InfoPanel extends JPanel {
     private GameWindow window;
     private InfoTimer timer;
-    private InfoErrorCounter errorCounter;
+    private InfoMistakeCounter errorCounter;
     private InfoProgress progress;
     private JCheckBox mixCheckBox;
+    private JButton undoButton;
 
     public JCheckBox getMixCheckBox() {
         return mixCheckBox;
@@ -24,16 +25,9 @@ public class InfoPanel extends JPanel {
 
         constraints.anchor = GridBagConstraints.PAGE_START;
         constraints.gridy = 0;
-        constraints.weighty = 0.5;
+        constraints.weighty = 0;
         timer = new InfoTimer();
         add(timer, constraints);
-
-
-        constraints.anchor = GridBagConstraints.PAGE_END;
-        constraints.gridy++;
-        constraints.weighty = 0.5;
-        errorCounter = new InfoErrorCounter();
-        add(errorCounter, constraints);
 
         constraints.anchor = GridBagConstraints.PAGE_START;
         constraints.gridy++;
@@ -42,10 +36,27 @@ public class InfoPanel extends JPanel {
         progress.setVisible(true);
         add(progress, constraints);
 
+
         constraints.anchor = GridBagConstraints.PAGE_END;
         constraints.gridy++;
         constraints.weighty = 0.5;
-        JCheckBox mixCheckBox = new JCheckBox("Премешивать");
+        errorCounter = new InfoMistakeCounter();
+        add(errorCounter, constraints);
+
+        constraints.anchor = GridBagConstraints.PAGE_START;
+        constraints.gridy++;
+        constraints.weighty = 0.5;
+        undoButton = new JButton("Отменить ход");
+        undoButton.setVisible(false);
+        undoButton.setFont(new Font("Arial", Font.BOLD, 15));
+        undoButton.addActionListener(e -> undo());
+        add(undoButton, constraints);
+
+
+        constraints.anchor = GridBagConstraints.PAGE_END;
+        constraints.gridy++;
+        constraints.weighty = 0.5;
+        JCheckBox mixCheckBox = new JCheckBox("Перемешивать");
         this.mixCheckBox = mixCheckBox;
         mixCheckBox.setFont(new Font("Arial", Font.BOLD ,13));
         add(mixCheckBox, constraints);
@@ -68,7 +79,7 @@ public class InfoPanel extends JPanel {
         return window;
     }
 
-    public InfoErrorCounter getErrorCounter() {
+    public InfoMistakeCounter getErrorCounter() {
         return errorCounter;
     }
 
@@ -78,5 +89,16 @@ public class InfoPanel extends JPanel {
 
     public InfoTimer getTimer() {
         return timer;
+    }
+
+    public void startAll() {
+        undoButton.setVisible(true);
+        progress.setVisible(true);
+        errorCounter.setVisible(true);
+        timer.start();
+    }
+
+    private void undo() {
+        window.getFieldPanel().undo();
     }
 }
