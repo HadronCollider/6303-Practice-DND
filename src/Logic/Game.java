@@ -67,6 +67,7 @@ public class Game {
         DictionaryPair first = Field[a.vertical][a.horizontal].getPair();
         DictionaryPair second = Field[b.vertical][b.horizontal].getPair();
         boolean compareFlag = comparePair(first, second);
+        setLastMove(new Move(Field[a.vertical][a.horizontal], Field[b.vertical][b.horizontal]));
         if (compareFlag) {
             Field[a.vertical][a.horizontal] = null;
             Field[b.vertical][b.horizontal] = null;
@@ -83,7 +84,6 @@ public class Game {
             LessonErr1.addLast(first);
             LessonErr2.addLast(second);
         }
-        setLastMove(new Move(Field[a.vertical][a.horizontal], Field[b.vertical][b.horizontal]));
         return compareFlag;
     }
 
