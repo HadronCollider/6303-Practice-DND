@@ -43,7 +43,7 @@ public class Game {
             return false;
     }
 
-    private void prepareLesson()
+    public void prepareLesson()
     {
         LessonErr1 = new LinkedList<>();
         LessonErr2 = new LinkedList<>();
@@ -51,7 +51,6 @@ public class Game {
         offset = 0;
         localErrs = 0;
         NumberOfSteps = 0;
-        MixFlag = true;
         NumElemOfMatrix = new LinkedList<>();
         curLesson.MixDictionary();
         NumberOfSteps = CalculateFields();  // рассчёт матричного заполнения

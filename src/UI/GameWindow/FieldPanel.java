@@ -38,10 +38,6 @@ public class FieldPanel extends JPanel {
         setMinimumSize(new Dimension(400, 300));
     }
 
-    public void setSelected(Square selected) {
-        this.selected = selected;
-    }
-
     public boolean isSelectedExists() {
         return selected != null;
     }
@@ -50,21 +46,27 @@ public class FieldPanel extends JPanel {
         return selected;
     }
 
+    public void setSelected(Square selected) {
+        this.selected = selected;
+    }
+
     public void checkTwoSquares(Square checked) {
-        if(game.compareCell(selected.getPosition(), checked.getPosition())) {
+        if (game.compareCell(selected.getPosition(), checked.getPosition())) {
             selected.setFinal();
             checked.setFinal();
-            numberOfCorrectCells+=2;
+            numberOfCorrectCells += 2;
         } else {
             selected.dispalayWrong();
             checked.dispalayWrong();
+            window.getInfoPanel().getErrorCounter().increase();
         }
         setSelected(null);
-        if(numberOfCorrectCells == rows * columns) {
-            if(game.nextField()) {
+        if (numberOfCorrectCells == rows * columns) {
+            if (game.nextField()) {
                 displayField();
+                window.getInfoPanel().getProgress().increase();
             } else {
-                JOptionPane.showMessageDialog(this, "Победа");
+                JOptionPane.showMessageDialog(this, "Победа! Вы совершили " + game.getNumErrors() + " ошибок.");
             }
         }
     }
@@ -74,7 +76,7 @@ public class FieldPanel extends JPanel {
         Cell[][] cellField = game.getField();
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
-                if(cellField[i][j] == null) {
+                if (cellField[i][j] == null) {
                     numberOfCorrectCells++;
                 }
                 field[i][j].setCell(cellField[i][j]);
@@ -84,7 +86,7 @@ public class FieldPanel extends JPanel {
 
     public void mixField() {
         game.mixField();
-        if(game.getField() == null) {
+        if (game.getField() == null) {
             return;
         }
         displayField();
@@ -93,20 +95,19 @@ public class FieldPanel extends JPanel {
     public void openDictionary() {
         JFileChooser fileDialog = new JFileChooser();
         fileDialog.showOpenDialog(this);
+        if (window.getInfoPanel().getMixCheckBox().isSelected()) {
+            game.setMixFlag(true);
+        }
         try {
             game.newLesson(fileDialog.getSelectedFile());
         } catch (IOException e) {
             e.printStackTrace();
         }
         window.getInfoPanel().getProgress().setVisible(true);
+        window.getInfoPanel().getProgress().setNumberOfSteps(game.getNumberOfSteps());
         window.getInfoPanel().getErrorCounter().setVisible(true);
         window.getInfoPanel().getTimer().start();
-
         game.nextField();
-        if(window.getInfoPanel().getMixCheckBox().isEnabled()) {
-
-
-        }
         displayField();
     }
 
