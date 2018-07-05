@@ -5,15 +5,22 @@ import java.awt.*;
 
 
 public class InfoTimer extends JLabel {
-    private int seconds = -1;
+    private int seconds;
     private int minutes;
+    private Timer timer;
 
     public InfoTimer() {
         setFont(new Font("Arial", Font.BOLD, 30));
-        Timer timer = new Timer(1000, e -> increase());
-        increase();
-        timer.start();
+        timer = new Timer(1000, e -> increase());
+        display();
+    }
 
+    void start() {
+        timer.start();
+    }
+
+    void stop() {
+        timer.stop();
     }
 
     private void increase() {
@@ -24,12 +31,11 @@ public class InfoTimer extends JLabel {
             seconds = 0;
             minutes++;
         }
-        rewrite();
+        display();
     }
 
-    private void rewrite() {
+    private void display() {
         StringBuilder out = new StringBuilder();
-        out.append("   ");
         if (minutes < 10) {
             out.append('0');
         }
