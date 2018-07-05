@@ -48,7 +48,7 @@ public class Game {
         NumCorrectAnsw = 0;
         offset = 0;
         localErrs = 0;
-        MixFlag = false;
+        MixFlag = true;
         NumElemOfMatrix = new LinkedList<>();
         curLesson.MixDictionary();
         CalculateFields();  // рассчёт матричного заполнения
