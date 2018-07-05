@@ -7,20 +7,21 @@ import java.util.LinkedList;
 import java.util.Random;
 
 public class Game {
-    private Lesson curLesson;                                       // Текущий урок
-    private LinkedList<DictionaryPair> LessonErr1;                        // Список ошибок (верные пары левых)
-    private LinkedList<DictionaryPair> LessonErr2;                        // Список ошибок (верные пары левых)
-    private int NumCorrectAnsw;                                 // Кол-во верных ответов на уроке
-    private int offset;                                         // Смещение относительно начала словаря
-    private Cell[][] Field;                                         // Поле
+    private Lesson curLesson;                                      // Текущий урок
+    private LinkedList<DictionaryPair> LessonErr1;                 // Список ошибок (верные пары левых)
+    private LinkedList<DictionaryPair> LessonErr2;                 // Список ошибок (верные пары левых)
+    private int NumCorrectAnsw;                                    // Кол-во верных ответов на уроке
+    private int offset;                                            // Смещение относительно начала словаря
+    private Cell[][] Field;                                        // Поле
     private LinkedList<Integer> NumElemOfMatrix;                   // Распределение элементов по матрицам
-    private Position FieldSize;      // Размеры поля
-    private Position curCellCoor;
-    private Move LastMove;
-    private int localErrs = 0;
+    private Position FieldSize;                                    // Размеры поля
+    private Move LastMove;                                         // Последный ход
+    private int localErrs = 0;                                     // Кол-во ошибок на этапе
+    private boolean MixFlag;                                       // Флаг перемешивания (при загрузке этапа)
+    private boolean OddFlag;                                       //
 
-    public Game(int horizontal, int vertical) {
-        FieldSize = new Position(horizontal, vertical);
+    public Game(int vertical, int horizontal) {
+        setSize(vertical, horizontal);
     }
 
     /**
@@ -176,7 +177,8 @@ public class Game {
                         break;
                 }
             }
-
+            if (MixFlag)
+                mixField();
             offset = offset + NumElem;
             return true;
         }
@@ -209,19 +211,24 @@ public class Game {
     /**
      * Устанавливает размеры поля
      *
-     * @param horizontal
-     * @param vertical
+     * @param horizontal - ширина
+     * @param vertical - высота
      */
-    public void setSize(int horizontal, int vertical) {
-        /*if (horizontal*vertical % 2 == 1) {
-            System.out.println("Указанный размер поля невозможен - нечетное количество ячеек");
-            FieldSize.horizontal = FieldSize.vertical = 4;
+    public void setSize(int vertical, int horizontal) {
+        if (FieldSize == null)
+            FieldSize = new Position(vertical, horizontal);
+        else {
+            FieldSize.horizontal = horizontal;
+            FieldSize.vertical = vertical;
         }
-        else
-        {
-        }*/
-        FieldSize.horizontal = horizontal;
-        FieldSize.vertical = vertical;
+        if (horizontal*vertical % 2 == 1) {
+            OddFlag = true;
+            MixFlag = false;
+        }
+        else {
+            OddFlag = false;
+            MixFlag = true;
+        }
     }
 
     /**
@@ -249,11 +256,11 @@ public class Game {
      */
     void SaveProgress() throws IOException {
         StringBuilder build = new StringBuilder();
-        build.append(curLesson.LessonName);
+        build.append(curLesson.getLessonName());
         build.setLength(build.length() - 4);
         build.append("(save).savepr");
         try (FileWriter save = new FileWriter(build.toString())) {
-            save.write(curLesson.LessonName + "\n");                            // Путь к используемому словарю
+            save.write(curLesson.getLessonName() + "\n");                            // Путь к используемому словарю
             save.write(offset + "\n");                                          // Смещение в словаре
             for (int a : NumElemOfMatrix)                                            // Матричное распределение
                 save.write(a + " ");

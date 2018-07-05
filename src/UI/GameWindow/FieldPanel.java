@@ -25,8 +25,8 @@ public class FieldPanel extends JPanel {
 
 
         field = new Square[rows][columns];
-        for (int i = 0; i < columns; i++) {
-            for (int j = 0; j < rows; j++) {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
                 Square square = new Square(this, null);
                 add(square);
                 field[i][j] = square;
@@ -71,8 +71,8 @@ public class FieldPanel extends JPanel {
     private void displayField() {
         numberOfCorrectCells = 0;
         Cell[][] cellField = game.getField();
-        for (int i = 0; i < columns; i++) {
-            for (int j = 0; j < rows; j++) {
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
                 if(cellField[i][j] == null) {
                     numberOfCorrectCells++;
                 }

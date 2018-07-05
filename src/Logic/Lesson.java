@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Lesson {
-    public ArrayList<DictionaryPair> Dictionary;
+    ArrayList<DictionaryPair> Dictionary;
     String LessonName;
 
     /**
@@ -28,7 +28,16 @@ public class Lesson {
                     return false;
             }
         }
-        //LessonName = fileName;
+        setLessonName(file.getName());
+
         return true;
+    }
+
+    void setLessonName(String lessonName) {
+        LessonName = lessonName;
+    }
+
+    public String getLessonName() {
+        return LessonName;
     }
 }

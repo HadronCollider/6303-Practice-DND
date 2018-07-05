@@ -62,7 +62,7 @@ public class GameWindow extends JFrame {
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 0.1;
-        FieldPanel fieldPanel = new FieldPanel(4, 4);
+        FieldPanel fieldPanel = new FieldPanel(5, 4);
         this.field = fieldPanel;
         panel.add(fieldPanel, gridBagConstraints);
         gridBagConstraints.gridx = 1;
