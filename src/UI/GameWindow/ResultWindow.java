@@ -39,7 +39,7 @@ public class ResultWindow extends JFrame {
         JButton saveMistakesButton = new JButton("Сохранить ошибки");
         saveMistakesButton.addActionListener(e -> {
             try {
-                panel.getGame().ErrorsTo(Game.ActionErrorType.SAVE, Game.NumErrorType.BOTH);
+                panel.getGame().SaveErrors();
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
@@ -52,7 +52,7 @@ public class ResultWindow extends JFrame {
         JButton startMistakesGameButton = new JButton("Работа над ошибками");
         startMistakesGameButton.addActionListener(e -> {
             try {
-                panel.getGame().ErrorsTo(Game.ActionErrorType.LOAD, Game.NumErrorType.BOTH);
+                panel.getGame().ErrorsToLesson(Game.NumErrorType.BOTH);
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
