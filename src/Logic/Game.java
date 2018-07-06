@@ -312,7 +312,7 @@ public class Game {
         }
     }
 
-    void SaveErrors() throws IOException {
+    public void SaveErrors() throws IOException {
         StringBuilder build = new StringBuilder();
         build.append("/data/");
         build.append(curLesson.getLessonName());
@@ -461,8 +461,7 @@ public class Game {
 
     }
 
-
-    public void ErrorsToLesson(NumErrorType numType) throws IOException {
+        public void ErrorsToLesson(NumErrorType numType) throws IOException {
         StringBuilder build = new StringBuilder();
         build.append(curLesson.getLessonName());
         build.setLength(build.length() - 4);
