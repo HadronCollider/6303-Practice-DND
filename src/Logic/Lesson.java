@@ -1,6 +1,7 @@
 package Logic;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -18,7 +19,7 @@ public class Lesson {
      * @return - удачная инициализация - true
      * @throws IOException
      */
-    boolean Init(File file) throws IOException {
+    boolean Init(File file) throws FileNotFoundException {
         Dictionary = new ArrayList<>();
         try (Scanner scanner = new Scanner(file)) {
             while (scanner.hasNext()) {
@@ -26,8 +27,11 @@ public class Lesson {
                 String[] strings = line.split("\t");
                 if (strings.length == 2)
                     Dictionary.add(new DictionaryPair(strings[0], strings[1]));
-                else
+                else {
+                    // Сообщение об ошибке в словаре
+                    System.out.println("Ошибка в словаре. Строка №" + (Dictionary.size()+1) + "\n");
                     return false;
+                }
             }
         }
         setLessonName(file.getName());
