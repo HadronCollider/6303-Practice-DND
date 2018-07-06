@@ -50,7 +50,7 @@ public class GameWindow extends JFrame {
         JMenuItem saveMistakesMenuItem = new JMenuItem("Сохранить ошибки");
         saveMistakesMenuItem.addActionListener(e -> {
             try {
-                fieldPanel.getGame().ErrorsTo(Game.ActionErrorType.SAVE, Game.NumErrorType.BOTH);
+                fieldPanel.getGame().SaveErrors();
             } catch (IOException e1) {
                 e1.printStackTrace();
             }

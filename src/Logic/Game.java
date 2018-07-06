@@ -87,9 +87,9 @@ public class Game {
             LessonErr2.addLast(second);
         }
 /// ПРОВЕРКА СОХРАНЕНИЯ
-        if (new Random().nextInt() % 5 == 0)
-            SaveProgress();
-        return compareFlag;
+       // if (new Random().nextInt() % 5 == 0)
+       //     SaveProgress();
+         return compareFlag;
     }
 
     /**
