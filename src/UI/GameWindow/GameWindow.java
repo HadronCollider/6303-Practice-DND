@@ -79,6 +79,8 @@ public class GameWindow extends JFrame {
         setMinimumSize(new Dimension(600, 500));
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("Kana");
+        Image image = Toolkit.getDefaultToolkit().createImage( getClass().getResource("/UI/StartWindow/icon.png") );
+        setIconImage( image );
         setLocationRelativeTo(null);
     }
 

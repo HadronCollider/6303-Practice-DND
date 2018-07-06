@@ -5,6 +5,7 @@ import sun.reflect.generics.tree.FormalTypeParameter;
 
 import javax.swing.*;
 import java.awt.*;
+import java.net.URL;
 import java.text.Format;
 
 
@@ -76,6 +77,9 @@ public class StartWindow extends JFrame {
 
         exitButton.addActionListener(e -> this.dispose());
         setTitle("Kana");
+
+        Image image = Toolkit.getDefaultToolkit().createImage( getClass().getResource("icon.png") );
+        setIconImage( image );
     }
 
 

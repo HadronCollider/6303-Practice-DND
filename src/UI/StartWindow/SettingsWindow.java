@@ -31,7 +31,7 @@ public class SettingsWindow extends JFrame {
         c.gridwidth = 1;
         c.gridx = 0;
         c.gridy = 0;
-        c.insets = new Insets(10, 10, 10, 10);
+        c.insets = new Insets(10, 10, 5, 10);
         c.ipadx = 0;
         c.ipady = 0;
         c.weightx = 0.0;
@@ -146,6 +146,8 @@ public class SettingsWindow extends JFrame {
             this.dispose();
         });
         setTitle("Настройки");
+        Image image = Toolkit.getDefaultToolkit().createImage( getClass().getResource("icon_settings.png") );
+        setIconImage( image );
     }
 
     public static boolean isNumeric(String str) {
