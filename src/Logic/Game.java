@@ -5,6 +5,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Random;
+import java.util.Scanner;
 
 public class Game {
     private Lesson curLesson;                                      // Текущий урок
@@ -41,6 +42,7 @@ public class Game {
             return true;
         } else
             return false;
+        return true;
     }
 
     public void prepareLesson()
@@ -311,12 +313,9 @@ public class Game {
     }
 
 
-    // принимает fileName поданное пользователем
-
     /**
-     * -------------- МЕТОД НАХОДИТСЯ В РАЗРАБОТКЕ --------------
-     *
-     * @throws IOException
+     * Сохранение текущего прогресса, для дальнейшего продолжение
+     *     // принимает fileName поданное пользователем?
      */
     void SaveProgress(){
         StringBuilder build = new StringBuilder();
@@ -324,9 +323,10 @@ public class Game {
         build.setLength(build.length() - 4);
         build.append("(save).savepr");
         try (FileWriter save = new FileWriter(build.toString())) {
-            save.write(curLesson.getLessonName() + "\n"); // Путь к используемому словарю
-            save.write(offset + "\n"); // Смещение в словаре
-            for (int a : NumElemOfMatrix) // Матричное распределение
+            save.write(curLesson.getLessonName() + "\n");           // Путь к используемому словарю
+            save.write(offset + "\n");                              // Смещение в словаре
+            save.write(NumElemOfMatrix.size() + " ");               // Количество матриц
+            for (int a : NumElemOfMatrix)                               // Матричное распределение
                 save.write(a + " ");
             save.write("\n");
             save.write(FieldSize.vertical + " " + FieldSize.horizontal); // Размер поля
@@ -345,6 +345,7 @@ public class Game {
                 save.write("\n");
             }
             Cell cell = LastMove.first;
+// Последний сделанный ход
 //--- Заменить на вызов функции
             if(cell.getFlag())
                 save.write(curLesson.Dictionary.indexOf(cell.getPair()) + " 1 ");
@@ -359,7 +360,6 @@ public class Game {
             save.write(cell.getPosition().toString() + " ");
 //---
             save.write("\n");
-// Последний сделанный ход
             save.write(NumCorrectAnsw + " " + LessonErr1.size() + "\n"); // Кол-во верных ответов, ошибок
             for (DictionaryPair a : LessonErr1) // Сохранение первого списка ошибок
                 save.write(curLesson.Dictionary.indexOf(a) + " ");
@@ -367,6 +367,81 @@ public class Game {
             for (DictionaryPair a : LessonErr2) // Сохранение второго списка ошибок
                 save.write(curLesson.Dictionary.indexOf(a) + " ");
             save.write("\n");
+
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Загрузка сохраненного прогресса
+     *     // принимает fileName поданное пользователем?
+     */
+    void LoadProgress(String fileName){
+        try (Scanner load = new Scanner(new File(fileName))) {
+            if (curLesson == null) {
+                curLesson = new Lesson();
+            }
+            curLesson.setLessonName(load.nextLine());                   // Путь к используемому словарю
+            curLesson.Init(new File(curLesson.getLessonName()));        // Загрузка словаря
+            prepareLesson();
+            offset = load.nextInt();                                    // Смещение внутри словаря
+            NumberOfSteps = load.nextInt();                             // Кол-во шагов
+            NumElemOfMatrix.clear();
+            for (int i = 0; i < NumberOfSteps; i++)                     // Матричное распределение
+                NumElemOfMatrix.addLast(load.nextInt());
+//            save.write("\n");
+            FieldSize.vertical = load.nextInt();
+            FieldSize.horizontal = load.nextInt();
+//            save.write("\n");
+            Field = new Cell[FieldSize.vertical][FieldSize.horizontal];
+            for (int i = 0; i < FieldSize.vertical; i++)                      // Считывание поля
+            {
+                for (int j = 0; j < FieldSize.vertical; j++)
+                {
+                    int index = load.nextInt();
+                    int flag = load.nextInt();
+                    if (index != -1)
+                    {                                                        // Индекс пары в словаре + флаг
+                        if (flag == 1)
+                            Field[i][j] = new Cell (curLesson.Dictionary.get(index), new Position(i, j), true);
+                        else
+                            Field[i][j] = new Cell (curLesson.Dictionary.get(index), new Position(i, j), false);
+                    } else
+                        Field[i][j] = null;
+                }
+//                save.write("\n");
+            }
+// Последний сделанный ход
+//--- Заменить на вызов функции
+            int index = load.nextInt();
+            int flag = load.nextInt();
+            int row = load.nextInt();
+            int column = load.nextInt();
+            if (flag == 1)
+                Field[row][column] = new Cell (curLesson.Dictionary.get(index), new Position(row, column), true);
+            else
+                Field[row][column] = new Cell (curLesson.Dictionary.get(index), new Position(row, column), false);
+            index = load.nextInt();
+            flag = load.nextInt();
+            row = load.nextInt();
+            column = load.nextInt();
+            if (flag == 1)
+                Field[row][column] = new Cell (curLesson.Dictionary.get(index), new Position(row, column), true);
+            else
+                Field[row][column] = new Cell (curLesson.Dictionary.get(index), new Position(row, column), false);
+//---
+//            save.write("\n");
+            NumCorrectAnsw = load.nextInt();
+            int NumAllErr = load.nextInt();
+            for (int i = 0; i < NumAllErr; i++)                         // Загрука первого списка ошибок
+                LessonErr1.add(curLesson.Dictionary.get(load.nextInt()));
+//            save.write("\n");
+            for (int i = 0; i < NumAllErr; i++)                         // Загрузка второго списка ошибок
+                LessonErr2.add(curLesson.Dictionary.get(load.nextInt()));
+//            save.write("\n");
 
         }
         catch (IOException e)
