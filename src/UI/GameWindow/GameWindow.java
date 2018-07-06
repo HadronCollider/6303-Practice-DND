@@ -1,9 +1,14 @@
 package UI.GameWindow;
 
+import Logic.Game;
+
 import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 
 public class GameWindow extends JFrame {
 
@@ -36,17 +41,33 @@ public class GameWindow extends JFrame {
         JMenuItem saveMenuItem = new JMenuItem("Coxранить игру");
         saveMenuItem.addActionListener(e -> {
             JFileChooser fileDialog = new JFileChooser();
+            FileFilter filter = new FileNameExtensionFilter("MP3 File","mp3");
+            fileDialog.addChoosableFileFilter(filter);
             fileDialog.showSaveDialog(this);
         });
 
         saveMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
         JMenuItem saveMistakesMenuItem = new JMenuItem("Сохранить ошибки");
+        saveMistakesMenuItem.addActionListener(e -> {
+            try {
+                fieldPanel.getGame().ErrorsTo(Game.ActionErrorType.SAVE, Game.NumErrorType.BOTH);
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        });
         JMenuItem exitMenuItem = new JMenuItem("Выйти");
+
         exitMenuItem.addActionListener(e -> dispose());
+
         JMenuItem loadLessonMenuItem = new JMenuItem("Загрузить словарь");
-        loadLessonMenuItem.addActionListener(e -> fieldPanel.openDictionary());
+        loadLessonMenuItem.addActionListener(e -> fieldPanel.startGame());
+
         JMenuItem undoMenuItem = new JMenuItem("Отменить действие");
+        undoMenuItem.addActionListener(e -> fieldPanel.undo());
+
         JMenuItem mixMenuItem = new JMenuItem("Перемешать");
+        mixMenuItem.addActionListener(e -> fieldPanel.mixField());
+
         JMenuItem settingsMenuItem = new JMenuItem("Настройки");
         gameMenu.add(loadLessonMenuItem);
         gameMenu.add(saveMistakesMenuItem);
@@ -87,8 +108,12 @@ public class GameWindow extends JFrame {
         setLocationRelativeTo(null);
     }
 
-    FieldPanel getFieldPanel() {
+    public FieldPanel getFieldPanel() {
         return fieldPanel;
+    }
+
+    public void startGame() {
+        fieldPanel.startGame();
     }
 
 }

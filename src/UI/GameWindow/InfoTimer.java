@@ -24,6 +24,14 @@ public class InfoTimer extends JLabel {
         timer.stop();
     }
 
+    void restart() {
+        stop();
+        seconds = 0;
+        minutes = 0;
+        display();
+        start();
+    }
+
     private void increase() {
 
         if (seconds < 59) {
