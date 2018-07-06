@@ -2,6 +2,7 @@ package UI.GameWindow;
 
 import Logic.Cell;
 import Logic.Game;
+import javafx.stage.FileChooser;
 
 import javax.swing.*;
 import java.awt.*;
@@ -17,6 +18,9 @@ public class FieldPanel extends JPanel {
     private int numberOfCorrectCells;
     private GameWindow window;
 
+    public Game getGame() {
+        return game;
+    }
 
     public FieldPanel(GameWindow window, int rows, int columns) {
         this.window = window;
@@ -66,7 +70,12 @@ public class FieldPanel extends JPanel {
                 displayField();
                 window.getInfoPanel().getProgress().increase();
             } else {
-                JOptionPane.showMessageDialog(this, "Победа! Вы совершили " + game.getNumErrors() + " ошибок.");
+                window.getInfoPanel().getTimer().stop();
+                SwingUtilities.invokeLater(() -> {
+                    ResultWindow resultWindow = new ResultWindow(this, game.getNumErrors());
+                    resultWindow.setVisible(true);
+
+                });
             }
         }
     }
@@ -92,17 +101,28 @@ public class FieldPanel extends JPanel {
         displayField();
     }
 
-    public void openDictionary() {
+    public void startGame() {
         JFileChooser fileDialog = new JFileChooser();
-        fileDialog.showOpenDialog(this);
+        int approval = fileDialog.showOpenDialog(this);
+        if(approval != JFileChooser.APPROVE_OPTION) {
+            return;
+        }
         if (window.getInfoPanel().getMixCheckBox().isSelected()) {
             game.setMixFlag(true);
         }
+
         try {
             game.newLesson(fileDialog.getSelectedFile());
         } catch (IOException e) {
             e.printStackTrace();
         }
+        window.getInfoPanel().startAll();
+        window.getInfoPanel().getProgress().setNumberOfSteps(game.getNumberOfSteps());
+        game.nextField();
+        displayField();
+    }
+
+    public void startMistakeGame() {
         window.getInfoPanel().startAll();
         window.getInfoPanel().getProgress().setNumberOfSteps(game.getNumberOfSteps());
         game.nextField();

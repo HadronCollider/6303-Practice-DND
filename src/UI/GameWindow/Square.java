@@ -25,7 +25,7 @@ public class Square extends JButton {
     public Square(FieldPanel parent, Cell cell) {
         //super();
         this.parent = parent;
-        setFont(new Font("APJapanesefont", Font.BOLD, 20));
+        //setFont(new Font("APJapanesefont", Font.BOLD, 20));
         setCell(cell);
         init();
     }
@@ -35,6 +35,7 @@ public class Square extends JButton {
             this.position = cell.getPosition();
             this.type = cell.getFlag() ? SquareType.RIGHT : SquareType.LEFT;
             this.content = cell.getFlag() ? cell.getPair().getSecond() : cell.getPair().getFirst();
+            setFont(cell.getFlag() ? new Font("APJapanesefont", Font.BOLD, 20) : new Font("APJapanesefont", Font.BOLD, 40));
         } else {
             this.type = SquareType.FINAL;
             this.content = "";

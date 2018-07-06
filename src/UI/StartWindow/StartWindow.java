@@ -59,8 +59,11 @@ public class StartWindow extends JFrame {
         setMaximumSize(new Dimension(screenSize.width / 6, screenSize.height / 3));
 
         startButton.addActionListener(e -> {
-            GameWindow gameWindow = new GameWindow(tableSizeY, tableSizeX);
-            gameWindow.setVisible(true);
+            SwingUtilities.invokeLater(() ->{
+                GameWindow gameWindow = new GameWindow(tableSizeY, tableSizeX);
+                gameWindow.setVisible(true);
+                //gameWindow.startGame();
+            });
             this.dispose();
         });
 
@@ -70,8 +73,10 @@ public class StartWindow extends JFrame {
         });
 
         settingsButton.addActionListener(e -> {
-            SettingsWindow settingsWindow = new SettingsWindow(this);
-            settingsWindow.setVisible(true);
+            SwingUtilities.invokeLater(() -> {
+                SettingsWindow settingsWindow = new SettingsWindow(this);
+                settingsWindow.setVisible(true);
+            });
             this.setVisible(false);
         });
 
