@@ -13,9 +13,12 @@ public class GameWindow extends JFrame {
 
     private FieldPanel fieldPanel;
     private InfoPanel infoPanel;
+    private int vertical, horizontal;
 
 
-    public GameWindow() {
+    public GameWindow(int vertical, int horizontal) {
+        this.vertical = vertical;
+        this.horizontal = horizontal;
         init();
         setMenuBars();
     }
@@ -41,7 +44,7 @@ public class GameWindow extends JFrame {
         JMenuItem exitMenuItem = new JMenuItem("Выйти");
         exitMenuItem.addActionListener(e -> dispose());
         JMenuItem loadLessonMenuItem = new JMenuItem("Загрузить словарь");
-        loadLessonMenuItem.addActionListener(e -> fieldPanel.openDictionary());
+        loadLessonMenuItem.addActionListener(e -> fieldPanel.startGame());
         JMenuItem undoMenuItem = new JMenuItem("Отменить действие");
         JMenuItem mixMenuItem = new JMenuItem("Перемешать");
         JMenuItem settingsMenuItem = new JMenuItem("Настройки");
@@ -67,7 +70,7 @@ public class GameWindow extends JFrame {
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 0.1;
-        FieldPanel fieldPanel = new FieldPanel(this, 4, 4);
+        FieldPanel fieldPanel = new FieldPanel(this, vertical, horizontal);
         this.fieldPanel = fieldPanel;
         panel.add(fieldPanel, gridBagConstraints);
         gridBagConstraints.gridx = 1;
@@ -79,11 +82,17 @@ public class GameWindow extends JFrame {
         setMinimumSize(new Dimension(600, 500));
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("Kana");
+        Image image = Toolkit.getDefaultToolkit().createImage( getClass().getResource("/UI/StartWindow/icon.png") );
+        setIconImage( image );
         setLocationRelativeTo(null);
     }
 
-    FieldPanel getFieldPanel() {
+    public FieldPanel getFieldPanel() {
         return fieldPanel;
+    }
+
+    public void startGame() {
+        fieldPanel.startGame();
     }
 
 }

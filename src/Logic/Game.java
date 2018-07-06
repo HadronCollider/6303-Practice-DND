@@ -42,7 +42,7 @@ public class Game {
             return true;
         } else
             return false;
-        return true;
+        //return true;
     }
 
     public void prepareLesson()
@@ -452,7 +452,7 @@ public class Game {
     }
 
 
-    void ErrorsTo(ActionErrorType actionType, NumErrorType numType) throws IOException {
+    public void ErrorsTo(ActionErrorType actionType, NumErrorType numType) throws IOException {
         StringBuilder build = new StringBuilder();
         build.append(curLesson.getLessonName());
         build.setLength(build.length() - 4);
@@ -489,14 +489,14 @@ public class Game {
         }
     }
 
-    enum NumErrorType
+    public enum NumErrorType
     {
         FIRST,
         SECOND,
         BOTH
     }
 
-    enum ActionErrorType
+    public enum ActionErrorType
     {
         SAVE,
         LOAD

@@ -31,7 +31,7 @@ public class SettingsWindow extends JFrame {
         c.gridwidth = 1;
         c.gridx = 0;
         c.gridy = 0;
-        c.insets = new Insets(10, 10, 10, 10);
+        c.insets = new Insets(10, 10, 5, 10);
         c.ipadx = 0;
         c.ipady = 0;
         c.weightx = 0.0;
@@ -124,11 +124,11 @@ public class SettingsWindow extends JFrame {
         setMaximumSize(new Dimension(screenSize.width / 6, screenSize.height / 3));
 
         saveButton.addActionListener(e -> {
-            if (isNumeric(tableSizeFieldX.getText()) && isNumeric(cellSizeFieldX.getText()) && isNumeric(tableSizeFieldY.getText()) && isNumeric(cellSizeFieldY.getText())) {
+            if (isNumeric(tableSizeFieldX.getText()) &&  isNumeric(tableSizeFieldY.getText())) {
                 startWindow.tableSizeX = Integer.parseInt(tableSizeFieldX.getText());
-                startWindow.cellSizeX = Integer.parseInt(cellSizeFieldX.getText());
+                //startWindow.cellSizeX = Integer.parseInt(cellSizeFieldX.getText());
                 startWindow.tableSizeY = Integer.parseInt(tableSizeFieldY.getText());
-                startWindow.cellSizeY = Integer.parseInt(cellSizeFieldY.getText());
+                //startWindow.cellSizeY = Integer.parseInt(cellSizeFieldY.getText());
                 startWindow.setVisible(true);
                 this.dispose();
             } else {
@@ -146,6 +146,8 @@ public class SettingsWindow extends JFrame {
             this.dispose();
         });
         setTitle("Настройки");
+        Image image = Toolkit.getDefaultToolkit().createImage( getClass().getResource("icon_settings.png") );
+        setIconImage( image );
     }
 
     public static boolean isNumeric(String str) {

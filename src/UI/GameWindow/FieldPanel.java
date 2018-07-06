@@ -17,6 +17,9 @@ public class FieldPanel extends JPanel {
     private int numberOfCorrectCells;
     private GameWindow window;
 
+    public Game getGame() {
+        return game;
+    }
 
     public FieldPanel(GameWindow window, int rows, int columns) {
         this.window = window;
@@ -66,7 +69,12 @@ public class FieldPanel extends JPanel {
                 displayField();
                 window.getInfoPanel().getProgress().increase();
             } else {
-                JOptionPane.showMessageDialog(this, "Победа! Вы совершили " + game.getNumErrors() + " ошибок.");
+                window.getInfoPanel().getTimer().stop();
+                SwingUtilities.invokeLater(() -> {
+                    ResultWindow resultWindow = new ResultWindow(this);
+                    resultWindow.setVisible(true);
+
+                });
             }
         }
     }
@@ -92,7 +100,7 @@ public class FieldPanel extends JPanel {
         displayField();
     }
 
-    public void openDictionary() {
+    public void startGame() {
         JFileChooser fileDialog = new JFileChooser();
         fileDialog.showOpenDialog(this);
         if (window.getInfoPanel().getMixCheckBox().isSelected()) {
@@ -103,6 +111,13 @@ public class FieldPanel extends JPanel {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        window.getInfoPanel().startAll();
+        window.getInfoPanel().getProgress().setNumberOfSteps(game.getNumberOfSteps());
+        game.nextField();
+        displayField();
+    }
+
+    public void startMistakeGame() {
         window.getInfoPanel().startAll();
         window.getInfoPanel().getProgress().setNumberOfSteps(game.getNumberOfSteps());
         game.nextField();

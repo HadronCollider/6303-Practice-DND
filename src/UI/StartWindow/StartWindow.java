@@ -5,6 +5,7 @@ import sun.reflect.generics.tree.FormalTypeParameter;
 
 import javax.swing.*;
 import java.awt.*;
+import java.net.URL;
 import java.text.Format;
 
 
@@ -14,8 +15,8 @@ public class StartWindow extends JFrame {
         init();
     }
 
-    public int tableSizeX = 0;
-    public int tableSizeY = 0;
+    public int tableSizeX = 6;
+    public int tableSizeY = 6;
     public int cellSizeX = 0;
     public int cellSizeY = 0;
 
@@ -58,8 +59,11 @@ public class StartWindow extends JFrame {
         setMaximumSize(new Dimension(screenSize.width / 6, screenSize.height / 3));
 
         startButton.addActionListener(e -> {
-            GameWindow gameWindow = new GameWindow();
-            gameWindow.setVisible(true);
+            SwingUtilities.invokeLater(() ->{
+                GameWindow gameWindow = new GameWindow(tableSizeY, tableSizeX);
+                gameWindow.setVisible(true);
+                gameWindow.startGame();
+            });
             this.dispose();
         });
 
@@ -69,13 +73,18 @@ public class StartWindow extends JFrame {
         });
 
         settingsButton.addActionListener(e -> {
-            SettingsWindow settingsWindow = new SettingsWindow(this);
-            settingsWindow.setVisible(true);
+            SwingUtilities.invokeLater(() -> {
+                SettingsWindow settingsWindow = new SettingsWindow(this);
+                settingsWindow.setVisible(true);
+            });
             this.setVisible(false);
         });
 
         exitButton.addActionListener(e -> this.dispose());
         setTitle("Kana");
+
+        Image image = Toolkit.getDefaultToolkit().createImage( getClass().getResource("icon.png") );
+        setIconImage( image );
     }
 
 

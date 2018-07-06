@@ -44,6 +44,8 @@ public class InfoWindow extends JFrame {
             this.dispose();
         });
         setTitle("Информация");
+        Image image = Toolkit.getDefaultToolkit().createImage( getClass().getResource("icon_info.png") );
+        setIconImage( image );
     }
 
 }
