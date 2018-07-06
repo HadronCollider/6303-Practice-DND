@@ -19,9 +19,11 @@ public class InfoWindow extends JFrame {
         JLabel label = new JLabel(text);
         label.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel.add(Box.createVerticalStrut(screenSize.height / 35));
+        label.setFont(new Font("Verdana", Font.PLAIN, 16));
         panel.add(label);
         returnButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         panel.add(Box.createVerticalStrut(screenSize.height / 25));
+        returnButton.setFont(new Font("Verdana", Font.PLAIN, 16));
         panel.add(returnButton);
         setResizable(false);
 

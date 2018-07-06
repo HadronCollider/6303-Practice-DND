@@ -29,15 +29,19 @@ public class StartWindow extends JFrame {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.add(Box.createVerticalStrut(screenSize.height / 12));
         startButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        startButton.setFont(new Font("Verdana", Font.PLAIN, 20));
         panel.add(startButton);
-        panel.add(Box.createVerticalStrut(screenSize.height / 100));
+        /*panel.add(Box.createVerticalStrut(screenSize.height / 100));
         continueButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        panel.add(continueButton);
+        continueButton.setFont(new Font("Verdana", Font.PLAIN, 20));
+        panel.add(continueButton);*/
         panel.add(Box.createVerticalStrut(screenSize.height / 100));
         settingsButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        settingsButton.setFont(new Font("Verdana", Font.PLAIN, 20));
         panel.add(settingsButton);
         panel.add(Box.createVerticalStrut(screenSize.height / 100));
         exitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        exitButton.setFont(new Font("Verdana", Font.PLAIN, 20));
         panel.add(exitButton);
         setResizable(false);
         //panel.add(new JFormattedTextField());
