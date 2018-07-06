@@ -313,8 +313,9 @@ public class Game {
     }
 
     public void SaveErrors() throws IOException {
+        // Проверка на пустоту урока
         StringBuilder build = new StringBuilder();
-        build.append("/data/");
+        build.append("data/");
         build.append(curLesson.getLessonName());
         build.setLength(build.length() - 4);
         ErrorsToFile(LessonErr1, build.toString() + "(err1).txt");
@@ -328,7 +329,7 @@ public class Game {
      */
     void SaveProgress(){
         StringBuilder build = new StringBuilder();
-        build.append("/data/");
+        build.append("data/");
         build.append(curLesson.getLessonName());
         build.setLength(build.length() - 4);
         build.append(".savepr");
