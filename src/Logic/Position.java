@@ -4,7 +4,7 @@ public class Position {
     int vertical;
     int horizontal;
 
-    public Position(int a, int b) {
+    Position(int a, int b) {
         vertical = a;
         horizontal = b;
     }

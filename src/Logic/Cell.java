@@ -23,7 +23,7 @@ public class Cell {
         return position;
     }
 
-    public void setPosition(Position position) {
+    void setPosition(Position position) {
         this.position = position;
     }
 

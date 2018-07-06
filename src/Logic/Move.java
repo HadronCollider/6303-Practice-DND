@@ -1,11 +1,10 @@
 package Logic;
 
-
-public class Move {
+class Move {
     Cell first;
     Cell second;
 
-    public Move(Cell a, Cell b) {
+    Move(Cell a, Cell b) {
         first = a;
         second = b;
     }

@@ -8,30 +8,93 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class Game {
+    private Cell[][] Field;                                        // Поле
+    private Position FieldSize;                                    // Размеры поля
     private Lesson curLesson;                                      // Текущий урок
+    private int NumberOfSteps;                                     // Количество этапов в уроке
     private LinkedList<DictionaryPair> LessonErr1;                 // Список ошибок (верные пары левых)
     private LinkedList<DictionaryPair> LessonErr2;                 // Список ошибок (верные пары левых)
     private int NumCorrectAnsw;                                    // Кол-во верных ответов на уроке
-    private int offset;                                            // Смещение относительно начала словаря
-    private Cell[][] Field;                                        // Поле
-    private LinkedList<Integer> NumElemOfMatrix;                   // Распределение элементов по матрицам
-    private Position FieldSize;                                    // Размеры поля
-    private Move LastMove;                                         // Последный ход
     private int localErrs;                                         // Кол-во ошибок на этапе
+    private int offset;                                            // Смещение относительно начала словаря
+    private LinkedList<Integer> NumElemOfMatrix;                   // Распределение элементов по матрицам
+    private Move LastMove;                                         // Последный ход
     private boolean MixFlag;                                       // Флаг перемешивания (при загрузке этапа)
-    private boolean OddFlagForDistribution;                                 //
-    private int NumberOfSteps;
-
+    private boolean OddFlagForDistribution;                        // Флаг "плохого" размера поля (нечетная вертикаль)
 
     public Game(int vertical, int horizontal) {
         setSize(vertical, horizontal);
     }
 
     /**
-     * Делает текущим урок из поданного файла
+     * @return - игровое поле
+     */
+    public Cell[][] getField() {
+        return Field;
+    }
+
+    /**
+     * @return - количество этапов урока
+     */
+    public int getNumberOfSteps() {
+        return NumberOfSteps;
+    }
+
+    /**
+     * @return - количество совершенных ошибок за этап
+     */
+    public int getLocalErrs() {
+        return localErrs;
+    }
+
+    /**
+     * @return - количество совершенных ошибок за урок
+     */
+    public int getNumErrors() {
+        return LessonErr1.size();
+    }
+
+    /**
+     * @return - список распределений пар по этапам
+     */
+    public LinkedList<Integer> getNumElemOfMatrix() {
+        return NumElemOfMatrix;
+    }
+
+    /**
+     * Сеттер флага автоматического перемешивания
      *
-     * @param file
-     * @throws IOException
+     * @param mixFlag - true/false - перемешивать / не перемешивать
+     */
+    public void setMixFlag(boolean mixFlag) {
+        MixFlag = mixFlag;
+    }
+
+    /**
+     * Сеттер последнего хода
+     *
+     * @param lastMove - последний ход
+     */
+    private void setLastMove(Move lastMove) {
+        LastMove = lastMove;
+    }
+
+    /**
+     * Сеттер размеров игрового поля
+     *
+     * @param horizontal - ширина
+     * @param vertical   - высота
+     */
+    public void setSize(int vertical, int horizontal) {
+        FieldSize = new Position(vertical, horizontal);
+        OddFlagForDistribution = vertical % 2 == 1;
+    }
+
+    /**
+     * Установка нового урока из файла
+     *
+     * @param file - файл-словарь
+     * @throws IOException - Input/Output exception
      */
     public boolean newLesson(File file) throws IOException {
         if (curLesson == null) {
@@ -42,11 +105,12 @@ public class Game {
             return true;
         } else
             return false;
-        //return true;
     }
 
-    public void prepareLesson()
-    {
+    /**
+     * Подготовка урока к запуску
+     */
+    private void prepareLesson() {
         LessonErr1 = new LinkedList<>();
         LessonErr2 = new LinkedList<>();
         NumCorrectAnsw = 0;
@@ -59,111 +123,9 @@ public class Game {
     }
 
     /**
-     * Сравнивает выбранные ячейки
-     *
-     * @param a
-     * @param b
-     * @return
+     * Вычисление оптимального кол-ва элементов в матрицах, для умещения всего урока на "доске"
      */
-    public boolean compareCell(Position a, Position b) {
-        DictionaryPair first = Field[a.vertical][a.horizontal].getPair();
-        DictionaryPair second = Field[b.vertical][b.horizontal].getPair();
-        boolean compareFlag = comparePair(first, second);
-        setLastMove(new Move(Field[a.vertical][a.horizontal], Field[b.vertical][b.horizontal]));
-        if (compareFlag) {
-            Field[a.vertical][a.horizontal] = null;
-            Field[b.vertical][b.horizontal] = null;
-            NumCorrectAnsw++;
-            if (NumCorrectAnsw == NumElemOfMatrix.getFirst()) {
-                NumElemOfMatrix.removeFirst();
-                localErrs = 0;
-                NumCorrectAnsw = 0;
-                setLastMove(null);
-                return true;
-            }
-        } else {
-            localErrs++;
-            LessonErr1.addLast(first);
-            LessonErr2.addLast(second);
-        }
-/// ПРОВЕРКА СОХРАНЕНИЯ
-       // if (new Random().nextInt() % 5 == 0)
-       //     SaveProgress();
-         return compareFlag;
-    }
-
-    /**
-     * Сравнивает поданные пары
-     *
-     * @param A - первая пара
-     * @param B - вторая пара
-     * @return - true - если пары совместимы
-     */
-    boolean comparePair(DictionaryPair A, DictionaryPair B) {
-        return A.getFirst().equals(B.getFirst()) || A.getSecond().equals(B.getSecond());
-    }
-
-    /**
-     * Сеттер последнего хода
-     *
-     * @param lastMove - последний ход
-     */
-    void setLastMove(Move lastMove) {
-        LastMove = lastMove;
-    }
-
-    /**
-     *
-     * @return - количество совершенных ошибок за этап
-     */
-    public int getLocalErrs() {
-        return localErrs;
-    }
-
-    /**
-     *
-     * @return - количество совершенных ошибок за урок
-     */
-    public int getNumErrors() {
-        return LessonErr1.size();
-    }
-
-    /**
-     * Отмена хода
-     * - верного - уменьшение кол-ва верных ответов
-     * - неверного - удаление из таблицы ошибок (уменьшение кол-ва ошибок)
-     */
-    public void undo() {
-        if (LastMove != null) {
-//            System.out.println("Отменa " + LastMove.first.getPosition() + " " + LastMove.second.getPosition());
-            Position f = LastMove.first.getPosition();
-            Position s = LastMove.second.getPosition();
-            Field[f.vertical][f.horizontal] = LastMove.first;
-            Field[s.vertical][s.horizontal] = LastMove.second;
-            if (comparePair(LastMove.first.getPair(), LastMove.second.getPair())) {
-                NumCorrectAnsw--;
-            } else {
-                LessonErr1.removeLast();
-                LessonErr2.removeLast();
-                localErrs--;
-            }
-            setLastMove(null);
-        }
-    }
-
-    /**
-     * Геттер поля
-     *
-     * @return поле
-     */
-    public Cell[][] getField() {
-        return Field;
-    }
-
-    /**
-     * Вычисляет оптимальное кол-во элементов в матрицах, для умещения всего урока на "доске"
-     */
-    int CalculateFields() {
+    private int CalculateFields() {
         int NumElem = curLesson.Dictionary.size();                          // всего элементов
         int MatrixElem = FieldSize.horizontal * FieldSize.vertical / 2;         // пар в матрице заданного размера
         int NumOfMatrix = (int) Math.ceil((double) NumElem / MatrixElem);    // количество необходимых матриц
@@ -182,12 +144,8 @@ public class Game {
         return NumOfMatrix;
     }
 
-    public LinkedList<Integer> getNumElemOfMatrix() {
-        return NumElemOfMatrix;
-    }
-
     /**
-     * Контролирует установку потока полей урока - устанавливет следующее, если оно существует
+     * Контроль установки потока полей урока - устанавливет следующее, если оно существует
      *
      * @return true - если поля ещё есть (и после выполнения очередное поле выставлено), false - если полей урока больше нет
      */
@@ -209,11 +167,9 @@ public class Game {
                             break;
                     }
                 }
-            }
-            else
-            {
+            } else {
                 int j = 0;
-                while ( j < FieldSize.vertical*FieldSize.horizontal) {
+                while (j < FieldSize.vertical * FieldSize.horizontal) {
                     int row1 = j / FieldSize.horizontal;
                     int column1 = j % FieldSize.horizontal;
                     j++;
@@ -239,7 +195,7 @@ public class Game {
     }
 
     /**
-     * Перемешивание
+     * Перемешивание поля
      */
     public void mixField() {
         if (Field != null) {
@@ -264,42 +220,90 @@ public class Game {
     }
 
     /**
-     * Сеттер флага автоматического перемешивания
-     * @param mixFlag - true/false - перемешивать / не перемешивать
-     */
-    public void setMixFlag(boolean mixFlag) {
-        MixFlag = mixFlag;
-    }
-
-    /**
+     * Сравнение ячеек по поданным координатам
      *
-     * @return - количество этапов урока
+     * @param a - первая ячейка
+     * @param b - вторая ячейка
+     * @return - true - если ячейки совместимы
      */
-    public int getNumberOfSteps() {
-        return NumberOfSteps;
-    }
-
-    /**
-     * Устанавливает размеры поля
-     *
-     * @param horizontal - ширина
-     * @param vertical - высота
-     */
-    public void setSize(int vertical, int horizontal) {
-        FieldSize = new Position(vertical, horizontal);
-        if (vertical % 2 == 1) {
-            OddFlagForDistribution = true;
+    public boolean compareCell(Position a, Position b) {
+        DictionaryPair first = Field[a.vertical][a.horizontal].getPair();
+        DictionaryPair second = Field[b.vertical][b.horizontal].getPair();
+        boolean compareFlag = comparePair(first, second);
+        setLastMove(new Move(Field[a.vertical][a.horizontal], Field[b.vertical][b.horizontal]));
+        if (compareFlag) {
+            Field[a.vertical][a.horizontal] = null;
+            Field[b.vertical][b.horizontal] = null;
+            NumCorrectAnsw++;
+            if (NumCorrectAnsw == NumElemOfMatrix.getFirst()) {
+                NumElemOfMatrix.removeFirst();
+                localErrs = 0;
+                NumCorrectAnsw = 0;
+                setLastMove(null);
+                return true;
+            }
+        } else {
+            localErrs++;
+            LessonErr1.addLast(first);
+            LessonErr2.addLast(second);
         }
-        else {
-            OddFlagForDistribution = false;
+        return compareFlag;
+    }
+
+    /**
+     * Сравнение поданных пар
+     *
+     * @param A - первая пара
+     * @param B - вторая пара
+     * @return - true - если пары совместимы
+     */
+    private boolean comparePair(DictionaryPair A, DictionaryPair B) {
+        return A.getFirst().equals(B.getFirst()) || A.getSecond().equals(B.getSecond());
+    }
+
+    /**
+     * Отмена последнего хода
+     * - верного - уменьшение кол-ва верных ответов
+     * - неверного - удаление из таблицы ошибок (уменьшение кол-ва ошибок)
+     */
+    public void undo() {
+        if (LastMove != null) {
+            Position f = LastMove.first.getPosition();
+            Position s = LastMove.second.getPosition();
+            Field[f.vertical][f.horizontal] = LastMove.first;
+            Field[s.vertical][s.horizontal] = LastMove.second;
+            if (comparePair(LastMove.first.getPair(), LastMove.second.getPair())) {
+                NumCorrectAnsw--;
+            } else {
+                LessonErr1.removeLast();
+                LessonErr2.removeLast();
+                localErrs--;
+            }
+            setLastMove(null);
+        }
+    }
+
+
+    /**
+     * Сохранение совершенных ошибок в файл
+     *
+     * @throws IOException - Input/Output exception
+     */
+    public void SaveErrors() throws IOException {
+        if (curLesson != null) {
+            StringBuilder build = new StringBuilder();
+            build.append("data/");
+            build.append(curLesson.getLessonName());
+            build.setLength(build.length() - 4);
+            ErrorsToFile(LessonErr1, build.toString() + "(err1).txt");
+            ErrorsToFile(LessonErr2, build.toString() + "(err2).txt");
         }
     }
 
     /**
-     * -------------- МЕТОД НАХОДИТСЯ В РАЗРАБОТКЕ --------------
-     * Запись ошибок в файл для возможности повторного запуска
+     * Запись списка в файл
      *
-     * @param a - список для сохранения
+     * @param a        - сохраняемый список
      * @param fileName - имя файла
      * @throws IOException - Input/Output Exception
      */
@@ -312,22 +316,58 @@ public class Game {
         }
     }
 
-    public void SaveErrors() throws IOException {
-        // Проверка на пустоту урока
+    /**
+     * Создание урока из совершенных ошибок
+     *
+     * @param numType - загружаемый список ошибок
+     */
+    public void ErrorsToLesson(NumErrorType numType) throws IOException {
         StringBuilder build = new StringBuilder();
-        build.append("data/");
         build.append(curLesson.getLessonName());
         build.setLength(build.length() - 4);
-        ErrorsToFile(LessonErr1, build.toString() + "(err1).txt");
-        ErrorsToFile(LessonErr2, build.toString() + "(err2).txt");
+        LinkedList<DictionaryPair> LList = null;
+        switch (numType) {
+            case FIRST: {
+                build.append("(err1).txt");
+                LList = new LinkedList<>(LessonErr1);
+                break;
+            }
+            case SECOND: {
+                build.append("(err2).txt");
+                LList = new LinkedList<>(LessonErr2);
+                break;
+            }
+            case BOTH: {
+                build.append("(allerr).txt");
+                LList = new LinkedList<>(LessonErr1);
+                LList.addAll(LessonErr2);
+                break;
+            }
+        }
+        curLesson.LessonFromList(LList, build.toString());
+        prepareLesson();
     }
 
+    public enum NumErrorType {
+        FIRST,
+        SECOND,
+        BOTH
+    }
+
+    //--------------------------------- СЮДА НЕ ЛЕЗТЬ ---------------------------------//
+    //--------------------------------- СЮДА НЕ ЛЕЗТЬ ---------------------------------//
+    //--------------------------------- СЮДА НЕ ЛЕЗТЬ ---------------------------------//
+    //--------------------------------- СЮДА НЕ ЛЕЗТЬ ---------------------------------//
+    //--------------------------------- СЮДА НЕ ЛЕЗТЬ ---------------------------------//
+    //--------------------------------- СЮДА НЕ ЛЕЗТЬ ---------------------------------//
+    //--------------------------------- СЮДА НЕ ЛЕЗТЬ ---------------------------------//
+    //--------------------------------- СЮДА НЕ ЛЕЗТЬ ---------------------------------//
 
     /**
      * Сохранение текущего прогресса, для дальнейшего продолжение
-     *     // принимает fileName поданное пользователем?
+     * // принимает fileName поданное пользователем?
      */
-    void SaveProgress(){
+    void SaveProgress() {
         StringBuilder build = new StringBuilder();
         build.append("data/");
         build.append(curLesson.getLessonName());
@@ -358,13 +398,13 @@ public class Game {
             Cell cell = LastMove.first;
 // Последний сделанный ход
 //--- Заменить на вызов функции
-            if(cell.getFlag())
+            if (cell.getFlag())
                 save.write(curLesson.Dictionary.indexOf(cell.getPair()) + " 1 ");
             else
                 save.write(curLesson.Dictionary.indexOf(cell.getPair()) + " 0 ");
             save.write(cell.getPosition().toString() + " ");
             cell = LastMove.second;
-            if(cell.getFlag())
+            if (cell.getFlag())
                 save.write(curLesson.Dictionary.indexOf(cell.getPair()) + " 1 ");
             else
                 save.write(curLesson.Dictionary.indexOf(cell.getPair()) + " 0 ");
@@ -379,18 +419,16 @@ public class Game {
                 save.write(curLesson.Dictionary.indexOf(a) + " ");
             save.write("\n");
 
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     /**
      * Загрузка сохраненного прогресса
-     *     // принимает fileName поданное пользователем?
+     * // принимает fileName поданное пользователем?
      */
-    void LoadProgress(String fileName){
+    void LoadProgress(String fileName) {
         try (Scanner load = new Scanner(new File(fileName))) {
             if (curLesson == null) {
                 curLesson = new Lesson();
@@ -410,16 +448,14 @@ public class Game {
             Field = new Cell[FieldSize.vertical][FieldSize.horizontal];
             for (int i = 0; i < FieldSize.vertical; i++)                      // Считывание поля
             {
-                for (int j = 0; j < FieldSize.vertical; j++)
-                {
+                for (int j = 0; j < FieldSize.vertical; j++) {
                     int index = load.nextInt();
                     int flag = load.nextInt();
-                    if (index != -1)
-                    {                                                        // Индекс пары в словаре + флаг
+                    if (index != -1) {                                                        // Индекс пары в словаре + флаг
                         if (flag == 1)
-                            Field[i][j] = new Cell (curLesson.Dictionary.get(index), new Position(i, j), true);
+                            Field[i][j] = new Cell(curLesson.Dictionary.get(index), new Position(i, j), true);
                         else
-                            Field[i][j] = new Cell (curLesson.Dictionary.get(index), new Position(i, j), false);
+                            Field[i][j] = new Cell(curLesson.Dictionary.get(index), new Position(i, j), false);
                     } else
                         Field[i][j] = null;
                 }
@@ -432,17 +468,17 @@ public class Game {
             int row = load.nextInt();
             int column = load.nextInt();
             if (flag == 1)
-                Field[row][column] = new Cell (curLesson.Dictionary.get(index), new Position(row, column), true);
+                Field[row][column] = new Cell(curLesson.Dictionary.get(index), new Position(row, column), true);
             else
-                Field[row][column] = new Cell (curLesson.Dictionary.get(index), new Position(row, column), false);
+                Field[row][column] = new Cell(curLesson.Dictionary.get(index), new Position(row, column), false);
             index = load.nextInt();
             flag = load.nextInt();
             row = load.nextInt();
             column = load.nextInt();
             if (flag == 1)
-                Field[row][column] = new Cell (curLesson.Dictionary.get(index), new Position(row, column), true);
+                Field[row][column] = new Cell(curLesson.Dictionary.get(index), new Position(row, column), true);
             else
-                Field[row][column] = new Cell (curLesson.Dictionary.get(index), new Position(row, column), false);
+                Field[row][column] = new Cell(curLesson.Dictionary.get(index), new Position(row, column), false);
 //---
 //            save.write("\n");
             NumCorrectAnsw = load.nextInt();
@@ -454,46 +490,10 @@ public class Game {
                 LessonErr2.add(curLesson.Dictionary.get(load.nextInt()));
 //            save.write("\n");
 
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
-    }
-
-        public void ErrorsToLesson(NumErrorType numType) throws IOException {
-        StringBuilder build = new StringBuilder();
-        build.append(curLesson.getLessonName());
-        build.setLength(build.length() - 4);
-        LinkedList<DictionaryPair> LList = null;
-        switch (numType) {
-            case FIRST: {
-                build.append("(err1).txt");
-                LList = new LinkedList<>(LessonErr1);
-                break;
-            }
-            case SECOND: {
-                build.append("(err2).txt");
-                LList = new LinkedList<>(LessonErr2);
-                break;
-            }
-            case BOTH: {
-                build.append("(allerr).txt");
-                LList = new LinkedList<>(LessonErr1);
-                LList.addAll(LessonErr2);
-                break;
-            }
-        }
-         curLesson.LessonFromErrors(LList, build.toString());
-         prepareLesson();
-    }
-
-    public enum NumErrorType
-    {
-        FIRST,
-        SECOND,
-        BOTH
     }
 
     /*@Override
@@ -515,4 +515,3 @@ public class Game {
     }*/
 
 }
-
