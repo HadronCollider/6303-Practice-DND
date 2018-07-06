@@ -15,8 +15,8 @@ public class StartWindow extends JFrame {
         init();
     }
 
-    public int tableSizeX = 0;
-    public int tableSizeY = 0;
+    public int tableSizeX = 6;
+    public int tableSizeY = 6;
     public int cellSizeX = 0;
     public int cellSizeY = 0;
 
@@ -59,7 +59,7 @@ public class StartWindow extends JFrame {
         setMaximumSize(new Dimension(screenSize.width / 6, screenSize.height / 3));
 
         startButton.addActionListener(e -> {
-            GameWindow gameWindow = new GameWindow();
+            GameWindow gameWindow = new GameWindow(tableSizeY, tableSizeX);
             gameWindow.setVisible(true);
             this.dispose();
         });

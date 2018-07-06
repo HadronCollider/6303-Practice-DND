@@ -124,11 +124,11 @@ public class SettingsWindow extends JFrame {
         setMaximumSize(new Dimension(screenSize.width / 6, screenSize.height / 3));
 
         saveButton.addActionListener(e -> {
-            if (isNumeric(tableSizeFieldX.getText()) && isNumeric(cellSizeFieldX.getText()) && isNumeric(tableSizeFieldY.getText()) && isNumeric(cellSizeFieldY.getText())) {
+            if (isNumeric(tableSizeFieldX.getText()) &&  isNumeric(tableSizeFieldY.getText())) {
                 startWindow.tableSizeX = Integer.parseInt(tableSizeFieldX.getText());
-                startWindow.cellSizeX = Integer.parseInt(cellSizeFieldX.getText());
+                //startWindow.cellSizeX = Integer.parseInt(cellSizeFieldX.getText());
                 startWindow.tableSizeY = Integer.parseInt(tableSizeFieldY.getText());
-                startWindow.cellSizeY = Integer.parseInt(cellSizeFieldY.getText());
+                //startWindow.cellSizeY = Integer.parseInt(cellSizeFieldY.getText());
                 startWindow.setVisible(true);
                 this.dispose();
             } else {
