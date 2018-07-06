@@ -42,7 +42,7 @@ public class Game {
             return true;
         } else
             return false;
-        return true;
+        //return true;
     }
 
     public void prepareLesson()

@@ -13,9 +13,12 @@ public class GameWindow extends JFrame {
 
     private FieldPanel fieldPanel;
     private InfoPanel infoPanel;
+    private int vertical, horizontal;
 
 
-    public GameWindow() {
+    public GameWindow(int vertical, int horizontal) {
+        this.vertical = vertical;
+        this.horizontal = horizontal;
         init();
         setMenuBars();
     }
@@ -67,7 +70,7 @@ public class GameWindow extends JFrame {
         gridBagConstraints.fill = GridBagConstraints.BOTH;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 0.1;
-        FieldPanel fieldPanel = new FieldPanel(this, 4, 4);
+        FieldPanel fieldPanel = new FieldPanel(this, vertical, horizontal);
         this.fieldPanel = fieldPanel;
         panel.add(fieldPanel, gridBagConstraints);
         gridBagConstraints.gridx = 1;
