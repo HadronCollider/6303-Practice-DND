@@ -312,6 +312,15 @@ public class Game {
         }
     }
 
+    void SaveErrors() throws IOException {
+        StringBuilder build = new StringBuilder();
+        build.append("/data/");
+        build.append(curLesson.getLessonName());
+        build.setLength(build.length() - 4);
+        ErrorsToFile(LessonErr1, build.toString() + "(err1).txt");
+        ErrorsToFile(LessonErr2, build.toString() + "(err2).txt");
+    }
+
 
     /**
      * Сохранение текущего прогресса, для дальнейшего продолжение
@@ -319,9 +328,10 @@ public class Game {
      */
     void SaveProgress(){
         StringBuilder build = new StringBuilder();
+        build.append("/data/");
         build.append(curLesson.getLessonName());
         build.setLength(build.length() - 4);
-        build.append("(save).savepr");
+        build.append(".savepr");
         try (FileWriter save = new FileWriter(build.toString())) {
             save.write(curLesson.getLessonName() + "\n");           // Путь к используемому словарю
             save.write(offset + "\n");                              // Смещение в словаре
@@ -452,7 +462,7 @@ public class Game {
     }
 
 
-    public void ErrorsTo(ActionErrorType actionType, NumErrorType numType) throws IOException {
+    public void ErrorsToLesson(NumErrorType numType) throws IOException {
         StringBuilder build = new StringBuilder();
         build.append(curLesson.getLessonName());
         build.setLength(build.length() - 4);
@@ -475,20 +485,8 @@ public class Game {
                 break;
             }
         }
-        switch (actionType)
-        {
-            case SAVE:
-            {
-                ErrorsToFile(LList, build.toString());
-                break;
-            }
-            case LOAD:
-            {
-                curLesson.LessonFromErrors(LList, build.toString());
-                prepareLesson();
-                break;
-            }
-        }
+         curLesson.LessonFromErrors(LList, build.toString());
+         prepareLesson();
     }
 
     public enum NumErrorType
@@ -496,12 +494,6 @@ public class Game {
         FIRST,
         SECOND,
         BOTH
-    }
-
-    public enum ActionErrorType
-    {
-        SAVE,
-        LOAD
     }
 
     /*@Override
