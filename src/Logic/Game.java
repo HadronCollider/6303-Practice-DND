@@ -460,17 +460,17 @@ public class Game {
         switch (numType) {
             case FIRST: {
                 build.append("(err1).txt");
-                LList = LessonErr1;
+                LList = new LinkedList<>(LessonErr1);
                 break;
             }
             case SECOND: {
                 build.append("(err2).txt");
-                LList = LessonErr2;
+                LList = new LinkedList<>(LessonErr2);
                 break;
             }
             case BOTH: {
                 build.append("(allerr).txt");
-                LList = LessonErr1;
+                LList = new LinkedList<>(LessonErr1);
                 LList.addAll(LessonErr2);
                 break;
             }
@@ -480,11 +480,13 @@ public class Game {
             case SAVE:
             {
                 ErrorsToFile(LList, build.toString());
+                break;
             }
             case LOAD:
             {
                 curLesson.LessonFromErrors(LList, build.toString());
                 prepareLesson();
+                break;
             }
         }
     }

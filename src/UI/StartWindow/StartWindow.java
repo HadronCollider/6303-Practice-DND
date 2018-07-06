@@ -62,7 +62,7 @@ public class StartWindow extends JFrame {
             SwingUtilities.invokeLater(() ->{
                 GameWindow gameWindow = new GameWindow(tableSizeY, tableSizeX);
                 gameWindow.setVisible(true);
-                gameWindow.startGame();
+                //gameWindow.startGame();
             });
             this.dispose();
         });

@@ -2,6 +2,7 @@ package UI.GameWindow;
 
 import Logic.Cell;
 import Logic.Game;
+import javafx.stage.FileChooser;
 
 import javax.swing.*;
 import java.awt.*;
@@ -71,7 +72,7 @@ public class FieldPanel extends JPanel {
             } else {
                 window.getInfoPanel().getTimer().stop();
                 SwingUtilities.invokeLater(() -> {
-                    ResultWindow resultWindow = new ResultWindow(this);
+                    ResultWindow resultWindow = new ResultWindow(this, game.getNumErrors());
                     resultWindow.setVisible(true);
 
                 });
@@ -102,10 +103,14 @@ public class FieldPanel extends JPanel {
 
     public void startGame() {
         JFileChooser fileDialog = new JFileChooser();
-        fileDialog.showOpenDialog(this);
+        int approval = fileDialog.showOpenDialog(this);
+        if(approval != JFileChooser.APPROVE_OPTION) {
+            return;
+        }
         if (window.getInfoPanel().getMixCheckBox().isSelected()) {
             game.setMixFlag(true);
         }
+
         try {
             game.newLesson(fileDialog.getSelectedFile());
         } catch (IOException e) {

@@ -118,10 +118,10 @@ public class SettingsWindow extends JFrame {
         //Для стартового окна используем 1/3 высоты экрана и 1/6 ширины, минимальный размер 300х100
 
         //setMinimumSize(new Dimension(300, 100)); //минимальный размер окна
-        setSize(new Dimension(screenSize.width / 6, screenSize.height / 3));
-        setPreferredSize(new Dimension(screenSize.width / 6, screenSize.height / 3));
-        setMinimumSize(new Dimension(screenSize.width / 6, screenSize.height / 3));
-        setMaximumSize(new Dimension(screenSize.width / 6, screenSize.height / 3));
+        setSize(new Dimension(screenSize.width / 3, screenSize.height / 2));
+        setPreferredSize(new Dimension(screenSize.width / 3, screenSize.height / 2));
+        setMinimumSize(new Dimension(screenSize.width / 3, screenSize.height / 2));
+        setMaximumSize(new Dimension(screenSize.width / 3, screenSize.height / 2));
 
         saveButton.addActionListener(e -> {
             if (isNumeric(tableSizeFieldX.getText()) &&  isNumeric(tableSizeFieldY.getText())) {

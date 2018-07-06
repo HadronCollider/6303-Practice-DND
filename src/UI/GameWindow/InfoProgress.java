@@ -26,6 +26,10 @@ public class InfoProgress extends JLabel {
         display();
     }
 
+    public void setCurrentStep(int currentStep) {
+        this.currentStep = currentStep;
+    }
+
     void display() {
         setText("Этап " + currentStep + " из " + numberOfSteps);
     }
