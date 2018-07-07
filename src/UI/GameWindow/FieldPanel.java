@@ -122,8 +122,8 @@ public class FieldPanel extends JPanel {
     }
 
     public void continueGame(String filename) {
-        game.LoadProgress(filename);
         window.getInfoPanel().startAll();
+        window.getInfoPanel().getTimer().setTime(game.LoadProgress(filename));
         window.getInfoPanel().getProgress().setNumberOfSteps(game.getNumberOfSteps());
         window.getInfoPanel().getErrorCounter().setNumberOfMistakes(game.getNumErrors());
         window.getInfoPanel().getProgress().setCurrentStep(game.getNumOfCurStep());

@@ -56,4 +56,14 @@ public class InfoTimer extends JLabel {
         setText(out.toString());
     }
 
+    int getTime() {
+        return minutes * 60 + seconds;
+    }
+
+    void setTime(int timeInSeconds) {
+        minutes = timeInSeconds / 60;
+        seconds = timeInSeconds % 60;
+        display();
+    }
+
 }
