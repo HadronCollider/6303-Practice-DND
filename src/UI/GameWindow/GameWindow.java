@@ -32,22 +32,23 @@ public class GameWindow extends JFrame {
         JMenuBar menuBar = new JMenuBar();
         JMenu fileMenu = new JMenu("Файл");
         JMenu gameMenu = new JMenu("Игра");
-        JMenuItem openMenuItem = new JMenuItem("Продолжить игру");
-        openMenuItem.addActionListener(e -> {
-            JFileChooser fileChooser = new JFileChooser();
-            int approve = fileChooser.showOpenDialog(null);
-            if(approve != JFileChooser.APPROVE_OPTION) {
-                return;
-            }
-            fieldPanel.getGame().LoadProgress(fileChooser.getSelectedFile().getName());
+        JMenuItem loadGameMenuItem = new JMenuItem("Продолжить игру");
+        loadGameMenuItem.addActionListener(e -> {
+            //JFileChooser fileChooser = new JFileChooser();
+            //int approve = fileChooser.showOpenDialog(null);
+            //if(approve != JFileChooser.APPROVE_OPTION) {
+            //    return;
+            //}
+            continueGame("/data/ex3.savepr");
         });
-        openMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
-        JMenuItem saveMenuItem = new JMenuItem("Coxранить игру");
-        saveMenuItem.addActionListener(e -> {
+
+        loadGameMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
+        JMenuItem saveGameMenuItem = new JMenuItem("Coxранить игру");
+        saveGameMenuItem.addActionListener(e -> {
             fieldPanel.getGame().SaveProgress();
         });
 
-        saveMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
+        saveGameMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
         JMenuItem saveMistakesMenuItem = new JMenuItem("Сохранить ошибки");
         saveMistakesMenuItem.addActionListener(e -> {
             try {
@@ -56,12 +57,13 @@ public class GameWindow extends JFrame {
                 e1.printStackTrace();
             }
         });
+
         JMenuItem exitMenuItem = new JMenuItem("Выйти");
 
         exitMenuItem.addActionListener(e -> dispose());
 
         JMenuItem loadLessonMenuItem = new JMenuItem("Загрузить словарь");
-        loadLessonMenuItem.addActionListener(e -> fieldPanel.startGame());
+        loadLessonMenuItem.addActionListener(e -> startGame());
 
         JMenuItem undoMenuItem = new JMenuItem("Отменить действие");
         undoMenuItem.addActionListener(e -> fieldPanel.undo());
@@ -74,8 +76,8 @@ public class GameWindow extends JFrame {
         gameMenu.add(saveMistakesMenuItem);
         gameMenu.add(undoMenuItem);
         gameMenu.add(mixMenuItem);
-        fileMenu.add(openMenuItem);
-        fileMenu.add(saveMenuItem);
+        fileMenu.add(loadGameMenuItem);
+        fileMenu.add(saveGameMenuItem);
         fileMenu.add(settingsMenuItem);
         fileMenu.addSeparator();
         fileMenu.add(exitMenuItem);
