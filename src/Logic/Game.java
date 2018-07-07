@@ -36,6 +36,13 @@ public class Game {
     }
 
     /**
+     * @return - номер текущего этапа
+     */
+    public int getNumOfCurStep() {
+        return !NumElemOfMatrix.isEmpty() ? NumberOfSteps - NumElemOfMatrix.size() + 1 : NumberOfSteps;
+    }
+
+    /**
      * @return - количество этапов урока
      */
     public int getNumberOfSteps() {
@@ -386,55 +393,7 @@ public class Game {
         build.setLength(build.length() - 4);
         build.append(".savepr");
         try (FileWriter save = new FileWriter(build.toString())) {
-/*
-// ЗАВИСИТ ОТ СЛОВАРЯ
-            save.write(curLesson.getLessonName() + "\n");           // Путь к используемому словарю
-            save.write(offset + "\n");                              // Смещение в словаре
-            save.write(NumElemOfMatrix.size() + " ");               // Количество матриц
-            for (int a : NumElemOfMatrix)                               // Матричное распределение
-                save.write(a + " ");
-            save.write("\n");
-            save.write(FieldSize.vertical + " " + FieldSize.horizontal); // Размер поля
-            save.write("\n");
-            for (Cell[] arr : Field) // Запись поля
-            {
-                for (Cell a : arr) {
-                    if (a != null) { // Индекс пары в словаре + флаг
-                        if (a.getFlag())
-                            save.write(curLesson.Dictionary.indexOf(a.getPair()) + " 1 ");
-                        else
-                            save.write(curLesson.Dictionary.indexOf(a.getPair()) + " 0 ");
-                    } else
-                        save.write("-1 0 "); // Если ячейка пуста, то -1
-                }
-                save.write("\n");
-            }
-            Cell cell = LastMove.first;
-// Последний сделанный ход
-//--- Заменить на вызов функции
-            if (cell.getFlag())
-                save.write(curLesson.Dictionary.indexOf(cell.getPair()) + " 1 ");
-            else
-                save.write(curLesson.Dictionary.indexOf(cell.getPair()) + " 0 ");
-            save.write(cell.getPosition().toString() + " ");
-            cell = LastMove.second;
-            if (cell.getFlag())
-                save.write(curLesson.Dictionary.indexOf(cell.getPair()) + " 1 ");
-            else
-                save.write(curLesson.Dictionary.indexOf(cell.getPair()) + " 0 ");
-            save.write(cell.getPosition().toString() + " ");
-//---
-            save.write("\n");
-            save.write(NumCorrectAnsw + " " + LessonErr1.size() + "\n"); // Кол-во верных ответов, ошибок
-            for (DictionaryPair a : LessonErr1) // Сохранение первого списка ошибок
-                save.write(curLesson.Dictionary.indexOf(a) + " ");
-            save.write("\n");
-            for (DictionaryPair a : LessonErr2) // Сохранение второго списка ошибок
-                save.write(curLesson.Dictionary.indexOf(a) + " ");
-            save.write("\n");
-
-*/
-// НЕ ЗАВИСЯТ ОТ СЛОВАРЯ
+// НЕ ЗАВИСИТ ОТ СЛОВАРЯ
             save.write(curLesson.getLessonName() + "\n");                   // Название урока
             int localOffset = offset - NumElemOfMatrix.getFirst();
             save.write((curLesson.Dictionary.size() - localOffset) + "\n");      // Кол-во слов словаря
@@ -482,6 +441,54 @@ public class Game {
             for (DictionaryPair a : LessonErr2) // Сохранение второго списка ошибок
                 save.write((curLesson.Dictionary.indexOf(a) - localOffset) + " ");
             save.write("\n");
+/*
+//ЗАВИСИТ ОТ СЛОВАРЯ
+            save.write(curLesson.getLessonName() + "\n");           // Путь к используемому словарю
+            save.write(offset + "\n");                              // Смещение в словаре
+            save.write(NumElemOfMatrix.size() + " ");               // Количество матриц
+            for (int a : NumElemOfMatrix)                               // Матричное распределение
+                save.write(a + " ");
+            save.write("\n");
+            save.write(FieldSize.vertical + " " + FieldSize.horizontal); // Размер поля
+            save.write("\n");
+            for (Cell[] arr : Field) // Запись поля
+            {
+                for (Cell a : arr) {
+                    if (a != null) { // Индекс пары в словаре + флаг
+                        if (a.getFlag())
+                            save.write(curLesson.Dictionary.indexOf(a.getPair()) + " 1 ");
+                        else
+                            save.write(curLesson.Dictionary.indexOf(a.getPair()) + " 0 ");
+                    } else
+                        save.write("-1 0 "); // Если ячейка пуста, то -1
+                }
+                save.write("\n");
+            }
+            Cell cell = LastMove.first;
+// Последний сделанный ход
+//--- Заменить на вызов функции
+            if (cell.getFlag())
+                save.write(curLesson.Dictionary.indexOf(cell.getPair()) + " 1 ");
+            else
+                save.write(curLesson.Dictionary.indexOf(cell.getPair()) + " 0 ");
+            save.write(cell.getPosition().toString() + " ");
+            cell = LastMove.second;
+            if (cell.getFlag())
+                save.write(curLesson.Dictionary.indexOf(cell.getPair()) + " 1 ");
+            else
+                save.write(curLesson.Dictionary.indexOf(cell.getPair()) + " 0 ");
+            save.write(cell.getPosition().toString() + " ");
+//---
+            save.write("\n");
+            save.write(NumCorrectAnsw + " " + LessonErr1.size() + "\n"); // Кол-во верных ответов, ошибок
+            for (DictionaryPair a : LessonErr1) // Сохранение первого списка ошибок
+                save.write(curLesson.Dictionary.indexOf(a) + " ");
+            save.write("\n");
+            for (DictionaryPair a : LessonErr2) // Сохранение второго списка ошибок
+                save.write(curLesson.Dictionary.indexOf(a) + " ");
+            save.write("\n");
+
+*/
         } catch (IOException e) {
             // Сообщение о неудачном сохранении
             System.out.println("Не удалось сохранить игру");
@@ -493,6 +500,7 @@ public class Game {
      * // принимает fileName поданное пользователем?
      */
     public void LoadProgress(String fileName) {
+        fileName = "data/ex.savepr";
         try (Scanner load = new Scanner(new File(fileName))) {
 // НЕ ЗАВИСИТ ОТ СЛОВАРЯ
             curLesson = new Lesson();
