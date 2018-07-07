@@ -264,8 +264,6 @@ public class Game {
             LessonErr1.addLast(first);
             LessonErr2.addLast(second);
         }
-        if (new Random().nextInt()%5 == 0)
-            SaveProgress();
         return compareFlag;
     }
 
@@ -386,7 +384,7 @@ public class Game {
      * Сохранение текущего прогресса, для дальнейшего продолжение
      * // принимает fileName поданное пользователем?
      */
-    public void SaveProgress() {
+    public void SaveProgress(int TimeSec) {
         StringBuilder build = new StringBuilder();
         build.append("data/");
         build.append(curLesson.getLessonName());
@@ -434,7 +432,7 @@ public class Game {
             save.write(cell.getPosition().toString() + " ");
 //---
             save.write("\n");
-            save.write(NumCorrectAnsw + " " + LessonErr1.size() + "\n");                        // Кол-во верных ответов, ошибок
+            save.write(TimeSec + " " + NumCorrectAnsw + " " + LessonErr1.size() + "\n");  // Значение таймера, кол-во верных ответов, ошибок
             for (DictionaryPair a : LessonErr1) // Сохранение первого списка ошибок
                 save.write((curLesson.Dictionary.indexOf(a) - localOffset) + " ");
             save.write("\n");
@@ -480,7 +478,7 @@ public class Game {
             save.write(cell.getPosition().toString() + " ");
 //---
             save.write("\n");
-            save.write(NumCorrectAnsw + " " + LessonErr1.size() + "\n"); // Кол-во верных ответов, ошибок
+            save.write(TimeSec + " " + NumCorrectAnsw + " " + LessonErr1.size() + "\n");  // Значение таймера, кол-во верных ответов, ошибок
             for (DictionaryPair a : LessonErr1) // Сохранение первого списка ошибок
                 save.write(curLesson.Dictionary.indexOf(a) + " ");
             save.write("\n");
@@ -499,8 +497,9 @@ public class Game {
      * Загрузка сохраненного прогресса
      * // принимает fileName поданное пользователем?
      */
-    public void LoadProgress(String fileName) {
+    public int LoadProgress(String fileName) {
         fileName = "data/ex.savepr";
+        int TimeSec = 0;
         try (Scanner load = new Scanner(new File(fileName))) {
 // НЕ ЗАВИСИТ ОТ СЛОВАРЯ
             curLesson = new Lesson();
@@ -555,6 +554,7 @@ public class Game {
                 Field[row][column] = new Cell(curLesson.Dictionary.get(index), new Position(row, column), false);
 //---
             load.nextLine();
+            TimeSec = load.nextInt();
             NumCorrectAnsw = load.nextInt();
             int NumAllErr = load.nextInt();
             for (int i = 0; i < NumAllErr; i++)                         // Загрука первого списка ошибок
@@ -571,8 +571,10 @@ public class Game {
             NumElemOfMatrix.clear();
             for (int i = 0; i < NumberOfSteps; i++)                     // Матричное распределение
                 NumElemOfMatrix.addLast(load.nextInt());
+            load.nextLine();
             FieldSize.vertical = load.nextInt();
             FieldSize.horizontal = load.nextInt();
+            load.nextLine();
             Field = new Cell[FieldSize.vertical][FieldSize.horizontal];
             for (int i = 0; i < FieldSize.vertical; i++)                      // Считывание поля
             {
@@ -607,6 +609,8 @@ public class Game {
             else
                 Field[row][column] = new Cell(curLesson.Dictionary.get(index), new Position(row, column), false);
 //---
+            load.nextLine();
+            int TimeSec = load.nextInt();
             NumCorrectAnsw = load.nextInt();
             int NumAllErr = load.nextInt();
             for (int i = 0; i < NumAllErr; i++)                         // Загрука первого списка ошибок
@@ -617,7 +621,7 @@ public class Game {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        return TimeSec;
     }
 
     /*@Override
