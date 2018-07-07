@@ -66,4 +66,10 @@ public class InfoTimer extends JLabel {
         display();
     }
 
+
+    String getTextTime() {
+        StringBuilder out = new StringBuilder();
+        out.append(" " + minutes + " минут " + seconds + " секунд ");
+        return out.toString();
+    }
 }

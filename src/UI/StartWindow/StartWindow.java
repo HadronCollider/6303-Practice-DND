@@ -89,7 +89,7 @@ public class StartWindow extends JFrame {
 
 
     public static void main(String[] args) {
-        /*UIManager.put( "control", new Color( 100, 128, 128) );
+        /*UIManager.put( "control", new Color( 128, 128, 128) );
         UIManager.put( "info", new Color(128,128,128) );
         UIManager.put( "nimbusBase", new Color( 18, 30, 49) );
         UIManager.put( "nimbusAlertYellow", new Color( 248, 187, 0) );
@@ -125,6 +125,10 @@ public class StartWindow extends JFrame {
             StartWindow startWindow = new StartWindow();
             startWindow.setVisible(true);
         });
+
+
+
+
     }
 
 }
