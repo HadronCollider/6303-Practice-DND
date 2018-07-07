@@ -65,10 +65,7 @@ public class Square extends JButton {
         addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if (type == SquareType.FINAL || wrong) {
-                    return;
-                }
-                clicked();
+
             }
 
             @Override
@@ -78,7 +75,13 @@ public class Square extends JButton {
 
             @Override
             public void mouseReleased(MouseEvent e) {
-
+                if(e.getX() < 0 || e.getY() < 0 || e.getX() > getSize().width || e.getY() > getSize().height) {
+                    return;
+                }
+                if (type == SquareType.FINAL || wrong) {
+                    return;
+                }
+                clicked();
             }
 
             @Override
@@ -158,5 +161,7 @@ public class Square extends JButton {
         RIGHT,
         FINAL
     }
+
+
 
 }
