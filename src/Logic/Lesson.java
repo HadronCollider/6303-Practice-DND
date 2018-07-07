@@ -18,14 +18,16 @@ class Lesson {
      * @return - удачная инициализация - true
      */
     boolean Init(File file) {
-        Dictionary = new ArrayList<>();
         try (Scanner scanner = new Scanner(file)) {
+            Dictionary = new ArrayList<>();
             while (scanner.hasNext()) {
-                String line = scanner.nextLine();
-                String[] strings = line.split("\t");
-                if (strings.length == 2)
-                    Dictionary.add(new DictionaryPair(strings[0], strings[1]));
-                else {
+                DictionaryPair pair = DictionaryPair.readPair(scanner);
+                if (pair != null)
+                {
+                    Dictionary.add(pair);
+                }
+                else
+                {
                     // Сообщение об ошибке в словаре
                     System.out.println("Ошибка в словаре. Строка №" + (Dictionary.size() + 1) + "\n");
                     Dictionary.clear();
