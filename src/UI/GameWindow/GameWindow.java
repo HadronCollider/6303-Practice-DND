@@ -34,16 +34,17 @@ public class GameWindow extends JFrame {
         JMenu gameMenu = new JMenu("Игра");
         JMenuItem openMenuItem = new JMenuItem("Продолжить игру");
         openMenuItem.addActionListener(e -> {
-            JFileChooser fileDialog = new JFileChooser();
-            fileDialog.showOpenDialog(this);
+            JFileChooser fileChooser = new JFileChooser();
+            int approve = fileChooser.showOpenDialog(null);
+            if(approve != JFileChooser.APPROVE_OPTION) {
+                return;
+            }
+            fieldPanel.getGame().LoadProgress(fileChooser.getSelectedFile().getName());
         });
         openMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
         JMenuItem saveMenuItem = new JMenuItem("Coxранить игру");
         saveMenuItem.addActionListener(e -> {
-            JFileChooser fileDialog = new JFileChooser();
-            FileFilter filter = new FileNameExtensionFilter("MP3 File","mp3");
-            fileDialog.addChoosableFileFilter(filter);
-            fileDialog.showSaveDialog(this);
+            fieldPanel.getGame().SaveProgress();
         });
 
         saveMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
@@ -114,6 +115,10 @@ public class GameWindow extends JFrame {
 
     public void startGame() {
         fieldPanel.startGame();
+    }
+
+    public void continueGame(String filename) {
+        fieldPanel.continueGame(filename);
     }
 
 }

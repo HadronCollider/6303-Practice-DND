@@ -379,7 +379,7 @@ public class Game {
      * Сохранение текущего прогресса, для дальнейшего продолжение
      * // принимает fileName поданное пользователем?
      */
-    void SaveProgress() {
+    public void SaveProgress() {
         StringBuilder build = new StringBuilder();
         build.append("data/");
         build.append(curLesson.getLessonName());
@@ -492,7 +492,7 @@ public class Game {
      * Загрузка сохраненного прогресса
      * // принимает fileName поданное пользователем?
      */
-    void LoadProgress(String fileName) {
+    public void LoadProgress(String fileName) {
         try (Scanner load = new Scanner(new File(fileName))) {
 // НЕ ЗАВИСИТ ОТ СЛОВАРЯ
             curLesson = new Lesson();

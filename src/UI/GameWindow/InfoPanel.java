@@ -94,7 +94,7 @@ public class InfoPanel extends JPanel {
     public void startAll() {
         undoButton.setVisible(true);
         progress.setVisible(true);
-        progress.setCurrentStep(0);
+        progress.setCurrentStep(1);
         errorCounter.setNumberOfMistakes(0);
         errorCounter.setVisible(true);
         timer.restart();
