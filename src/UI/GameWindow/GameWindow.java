@@ -45,7 +45,7 @@ public class GameWindow extends JFrame {
         loadGameMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
         JMenuItem saveGameMenuItem = new JMenuItem("Coxранить игру");
         saveGameMenuItem.addActionListener(e -> {
-            fieldPanel.getGame().SaveProgress();
+            fieldPanel.getGame().SaveProgress(infoPanel.getTimer().getTime());
         });
 
         saveGameMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
