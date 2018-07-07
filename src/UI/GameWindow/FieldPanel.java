@@ -2,7 +2,6 @@ package UI.GameWindow;
 
 import Logic.Cell;
 import Logic.Game;
-import javafx.stage.FileChooser;
 
 import javax.swing.*;
 import java.awt.*;
@@ -126,6 +125,8 @@ public class FieldPanel extends JPanel {
         game.LoadProgress(filename);
         window.getInfoPanel().startAll();
         window.getInfoPanel().getProgress().setNumberOfSteps(game.getNumberOfSteps());
+        window.getInfoPanel().getErrorCounter().setNumberOfMistakes(game.getNumErrors());
+        window.getInfoPanel().getProgress().setCurrentStep(game.getNumOfCurStep());
         game.nextField();
         displayField();
     }
