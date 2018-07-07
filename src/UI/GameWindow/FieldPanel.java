@@ -122,6 +122,15 @@ public class FieldPanel extends JPanel {
         displayField();
     }
 
+    public void continueGame(String filename) {
+        game.LoadProgress(filename);
+        window.getInfoPanel().startAll();
+        window.getInfoPanel().getProgress().setNumberOfSteps(game.getNumberOfSteps());
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        game.nextField();
+        displayField();
+    }
+
     public void startMistakeGame() {
         window.getInfoPanel().startAll();
         window.getInfoPanel().getProgress().setNumberOfSteps(game.getNumberOfSteps());
