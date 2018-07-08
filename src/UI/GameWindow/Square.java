@@ -20,7 +20,6 @@ public class Square extends JButton {
     private SquareType type;
     private FieldPanel parent;
     private Position position;
-    private String content;
     private Timer timer;
 
 
@@ -46,7 +45,6 @@ public class Square extends JButton {
         }
         this.selected = false;
         this.pressed = false;
-        setText(content);
         redraw();
     }
 
@@ -54,15 +52,13 @@ public class Square extends JButton {
     private void redraw() {
         if(type == SquareType.FINAL) {
             setBackground(new Color(34, 139, 34));
+        } else if(type == SquareType.LEFT){
+            setBackground(Color.CYAN);
         } else {
             setBackground(Color.WHITE);
         }
     }
 
-    public Square(Image image) {
-        super(new ImageIcon(image));
-        init();
-    }
 
     private void init() {
         setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2));

@@ -149,6 +149,7 @@ public class FieldPanel extends JPanel {
         }
     }
 
-
-
+    public GameWindow getWindow() {
+        return window;
+    }
 }

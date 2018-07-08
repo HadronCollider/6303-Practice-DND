@@ -58,8 +58,8 @@ public class GameWindow extends JFrame {
 
         exitMenuItem.addActionListener(e -> dispose());
 
-        JMenuItem loadLessonMenuItem = new JMenuItem("Загрузить словарь");
-        loadLessonMenuItem.addActionListener(e -> startGame());
+        JMenuItem newGameMenuItem = new JMenuItem("Новая игра");
+        newGameMenuItem.addActionListener(e -> startGame());
 
         JMenuItem undoMenuItem = new JMenuItem("Отменить действие");
         undoMenuItem.addActionListener(e -> fieldPanel.undo());
@@ -67,14 +67,13 @@ public class GameWindow extends JFrame {
         JMenuItem mixMenuItem = new JMenuItem("Перемешать");
         mixMenuItem.addActionListener(e -> fieldPanel.mixField());
 
-        JMenuItem settingsMenuItem = new JMenuItem("Настройки");
-        gameMenu.add(loadLessonMenuItem);
+
+        gameMenu.add(newGameMenuItem);
         gameMenu.add(saveMistakesMenuItem);
         gameMenu.add(undoMenuItem);
         gameMenu.add(mixMenuItem);
         fileMenu.add(loadGameMenuItem);
         fileMenu.add(saveGameMenuItem);
-        fileMenu.add(settingsMenuItem);
         fileMenu.addSeparator();
         fileMenu.add(exitMenuItem);
         menuBar.add(fileMenu);
