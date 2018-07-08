@@ -5,7 +5,6 @@ import Logic.Game;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 
 public class FieldPanel extends JPanel {
 
@@ -26,6 +25,10 @@ public class FieldPanel extends JPanel {
         this.rows = rows;
         this.columns = columns;
         this.game = new Game(rows, columns);
+        init();
+    }
+
+    private void init() {
         setLayout(new GridLayout(rows, columns));
 
 
@@ -37,7 +40,6 @@ public class FieldPanel extends JPanel {
                 field[i][j] = square;
             }
         }
-
         setMinimumSize(new Dimension(400, 300));
     }
 
@@ -114,9 +116,7 @@ public class FieldPanel extends JPanel {
             game.setMixFlag(true);
         }
 
-
         game.newLesson(fileDialog.getSelectedFile());
-
 
 
         window.getInfoPanel().startAll();
@@ -127,6 +127,10 @@ public class FieldPanel extends JPanel {
 
     public void continueGame(String filename) {
         game.LoadProgress(filename);
+        rows = game.getFieldSize().getVertical();
+        columns = game.getFieldSize().getHorizontal();
+        removeAll();
+        init();
         window.getInfoPanel().startAll();
         window.getInfoPanel().getTimer().setTime(game.LoadProgress(filename));
         window.getInfoPanel().getProgress().setNumberOfSteps(game.getNumberOfSteps());
@@ -143,9 +147,6 @@ public class FieldPanel extends JPanel {
         displayField();
     }
 
-    public void saveMistakes() {
-        
-    }
 
     public void undo() {
         int numberBefore = game.getNumMistakes();
@@ -161,7 +162,4 @@ public class FieldPanel extends JPanel {
         return window;
     }
 
-    public Square[][] getField() {
-        return field;
-    }
 }

@@ -90,6 +90,10 @@ public class Game {
         LastMove = lastMove;
     }
 
+    public Position getFieldSize() {
+        return FieldSize;
+    }
+
     /**
      * Сеттер размеров игрового поля
      *
@@ -99,6 +103,7 @@ public class Game {
     public void setSize(int vertical, int horizontal) {
         FieldSize = new Position(vertical, horizontal);
         OddFlagForDistribution = vertical % 2 == 1;
+
     }
 
     /**
