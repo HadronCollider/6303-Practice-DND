@@ -48,12 +48,7 @@ public class ResultWindow extends JFrame {
             if(approval != JFileChooser.APPROVE_OPTION) {
                 return;
             }
-            System.out.println(fileChooser.getCurrentDirectory() + File.separator + fileChooser.getSelectedFile().getName());
-            try {
-                panel.getGame().SaveMistakes();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+            panel.getGame().SaveMistakes(fileChooser.getCurrentDirectory() + File.separator + fileChooser.getSelectedFile().getName());
 
         });
         add(saveMistakesButton, constraints);
@@ -63,11 +58,9 @@ public class ResultWindow extends JFrame {
         JButton startMistakesGameButton = new JButton("Работа над ошибками");
         startMistakesGameButton.addActionListener(e -> {
             int choice = displayChooseWindow();
-            try {
-                panel.getGame().MistakesToLesson(Game.NumMistakeType.values()[choice]);
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
+
+            panel.getGame().MistakesToLesson(Game.NumMistakeType.values()[choice]);
+
             panel.startMistakeGame();
             dispose();
         });

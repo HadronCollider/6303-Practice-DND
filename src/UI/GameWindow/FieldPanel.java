@@ -114,11 +114,11 @@ public class FieldPanel extends JPanel {
             game.setMixFlag(true);
         }
 
-        try {
-            game.newLesson(fileDialog.getSelectedFile());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+        game.newLesson(fileDialog.getSelectedFile());
+
+
+
         window.getInfoPanel().startAll();
         window.getInfoPanel().getProgress().setNumberOfSteps(game.getNumberOfSteps());
         game.nextField();
@@ -126,6 +126,7 @@ public class FieldPanel extends JPanel {
     }
 
     public void continueGame(String filename) {
+        game.LoadProgress(filename);
         window.getInfoPanel().startAll();
         window.getInfoPanel().getTimer().setTime(game.LoadProgress(filename));
         window.getInfoPanel().getProgress().setNumberOfSteps(game.getNumberOfSteps());
@@ -140,6 +141,10 @@ public class FieldPanel extends JPanel {
         window.getInfoPanel().getProgress().setNumberOfSteps(game.getNumberOfSteps());
         game.nextField();
         displayField();
+    }
+
+    public void saveMistakes() {
+        
     }
 
     public void undo() {

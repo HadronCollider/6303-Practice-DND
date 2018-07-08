@@ -6,6 +6,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.io.IOException;
 
 public class GameWindow extends JFrame {
@@ -32,28 +33,36 @@ public class GameWindow extends JFrame {
         JMenu gameMenu = new JMenu("Игра");
         JMenuItem loadGameMenuItem = new JMenuItem("Продолжить игру");
         loadGameMenuItem.addActionListener(e -> {
-            //JFileChooser fileChooser = new JFileChooser();
-            //int approve = fileChooser.showOpenDialog(null);
-            //if(approve != JFileChooser.APPROVE_OPTION) {
-            //    return;
-            //}
-            continueGame("/data/ex3.savepr");
+            JFileChooser fileChooser = new JFileChooser();
+            int approval = fileChooser.showOpenDialog(null);
+            if(approval != JFileChooser.APPROVE_OPTION) {
+                return;
+            }
+            continueGame(fileChooser.getCurrentDirectory() + File.separator + fileChooser.getSelectedFile().getName());
         });
 
         loadGameMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
         JMenuItem saveGameMenuItem = new JMenuItem("Coxранить игру");
         saveGameMenuItem.addActionListener(e -> {
-            fieldPanel.getGame().SaveProgress(infoPanel.getTimer().getTime());
+            JFileChooser fileChooser = new JFileChooser();
+            int approval = fileChooser.showSaveDialog(null);
+            if(approval != JFileChooser.APPROVE_OPTION) {
+                return;
+            }
+            fieldPanel.getGame().SaveProgress(fileChooser.getCurrentDirectory() + File.separator + fileChooser.getSelectedFile().getName(), infoPanel.getTimer().getTime());
         });
 
         saveGameMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
         JMenuItem saveMistakesMenuItem = new JMenuItem("Сохранить ошибки");
         saveMistakesMenuItem.addActionListener(e -> {
-            try {
-                fieldPanel.getGame().SaveMistakes();
-            } catch (IOException e1) {
-                e1.printStackTrace();
+
+            JFileChooser fileChooser = new JFileChooser();
+            int approval = fileChooser.showSaveDialog(null);
+            if(approval != JFileChooser.APPROVE_OPTION) {
+                return;
             }
+            fieldPanel.getGame().SaveMistakes(fileChooser.getCurrentDirectory() + File.separator + fileChooser.getSelectedFile().getName());
+
         });
 
         JMenuItem exitMenuItem = new JMenuItem("Выйти");
