@@ -9,7 +9,6 @@ import java.awt.*;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
 
 
 public class Square extends JButton {
@@ -30,6 +29,7 @@ public class Square extends JButton {
     }
 
     public void setCell(Cell cell) {
+        this.removeAll();
         if(cell != null) {
             this.position = cell.getPosition();
             if(cell.getFlag()) {
@@ -127,7 +127,11 @@ public class Square extends JButton {
 
     private void unselect() {
         selected = false;
-        setBackground(Color.WHITE);
+        if(type == SquareType.LEFT) {
+            setBackground(Color.CYAN);
+        } else {
+            setBackground(Color.WHITE);
+        }
     }
 
 
@@ -153,7 +157,11 @@ public class Square extends JButton {
     private void setNormal() {
         timer.stop();
         wrong = false;
-        setBackground(Color.WHITE);
+        if(type == SquareType.LEFT) {
+            setBackground(Color.CYAN);
+        } else {
+            setBackground(Color.WHITE);
+        }
     }
 
 

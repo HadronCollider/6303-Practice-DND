@@ -2,6 +2,8 @@ package UI.GameWindow;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
@@ -104,6 +106,12 @@ public class GameWindow extends JFrame {
         Image image = Toolkit.getDefaultToolkit().createImage( getClass().getResource("/UI/StartWindow/icon.png") );
         setIconImage( image );
         setLocationRelativeTo(null);
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                System.out.println(fieldPanel.getField()[0][0].getSize().width + " " + fieldPanel.getField()[0][0].getSize().height);
+            }
+        });
     }
 
     public FieldPanel getFieldPanel() {

@@ -7,8 +7,8 @@ import java.awt.event.ComponentEvent;
 
 public class ResizableLable extends JLabel {
 
-    public static final int MIN_FONT_SIZE = 30;
-    public static final int MAX_FONT_SIZE = 240;
+    //public static final int MIN_FONT_SIZE = 5;
+    //public static final int MAX_FONT_SIZE = 30;
     Graphics graphics;
 
     public ResizableLable(String text) {
@@ -30,12 +30,14 @@ public class ResizableLable extends JLabel {
             return;
         }
         Rectangle rectangle = label.getBounds();
-        int fontSize = MIN_FONT_SIZE;
+
+        int fontSize = rectangle.height / 3;
         Font font = label.getFont();
+        System.out.println(fontSize);
 
         Rectangle rectangle1 = new Rectangle();
         Rectangle rectangle2 = new Rectangle();
-        while (fontSize < MAX_FONT_SIZE) {
+        while (fontSize < rectangle.height) {
             rectangle1.setSize(getTextSize(label, font.deriveFont(font.getStyle(), fontSize)));
             rectangle2.setSize(getTextSize(label, font.deriveFont(font.getStyle(), fontSize + 1)));
             if (rectangle.contains(rectangle1) && !rectangle.contains(rectangle2)) {
