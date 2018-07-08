@@ -24,26 +24,107 @@ public class StartWindow extends JFrame {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); //получаем разрешение экрана
         JButton startButton = new JButton("Начать игру");
         JButton continueButton = new JButton("Продолжить игру");
-        JButton settingsButton = new JButton("Настройки");
         JButton exitButton = new JButton("Выйти");
+        JLabel tableSizeLabel = new JLabel("Размер поля:");
+        JLabel cellSizeLabel = new JLabel("Размер ячейки:");
+        JTextField tableSizeFieldX = new JTextField();
+        JTextField cellSizeFieldX = new JTextField();
+        JTextField tableSizeFieldY = new JTextField();
+        JTextField cellSizeFieldY = new JTextField();
         JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.add(Box.createVerticalStrut(screenSize.height / 12));
-        startButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        GridBagLayout gb = new GridBagLayout();
+        panel.setLayout(gb);
+        GridBagConstraints c = new GridBagConstraints();
+        c.anchor = GridBagConstraints.NORTH;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridheight = 1;
+        c.gridwidth = 3;
+        c.gridx = 0;
+        c.gridy = 0;
+        c.insets = new Insets(10, 10, 5, 10);
+        c.ipadx = 0;
+        c.ipady = 0;
+        c.weightx = 0.0;
+        c.weighty = 0.0;
+        gb.setConstraints(startButton, c);
         startButton.setFont(new Font("Verdana", Font.PLAIN, 20));
         panel.add(startButton);
-        /*panel.add(Box.createVerticalStrut(screenSize.height / 100));
-        continueButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        c.anchor = GridBagConstraints.NORTH;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridheight = 1;
+        c.gridwidth = 1;
+        c.gridx = 0;
+        c.gridy = 1;
+        c.ipadx = 0;
+        c.ipady = 0;
+        c.weightx = 0.0;
+        c.weighty = 0.0;
+        gb.setConstraints(tableSizeLabel, c);
+        tableSizeLabel.setFont(new Font("Verdana", Font.PLAIN, 20));
+        panel.add(tableSizeLabel);
+
+        c.anchor = GridBagConstraints.NORTH;
+        c.gridheight = 1;
+        c.gridwidth = 1;
+        c.gridx = 1;
+        c.gridy = 1;
+        gb.setConstraints(tableSizeFieldX, c);
+        tableSizeFieldX.setFont(new Font("Verdana", Font.PLAIN, 20));
+        tableSizeFieldX.setText("6");
+        tableSizeFieldX.setToolTipText("Укажите ширину поля");
+        panel.add(tableSizeFieldX);
+
+        c.anchor = GridBagConstraints.NORTH;
+        c.gridx = 2;
+        c.gridy = 1;
+        gb.setConstraints(tableSizeFieldY, c);
+        tableSizeFieldY.setFont(new Font("Verdana", Font.PLAIN, 20));
+        tableSizeFieldY.setText("6");
+        tableSizeFieldY.setToolTipText("Укажите высоту поля");
+        panel.add(tableSizeFieldY);
+
+        c.anchor = GridBagConstraints.NORTH;
+        c.gridx = 0;
+        c.gridy = 2;
+        gb.setConstraints(cellSizeLabel, c);
+        cellSizeLabel.setFont(new Font("Verdana", Font.PLAIN, 20));
+        panel.add(cellSizeLabel);
+
+        c.anchor = GridBagConstraints.NORTH;
+        c.gridx = 1;
+        c.gridy = 2;
+        c.ipadx = 20;
+        gb.setConstraints(cellSizeFieldX, c);
+        cellSizeFieldX.setFont(new Font("Verdana", Font.PLAIN, 20));
+        cellSizeFieldX.setText("0");
+        cellSizeFieldX.setToolTipText("Укажите ширину ячейки");
+        panel.add(cellSizeFieldX);
+
+        c.anchor = GridBagConstraints.NORTH;
+        c.gridx = 2;
+        c.gridy = 2;
+        gb.setConstraints(cellSizeFieldY, c);
+        cellSizeFieldY.setFont(new Font("Verdana", Font.PLAIN, 20));
+        cellSizeFieldY.setText("0");
+        cellSizeFieldY.setToolTipText("Укажите высоту ячейки");
+        panel.add(cellSizeFieldY);
+
+        c.gridheight = 1;
+        c.gridwidth = 3;
+        c.gridx = 0;
+        c.gridy = 3;
+        gb.setConstraints(continueButton, c);
         continueButton.setFont(new Font("Verdana", Font.PLAIN, 20));
-        panel.add(continueButton);*/
-        panel.add(Box.createVerticalStrut(screenSize.height / 100));
-        settingsButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        settingsButton.setFont(new Font("Verdana", Font.PLAIN, 20));
-        panel.add(settingsButton);
-        panel.add(Box.createVerticalStrut(screenSize.height / 100));
-        exitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panel.add(continueButton);
+
+        c.gridheight = 1;
+        c.gridwidth = 3;
+        c.gridx = 0;
+        c.gridy = 4;
+        gb.setConstraints(exitButton, c);
         exitButton.setFont(new Font("Verdana", Font.PLAIN, 20));
         panel.add(exitButton);
+
         setResizable(false);
         //panel.add(new JFormattedTextField());
         add(panel);
@@ -53,31 +134,35 @@ public class StartWindow extends JFrame {
         //Для стартового окна используем 1/3 высоты экрана и 1/6 ширины, минимальный размер 300х100
 
         //setMinimumSize(new Dimension(300, 100)); //минимальный размер окна
-        setSize(new Dimension(screenSize.width / 6, screenSize.height / 3));
-        setPreferredSize(new Dimension(screenSize.width / 6, screenSize.height / 3));
-        setMinimumSize(new Dimension(screenSize.width / 6, screenSize.height / 3));
-        setMaximumSize(new Dimension(screenSize.width / 6, screenSize.height / 3));
+        setSize(new Dimension(screenSize.width / 5, screenSize.height / 3));
+        setPreferredSize(new Dimension(screenSize.width / 5, screenSize.height / 3));
+        setMinimumSize(new Dimension(screenSize.width / 5, screenSize.height / 3));
+        setMaximumSize(new Dimension(screenSize.width / 5, screenSize.height / 3));
 
         startButton.addActionListener(e -> {
-            SwingUtilities.invokeLater(() ->{
-                GameWindow gameWindow = new GameWindow(tableSizeY, tableSizeX);
-                gameWindow.setVisible(true);
-                //gameWindow.startGame();
-            });
-            this.dispose();
+            if (isNumeric(tableSizeFieldX.getText()) &&  isNumeric(tableSizeFieldY.getText())) {
+                tableSizeX = Integer.parseInt(tableSizeFieldX.getText());
+                //cellSizeX = Integer.parseInt(cellSizeFieldX.getText());
+                tableSizeY = Integer.parseInt(tableSizeFieldY.getText());
+                //cellSizeY = Integer.parseInt(cellSizeFieldY.getText());
+                SwingUtilities.invokeLater(() ->{
+                    GameWindow gameWindow = new GameWindow(tableSizeY, tableSizeX);
+                    gameWindow.setVisible(true);
+                    //gameWindow.startGame();
+                });
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(null, "Введите корректные данные.", "Ошибка данных", JOptionPane.ERROR_MESSAGE, null);
+                tableSizeFieldX.setText("6");
+                tableSizeFieldY.setText("6");
+                cellSizeFieldX.setText("0");
+                cellSizeFieldY.setText("0");
+            }
         });
 
         continueButton.addActionListener(e -> {
             JFileChooser fileopen = new JFileChooser();
             int ret = fileopen.showDialog(null, "Открыть файл");
-        });
-
-        settingsButton.addActionListener(e -> {
-            SwingUtilities.invokeLater(() -> {
-                SettingsWindow settingsWindow = new SettingsWindow(this);
-                settingsWindow.setVisible(true);
-            });
-            this.setVisible(false);
         });
 
         exitButton.addActionListener(e -> this.dispose());
@@ -129,6 +214,10 @@ public class StartWindow extends JFrame {
 
 
 
+    }
+
+    public static boolean isNumeric(String str) {
+        return str.matches("^?\\d+$");
     }
 
 }
