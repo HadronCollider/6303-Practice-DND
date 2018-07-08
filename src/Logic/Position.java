@@ -14,6 +14,14 @@ public class Position {
         horizontal = a.horizontal;
     }
 
+    public int getVertical() {
+        return vertical;
+    }
+
+    public int getHorizontal() {
+        return horizontal;
+    }
+
     public boolean equals(Position coor) {
         return coor.horizontal == horizontal && coor.vertical == vertical;
     }

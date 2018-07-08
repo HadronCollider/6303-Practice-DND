@@ -1,10 +1,12 @@
 package UI.StartWindow;
 
+import Logic.Game;
 import UI.GameWindow.GameWindow;
 import sun.reflect.generics.tree.FormalTypeParameter;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.net.URL;
 import java.text.Format;
 
@@ -161,8 +163,22 @@ public class StartWindow extends JFrame {
         });
 
         continueButton.addActionListener(e -> {
-            JFileChooser fileopen = new JFileChooser();
-            int ret = fileopen.showDialog(null, "Открыть файл");
+            JFileChooser fileChooser = new JFileChooser();
+            int approval = fileChooser.showDialog(null, "Открыть файл");
+            if(approval != JFileChooser.APPROVE_OPTION) {
+                return;
+            }
+
+            Game game = new Game(2, 2);
+            game.LoadProgress(fileChooser.getCurrentDirectory() + File.separator + fileChooser.getSelectedFile().getName());
+
+            SwingUtilities.invokeLater(() -> {
+                GameWindow gameWindow = new GameWindow(game.getFieldSize().getVertical(), game.getFieldSize().getHorizontal());
+                gameWindow.setVisible(true);
+                gameWindow.getFieldPanel().continueGame(fileChooser.getCurrentDirectory() + File.separator + fileChooser.getSelectedFile().getName());
+            });
+
+            dispose();
         });
 
         exitButton.addActionListener(e -> this.dispose());
@@ -174,40 +190,6 @@ public class StartWindow extends JFrame {
 
 
     public static void main(String[] args) {
-        /*UIManager.put( "control", new Color( 128, 128, 128) );
-        UIManager.put( "info", new Color(128,128,128) );
-        UIManager.put( "nimbusBase", new Color( 18, 30, 49) );
-        UIManager.put( "nimbusAlertYellow", new Color( 248, 187, 0) );
-        UIManager.put( "nimbusDisabledText", new Color( 128, 128, 128) );
-        UIManager.put( "nimbusFocus", new Color(115,164,209) );
-        UIManager.put( "nimbusGreen", new Color(176,179,50) );
-        UIManager.put( "nimbusInfoBlue", new Color( 66, 139, 221) );
-        UIManager.put( "nimbusLightBackground", new Color( 18, 30, 49) );
-        UIManager.put( "nimbusOrange", new Color(191,98,4) );
-        UIManager.put( "nimbusRed", new Color(169,46,34) );
-        UIManager.put( "nimbusSelectedText", new Color( 255, 255, 255) );
-        UIManager.put( "nimbusSelectionBackground", new Color( 104, 93, 156) );
-        UIManager.put( "text", new Color( 230, 230, 230) );
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Metal".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (javax.swing.UnsupportedLookAndFeelException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
-
-
 
         SwingUtilities.invokeLater(() -> {
             StartWindow startWindow = new StartWindow();
