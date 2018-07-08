@@ -9,3 +9,4 @@ Kana.iml
 *.iml
 *.txt
 *.savepr
+src/Logic/Game.java

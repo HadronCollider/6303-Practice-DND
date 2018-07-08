@@ -206,6 +206,9 @@ public class StartWindow extends JFrame {
         } catch (Exception e) {
             e.printStackTrace();
         }*/
+
+
+
         SwingUtilities.invokeLater(() -> {
             StartWindow startWindow = new StartWindow();
             startWindow.setVisible(true);

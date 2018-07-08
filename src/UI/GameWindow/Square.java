@@ -9,7 +9,6 @@ import java.awt.*;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
 
 
 public class Square extends JButton {
@@ -20,7 +19,6 @@ public class Square extends JButton {
     private SquareType type;
     private FieldPanel parent;
     private Position position;
-    private String content;
     private Timer timer;
 
 
@@ -31,6 +29,7 @@ public class Square extends JButton {
     }
 
     public void setCell(Cell cell) {
+        this.removeAll();
         if(cell != null) {
             this.position = cell.getPosition();
             if(cell.getFlag()) {
@@ -46,7 +45,6 @@ public class Square extends JButton {
         }
         this.selected = false;
         this.pressed = false;
-        setText(content);
         redraw();
     }
 
@@ -54,15 +52,13 @@ public class Square extends JButton {
     private void redraw() {
         if(type == SquareType.FINAL) {
             setBackground(new Color(34, 139, 34));
+        } else if(type == SquareType.LEFT){
+            setBackground(Color.CYAN);
         } else {
             setBackground(Color.WHITE);
         }
     }
 
-    public Square(Image image) {
-        super(new ImageIcon(image));
-        init();
-    }
 
     private void init() {
         setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2));
@@ -131,7 +127,11 @@ public class Square extends JButton {
 
     private void unselect() {
         selected = false;
-        setBackground(Color.WHITE);
+        if(type == SquareType.LEFT) {
+            setBackground(Color.CYAN);
+        } else {
+            setBackground(Color.WHITE);
+        }
     }
 
 
@@ -157,7 +157,11 @@ public class Square extends JButton {
     private void setNormal() {
         timer.stop();
         wrong = false;
-        setBackground(Color.WHITE);
+        if(type == SquareType.LEFT) {
+            setBackground(Color.CYAN);
+        } else {
+            setBackground(Color.WHITE);
+        }
     }
 
 
