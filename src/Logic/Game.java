@@ -384,9 +384,7 @@ public class Game {
     public boolean SaveProgress(String fileName, int TimeSec) {
         StringBuilder build = new StringBuilder();
         build.append(fileName);
-        build.append(curLesson.getLessonName());
-        build.setLength(build.length() - 4);
-        build.append("(save).savepr");
+        build.append(".savepr");
         try (FileWriter save = new FileWriter(build.toString())) {
             save.write(curLesson.getLessonName() + "\n");                   // Название урока
             save.write(curLesson.Dictionary.size() + " " + offset + "\n");      // Кол-во слов словаря, смещение в словаре
