@@ -34,10 +34,10 @@ public class Square extends JButton {
             this.position = cell.getPosition();
             if(cell.getFlag()) {
                 this.type = SquareType.RIGHT;
-                StrTransform.transform(this, cell.getPair().getSecond());
+                StrTransform.transform(this, cell.getPair().getSecond(), getHeight());
             } else {
                 this.type = SquareType.LEFT;
-                StrTransform.transform(this, cell.getPair().getFirst());
+                StrTransform.transform(this, cell.getPair().getFirst(), getHeight());
             }
 
         } else {
@@ -62,6 +62,7 @@ public class Square extends JButton {
 
     private void init() {
         setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2));
+        setDoubleBuffered(true);
         addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {

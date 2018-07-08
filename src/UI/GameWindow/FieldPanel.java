@@ -80,9 +80,12 @@ public class FieldPanel extends JPanel {
         }
     }
 
-    private void displayField() {
+    void displayField() {
         numberOfCorrectCells = 0;
         Cell[][] cellField = game.getField();
+        if(cellField == null) {
+            return;
+        }
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
                 if (cellField[i][j] == null) {
