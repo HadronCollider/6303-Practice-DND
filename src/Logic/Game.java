@@ -344,11 +344,7 @@ public class Game {
      *
      * @param numType - загружаемый список ошибок
      */
-<<<<<<< HEAD
     public void MistakesToLesson(NumMistakeType numType) {
-=======
-    public void  MistakesToLesson(NumMistakeType numType) throws IOException {
->>>>>>> e78cca3c348b5496d5412644e5aa450ecafcf27b
         StringBuilder build = new StringBuilder();
         build.append(curLesson.getLessonName());
         build.setLength(build.length() - 4);
