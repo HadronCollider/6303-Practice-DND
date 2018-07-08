@@ -216,6 +216,30 @@ public class StrTransform {
                 break;
         }
     }
+
+    public static boolean isFormatCorrect(String inputString){
+        inputString += ' ';
+        char[] input = inputString.toCharArray();
+        char lastPushedSymb =' ';
+        for (int i=0; i < inputString.length(); i++) {
+            if (lastPushedSymb == '\\'){
+                switch (input[i]){
+                    case '1': case '2': case '3': case '4': case '5': case '6':
+                    case 'р': case 'о': case 'з': case 'г': case 'с': case 'ф': case 'ч': case 'е':
+                    case '\\':
+                        lastPushedSymb = ' ';
+                        continue;
+                    default:
+                         return false;
+                }
+
+            }
+            if (input[i] == '\\'){
+                lastPushedSymb = input[i];
+            }
+        }
+        return true;
+    }
 }
 
 class word {
