@@ -1,5 +1,7 @@
 package Logic;
 
+import java.util.Scanner;
+
 class Move {
     Cell first;
     Cell second;

@@ -15,10 +15,6 @@ public class Cell {
         return pair;
     }
 
-    public void setPair(DictionaryPair pair) {
-        this.pair = pair;
-    }
-
     public Position getPosition() {
         return position;
     }
@@ -29,10 +25,6 @@ public class Cell {
 
     public boolean getFlag() {
         return flag;
-    }
-
-    public void setFlag(boolean flag) {
-        this.flag = flag;
     }
 
     @Override

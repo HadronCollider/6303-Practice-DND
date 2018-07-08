@@ -110,12 +110,9 @@ public class Game {
      * Установка нового урока из файла
      *
      * @param file - файл-словарь
-     * @throws IOException - Input/Output exception
      */
     public boolean newLesson(File file) {
-// ПРОВЕРКА ЗАГРУЗКИ
-//        LoadProgress("data/ex.savepr");
-//        return true;
+
         if (curLesson == null) {
             curLesson = new Lesson();
         }
@@ -322,9 +319,7 @@ public class Game {
             try {
                 MistakesToFile(LessonMistakes1, build.toString() + "(err1).txt");
                 MistakesToFile(LessonMistakes2, build.toString() + "(err2).txt");
-            }
-            catch (IOException e)
-            {
+            } catch (IOException e) {
                 JOptionPane.showMessageDialog(null, "Не удалось сохранить ошибки", "Ошибка сохранения ошибок", JOptionPane.ERROR_MESSAGE, null);
             }
 
@@ -335,7 +330,7 @@ public class Game {
      * @param a        - сохраняемый список
      * @param fileName - имя файла
      */
-    private void MistakesToFile(LinkedList<DictionaryPair> a, String fileName) throws IOException{
+    private void MistakesToFile(LinkedList<DictionaryPair> a, String fileName) throws IOException {
         if (a != null) {
             try (FileWriter out = new FileWriter(fileName)) {
                 for (DictionaryPair err : a)
@@ -382,16 +377,6 @@ public class Game {
         BOTH
     }
 
-    //--------------------------------- СЮДА НЕ ЛЕЗТЬ ---------------------------------//
-    //--------------------------------- СЮДА НЕ ЛЕЗТЬ ---------------------------------//
-    //--------------------------------- СЮДА НЕ ЛЕЗТЬ ---------------------------------//
-    //--------------------------------- СЮДА НЕ ЛЕЗТЬ ---------------------------------//
-    //--------------------------------- СЮДА НЕ ЛЕЗТЬ ---------------------------------//
-    //--------------------------------- СЮДА НЕ ЛЕЗТЬ ---------------------------------//
-    //--------------------------------- СЮДА НЕ ЛЕЗТЬ ---------------------------------//
-    //--------------------------------- СЮДА НЕ ЛЕЗТЬ ---------------------------------//
-    //く	КУ
-
     /**
      * Сохранение текущего прогресса, для дальнейшего продолжение
      * // принимает fileName поданное пользователем?
@@ -403,7 +388,6 @@ public class Game {
         build.setLength(build.length() - 4);
         build.append("(save).savepr");
         try (FileWriter save = new FileWriter(build.toString())) {
-// НЕ ЗАВИСИТ ОТ СЛОВАРЯ
             save.write(curLesson.getLessonName() + "\n");                   // Название урока
             save.write(curLesson.Dictionary.size() + " " + offset + "\n");      // Кол-во слов словаря, смещение в словаре
             for (int i = 0; i < curLesson.Dictionary.size(); i++)          // Пары словарь
@@ -427,24 +411,7 @@ public class Game {
                 }
                 save.write("\n");
             }
-            if (LastMove != null) {
-                Cell cell = LastMove.first;
-// Последний сделанный ход
-//--- Заменить на вызов функции
-                if (cell.getFlag())
-                    save.write(curLesson.Dictionary.indexOf(cell.getPair()) + " 1 ");
-                else
-                    save.write(curLesson.Dictionary.indexOf(cell.getPair()) + " 0 ");
-                save.write(cell.getPosition().toString() + " ");
-                cell = LastMove.second;
-                if (cell.getFlag())
-                    save.write(curLesson.Dictionary.indexOf(cell.getPair()) + " 1 ");
-                else
-                    save.write(curLesson.Dictionary.indexOf(cell.getPair()) + " 0 ");
-                save.write(cell.getPosition().toString() + " ");
-            } else
-                save.write("-1"); // В случае, если последнего хода нет
-//---
+            SaveLastMove(save);
             save.write("\n");
             save.write(TimeSec + " " + NumCorrectAnsw + " " + LessonMistakes1.size() + "\n");  // Значение таймера, кол-во верных ответов, ошибок
             for (DictionaryPair a : LessonMistakes1) // Сохранение первого списка ошибок
@@ -453,32 +420,23 @@ public class Game {
             for (DictionaryPair a : LessonMistakes2) // Сохранение второго списка ошибок
                 save.write(curLesson.Dictionary.indexOf(a) + " ");
             save.write("\n");
-/*
-//ЗАВИСИТ ОТ СЛОВАРЯ
-            save.write(curLesson.getLessonName() + "\n");           // Путь к используемому словарю
-            save.write(offset + "\n");                              // Смещение в словаре
-            save.write(NumElemOfMatrix.size() + " ");               // Количество матриц
-            for (int a : NumElemOfMatrix)                               // Матричное распределение
-                save.write(a + " ");
-            save.write("\n");
-            save.write(FieldSize.vertical + " " + FieldSize.horizontal); // Размер поля
-            save.write("\n");
-            for (Cell[] arr : Field) // Запись поля
-            {
-                for (Cell a : arr) {
-                    if (a != null) { // Индекс пары в словаре + флаг
-                        if (a.getFlag())
-                            save.write(curLesson.Dictionary.indexOf(a.getPair()) + " 1 ");
-                        else
-                            save.write(curLesson.Dictionary.indexOf(a.getPair()) + " 0 ");
-                    } else
-                        save.write("-1 0 "); // Если ячейка пуста, то -1
-                }
-                save.write("\n");
-            }
+        } catch (IOException e) {
+            // Сообщение о неудачном сохранении
+            JOptionPane.showMessageDialog(null, "Не удалось сохранить прогресс текущего урока", "Ошибка сохранения прогресса", JOptionPane.ERROR_MESSAGE, null);
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Сохраняет последний ход игрока
+     *
+     * @param save - FileWriter
+     * @throws IOException - Input/Output Exception
+     */
+    private void SaveLastMove(FileWriter save) throws IOException {
+        if (LastMove != null) {
             Cell cell = LastMove.first;
-// Последний сделанный ход
-//--- Заменить на вызов функции
             if (cell.getFlag())
                 save.write(curLesson.Dictionary.indexOf(cell.getPair()) + " 1 ");
             else
@@ -490,23 +448,8 @@ public class Game {
             else
                 save.write(curLesson.Dictionary.indexOf(cell.getPair()) + " 0 ");
             save.write(cell.getPosition().toString() + " ");
-//---
-            save.write("\n");
-            save.write(TimeSec + " " + NumCorrectAnsw + " " + LessonMistakes1.size() + "\n");  // Значение таймера, кол-во верных ответов, ошибок
-            for (DictionaryPair a : LessonMistakes1) // Сохранение первого списка ошибок
-                save.write(curLesson.Dictionary.indexOf(a) + " ");
-            save.write("\n");
-            for (DictionaryPair a : LessonMistakes2) // Сохранение второго списка ошибок
-                save.write(curLesson.Dictionary.indexOf(a) + " ");
-            save.write("\n");
-
-*/
-        } catch (IOException e) {
-            // Сообщение о неудачном сохранении
-            JOptionPane.showMessageDialog(null, "Не удалось сохранить прогресс текущего урока", "Ошибка сохранения прогресса", JOptionPane.ERROR_MESSAGE, null);
-            return false;
-        }
-        return true;
+        } else
+            save.write("-1"); // В случае, если последнего хода нет
     }
 
     /**
@@ -514,10 +457,8 @@ public class Game {
      * // принимает fileName поданное пользователем?
      */
     public int LoadProgress(String fileName) {
-        //fileName = "data/ex(allerr)(save).savepr";//data/ex(save).savepr";
         int TimeSec = 0;
         try (Scanner load = new Scanner(new File(fileName))) {
-// НЕ ЗАВИСИТ ОТ СЛОВАРЯ
             curLesson = new Lesson();
             curLesson.setLessonName(load.nextLine());               // Название урока
             curLesson.Dictionary = new ArrayList<>();
@@ -550,28 +491,7 @@ public class Game {
                         Field[i][j] = null;
                 }
             }
-// Последний сделанный ход
-//--- Заменить на вызов функции
-            int index = load.nextInt();
-            if (index != -1) {
-                LastMove = new Move();
-                int flag = load.nextInt();
-                int row = load.nextInt();
-                int column = load.nextInt();
-                if (flag == 1)
-                    LastMove.first = new Cell(curLesson.Dictionary.get(index), new Position(row, column), true);
-                else
-                    LastMove.first = new Cell(curLesson.Dictionary.get(index), new Position(row, column), false);
-                index = load.nextInt();
-                flag = load.nextInt();
-                row = load.nextInt();
-                column = load.nextInt();
-                if (flag == 1)
-                    LastMove.second = new Cell(curLesson.Dictionary.get(index), new Position(row, column), true);
-                else
-                    LastMove.second = new Cell(curLesson.Dictionary.get(index), new Position(row, column), false);
-            }
-//---
+            LastMove = readSaveMove(load);          // Последний сделанный ход
             load.nextLine();
             TimeSec = load.nextInt();
             NumCorrectAnsw = load.nextInt();
@@ -582,83 +502,39 @@ public class Game {
             for (int i = 0; i < NumAllMistakes; i++)                         // Загрузка второго списка ошибок
                 LessonMistakes2.add(curLesson.Dictionary.get(load.nextInt()));
             LoadFl = true;
-/*
-// ЗАВИСИТ ОТ СЛОВАРЯ
-            newLesson(new File(load.nextLine()))                        // Загрузка словаря
-            offset = load.nextInt();                                    // Смещение внутри словаря
-            NumberOfSteps = load.nextInt();                             // Кол-во шагов
-            NumElemOfMatrix.clear();
-            for (int i = 0; i < NumberOfSteps; i++)                     // Матричное распределение
-                NumElemOfMatrix.addLast(load.nextInt());
-            load.nextLine();
-            FieldSize.vertical = load.nextInt();
-            FieldSize.horizontal = load.nextInt();
-            load.nextLine();
-            Field = new Cell[FieldSize.vertical][FieldSize.horizontal];
-            for (int i = 0; i < FieldSize.vertical; i++)                      // Считывание поля
-            {
-                for (int j = 0; j < FieldSize.vertical; j++) {
-                    int index = load.nextInt();
-                    int flag = load.nextInt();
-                    if (index != -1) {                                                        // Индекс пары в словаре + флаг
-                        if (flag == 1)
-                            Field[i][j] = new Cell(curLesson.Dictionary.get(index), new Position(i, j), true);
-                        else
-                            Field[i][j] = new Cell(curLesson.Dictionary.get(index), new Position(i, j), false);
-                    } else
-                        Field[i][j] = null;
-                }
-            }
-// Последний сделанный ход
-//--- Заменить на вызов функции
-            int index = load.nextInt();
-            int flag = load.nextInt();
-            int row = load.nextInt();
-            int column = load.nextInt();
-            if (flag == 1)
-                Field[row][column] = new Cell(curLesson.Dictionary.get(index), new Position(row, column), true);
-            else
-                Field[row][column] = new Cell(curLesson.Dictionary.get(index), new Position(row, column), false);
-            index = load.nextInt();
-            flag = load.nextInt();
-            row = load.nextInt();
-            column = load.nextInt();
-            if (flag == 1)
-                Field[row][column] = new Cell(curLesson.Dictionary.get(index), new Position(row, column), true);
-            else
-                Field[row][column] = new Cell(curLesson.Dictionary.get(index), new Position(row, column), false);
-//---
-            load.nextLine();
-            int TimeSec = load.nextInt();
-            NumCorrectAnsw = load.nextInt();
-            int NumAllMistakes = load.nextInt();
-            for (int i = 0; i < NumAllMistakes; i++)                         // Загрука первого списка ошибок
-                LessonMistakes1.add(curLesson.Dictionary.get(load.nextInt()));
-            for (int i = 0; i < NumAllMistakes; i++)                         // Загрузка второго списка ошибок
-                LessonMistakes2.add(curLesson.Dictionary.get(load.nextInt()));
-*/
         } catch (IOException | InputMismatchException e) {
             return -1;
         }
         return TimeSec;
     }
 
-    /*@Override
-    public String toString() {
-        StringBuilder build = new StringBuilder();
-        for (Cell[] array : Field) {
-            for (Cell a : array) {
-                if (a != null) {
-                    if (!a.getFlag())
-                        build.append(a.getPair().getFirst() + "\t");
-                    else
-                        build.append(a.getPair().getSecond() + "\t");
-                } else
-                    build.append(0 + "\t");
-            }
-            build.append("\n");
+    /**
+     * Считывает сохраненный последний ход игрока из потока
+     *
+     * @param load - сканнер потока
+     * @return - объект класса Move
+     */
+    private Move readSaveMove(Scanner load) {
+        Move move = null;
+        int index = load.nextInt();
+        if (index != -1) {
+            move = new Move();
+            int flag = load.nextInt();
+            int row = load.nextInt();
+            int column = load.nextInt();
+            if (flag == 1)
+                move.first = new Cell(curLesson.Dictionary.get(index), new Position(row, column), true);
+            else
+                move.first = new Cell(curLesson.Dictionary.get(index), new Position(row, column), false);
+            index = load.nextInt();
+            flag = load.nextInt();
+            row = load.nextInt();
+            column = load.nextInt();
+            if (flag == 1)
+                move.second = new Cell(curLesson.Dictionary.get(index), new Position(row, column), true);
+            else
+                move.second = new Cell(curLesson.Dictionary.get(index), new Position(row, column), false);
         }
-        return build.toString();
-    }*/
-
+        return move;
+    }
 }

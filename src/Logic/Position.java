@@ -9,11 +9,6 @@ public class Position {
         horizontal = b;
     }
 
-    public Position(Position a) {
-        vertical = a.vertical;
-        horizontal = a.horizontal;
-    }
-
     public int getVertical() {
         return vertical;
     }
