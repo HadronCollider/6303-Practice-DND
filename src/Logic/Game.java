@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.InputMismatchException;
 
 public class Game {
     private Cell[][] Field;                                        // Поле
@@ -114,6 +115,7 @@ public class Game {
         }
         if (curLesson.Init(file)) {
             prepareLesson();
+            curLesson.MixDictionary();
             return true;
         } else
             return false;
@@ -129,7 +131,6 @@ public class Game {
         offset = 0;
         localErrs = 0;
         NumElemOfMatrix = new LinkedList<>();
-        curLesson.MixDictionary();
         NumberOfSteps = CalculateFields();  // рассчёт матричного заполнения
     }
 
@@ -379,23 +380,25 @@ public class Game {
     //--------------------------------- СЮДА НЕ ЛЕЗТЬ ---------------------------------//
     //--------------------------------- СЮДА НЕ ЛЕЗТЬ ---------------------------------//
     //--------------------------------- СЮДА НЕ ЛЕЗТЬ ---------------------------------//
+    //く	КУ
 
     /**
      * Сохранение текущего прогресса, для дальнейшего продолжение
      * // принимает fileName поданное пользователем?
+     *           ПРОБЛЕМА - сохранение старых ошибок без сохранения старой "версии" словаря
+     *              - несохранение старых ошибок недопустимо => сохранение всего словаря
      */
     public void SaveProgress(int TimeSec) {
         StringBuilder build = new StringBuilder();
         build.append("data/");
         build.append(curLesson.getLessonName());
         build.setLength(build.length() - 4);
-        build.append(".savepr");
+        build.append("(save).savepr");
         try (FileWriter save = new FileWriter(build.toString())) {
 // НЕ ЗАВИСИТ ОТ СЛОВАРЯ
             save.write(curLesson.getLessonName() + "\n");                   // Название урока
-            int localOffset = offset - NumElemOfMatrix.getFirst();
-            save.write((curLesson.Dictionary.size() - localOffset) + "\n");      // Кол-во слов словаря
-            for (int i = localOffset; i < curLesson.Dictionary.size(); i++)          // Пары словарь
+            save.write(curLesson.Dictionary.size() + " " + offset + "\n");      // Кол-во слов словаря, смещение в словаре
+            for (int i = 0; i < curLesson.Dictionary.size(); i++)          // Пары словарь
                 save.write(curLesson.Dictionary.get(i).toString() + "\n");
             save.write(NumElemOfMatrix.size() + " ");               // Количество матриц
             for (int a : NumElemOfMatrix)                               // Матричное распределение
@@ -408,36 +411,40 @@ public class Game {
                 for (Cell a : arr) {
                     if (a != null) { // Индекс пары в словаре + флаг
                         if (a.getFlag())
-                            save.write((curLesson.Dictionary.indexOf(a.getPair()) - localOffset) + " 1 ");
+                            save.write(curLesson.Dictionary.indexOf(a.getPair()) + " 1 ");
                         else
-                            save.write((curLesson.Dictionary.indexOf(a.getPair()) - localOffset) + " 0 ");
+                            save.write(curLesson.Dictionary.indexOf(a.getPair()) + " 0 ");
                     } else
                         save.write("-1 0 "); // Если ячейка пуста, то -1
                 }
                 save.write("\n");
             }
-            Cell cell = LastMove.first;
+            if (LastMove != null) {
+                Cell cell = LastMove.first;
 // Последний сделанный ход
 //--- Заменить на вызов функции
-            if (cell.getFlag())
-                save.write((curLesson.Dictionary.indexOf(cell.getPair()) - localOffset) + " 1 ");
+                if (cell.getFlag())
+                    save.write(curLesson.Dictionary.indexOf(cell.getPair()) + " 1 ");
+                else
+                    save.write(curLesson.Dictionary.indexOf(cell.getPair()) + " 0 ");
+                save.write(cell.getPosition().toString() + " ");
+                cell = LastMove.second;
+                if (cell.getFlag())
+                    save.write(curLesson.Dictionary.indexOf(cell.getPair()) + " 1 ");
+                else
+                    save.write(curLesson.Dictionary.indexOf(cell.getPair()) + " 0 ");
+                save.write(cell.getPosition().toString() + " ");
+            }
             else
-                save.write((curLesson.Dictionary.indexOf(cell.getPair()) - localOffset) + " 0 ");
-            save.write(cell.getPosition().toString() + " ");
-            cell = LastMove.second;
-            if (cell.getFlag())
-                save.write((curLesson.Dictionary.indexOf(cell.getPair()) - localOffset) + " 1 ");
-            else
-                save.write((curLesson.Dictionary.indexOf(cell.getPair()) - localOffset) + " 0 ");
-            save.write(cell.getPosition().toString() + " ");
+                save.write("-1"); // В случае, если последнего хода нет
 //---
             save.write("\n");
             save.write(TimeSec + " " + NumCorrectAnsw + " " + LessonErr1.size() + "\n");  // Значение таймера, кол-во верных ответов, ошибок
             for (DictionaryPair a : LessonErr1) // Сохранение первого списка ошибок
-                save.write((curLesson.Dictionary.indexOf(a) - localOffset) + " ");
+                save.write(curLesson.Dictionary.indexOf(a) + " ");
             save.write("\n");
             for (DictionaryPair a : LessonErr2) // Сохранение второго списка ошибок
-                save.write((curLesson.Dictionary.indexOf(a) - localOffset) + " ");
+                save.write(curLesson.Dictionary.indexOf(a) + " ");
             save.write("\n");
 /*
 //ЗАВИСИТ ОТ СЛОВАРЯ
@@ -498,7 +505,7 @@ public class Game {
      * // принимает fileName поданное пользователем?
      */
     public int LoadProgress(String fileName) {
-        fileName = "data/ex.savepr";
+        fileName = "data/ex(allerr)(save).savepr";//data/ex(save).savepr";
         int TimeSec = 0;
         try (Scanner load = new Scanner(new File(fileName))) {
 // НЕ ЗАВИСИТ ОТ СЛОВАРЯ
@@ -507,10 +514,10 @@ public class Game {
             curLesson.Dictionary = new ArrayList<>();
             prepareLesson();
             int SizeDict = load.nextInt();                          // Кол-во слов словаря
+            offset = load.nextInt();                                // Смещение в словаре
             load.nextLine();
             for (int i = 0; i < SizeDict; i++)                      // Пары словаря
                 curLesson.Dictionary.add(DictionaryPair.readPair(load));
-            offset = 0;                                             // Смещение внутри словаря 0
             NumberOfSteps = load.nextInt();                         // Кол-во шагов
             NumElemOfMatrix.clear();
             for (int i = 0; i < NumberOfSteps; i++)                     // Матричное распределение
@@ -537,21 +544,24 @@ public class Game {
 // Последний сделанный ход
 //--- Заменить на вызов функции
             int index = load.nextInt();
-            int flag = load.nextInt();
-            int row = load.nextInt();
-            int column = load.nextInt();
-            if (flag == 1)
-                Field[row][column] = new Cell(curLesson.Dictionary.get(index), new Position(row, column), true);
-            else
-                Field[row][column] = new Cell(curLesson.Dictionary.get(index), new Position(row, column), false);
-            index = load.nextInt();
-            flag = load.nextInt();
-            row = load.nextInt();
-            column = load.nextInt();
-            if (flag == 1)
-                Field[row][column] = new Cell(curLesson.Dictionary.get(index), new Position(row, column), true);
-            else
-                Field[row][column] = new Cell(curLesson.Dictionary.get(index), new Position(row, column), false);
+            if (index != -1) {
+                LastMove = new Move();
+                int flag = load.nextInt();
+                int row = load.nextInt();
+                int column = load.nextInt();
+                if (flag == 1)
+                    LastMove.first = new Cell(curLesson.Dictionary.get(index), new Position(row, column), true);
+                else
+                    LastMove.first = new Cell(curLesson.Dictionary.get(index), new Position(row, column), false);
+                index = load.nextInt();
+                flag = load.nextInt();
+                row = load.nextInt();
+                column = load.nextInt();
+                if (flag == 1)
+                    LastMove.second = new Cell(curLesson.Dictionary.get(index), new Position(row, column), true);
+                else
+                    LastMove.second = new Cell(curLesson.Dictionary.get(index), new Position(row, column), false);
+            }
 //---
             load.nextLine();
             TimeSec = load.nextInt();
@@ -619,7 +629,9 @@ public class Game {
                 LessonErr2.add(curLesson.Dictionary.get(load.nextInt()));
 */
         } catch (IOException e) {
-            e.printStackTrace();
+            return -1;
+        } catch (InputMismatchException e) {
+            return -1;
         }
         return TimeSec;
     }
