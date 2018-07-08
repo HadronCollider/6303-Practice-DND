@@ -2,6 +2,7 @@ package UI.GameWindow;
 
 import Logic.Cell;
 import Logic.Position;
+import Logic.StrTransform;
 
 import javax.swing.*;
 import java.awt.*;
@@ -23,9 +24,7 @@ public class Square extends JButton {
 
 
     public Square(FieldPanel parent, Cell cell) {
-        //super();
         this.parent = parent;
-        //setFont(new Font("APJapanesefont", Font.BOLD, 20));
         setCell(cell);
         init();
     }
@@ -33,12 +32,18 @@ public class Square extends JButton {
     public void setCell(Cell cell) {
         if(cell != null) {
             this.position = cell.getPosition();
-            this.type = cell.getFlag() ? SquareType.RIGHT : SquareType.LEFT;
-            this.content = cell.getFlag() ? cell.getPair().getSecond() : cell.getPair().getFirst();
-            setFont(cell.getFlag() ? new Font("APJapanesefont", Font.BOLD, 20) : new Font("APJapanesefont", Font.BOLD, 40));
+            if(cell.getFlag()) {
+                this.type = SquareType.RIGHT;
+                StrTransform transform = new StrTransform();
+                transform.transform(this, cell.getPair().getSecond());
+            } else {
+                this.type = SquareType.LEFT;
+                StrTransform transform = new StrTransform();
+                transform.transform(this, cell.getPair().getFirst());
+            }
+
         } else {
             this.type = SquareType.FINAL;
-            this.content = "";
         }
         this.selected = false;
         this.pressed = false;
