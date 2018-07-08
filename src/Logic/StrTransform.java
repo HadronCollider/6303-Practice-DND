@@ -1,3 +1,5 @@
+package Logic;
+
 import java.lang.String;
 import java.awt.*;
 import java.lang.reflect.Array;
@@ -9,6 +11,7 @@ public class StrTransform {
     public static void transform(JButton button, String input){
         toFormattedString(input);
         setLabelsToButton(button, createLabels());
+        formattedWords.clear();
     }
     public static String toNormalString(String inputString){
         char[] input = inputString.toCharArray();
