@@ -345,7 +345,6 @@ public class Game {
      * @param numType - загружаемый список ошибок
      */
     public void MistakesToLesson(NumMistakeType numType) {
-
         StringBuilder build = new StringBuilder();
         build.append(curLesson.getLessonName());
         build.setLength(build.length() - 4);
