@@ -2,6 +2,8 @@ package UI.GameWindow;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
@@ -58,8 +60,8 @@ public class GameWindow extends JFrame {
 
         exitMenuItem.addActionListener(e -> dispose());
 
-        JMenuItem loadLessonMenuItem = new JMenuItem("Загрузить словарь");
-        loadLessonMenuItem.addActionListener(e -> startGame());
+        JMenuItem newGameMenuItem = new JMenuItem("Новая игра");
+        newGameMenuItem.addActionListener(e -> startGame());
 
         JMenuItem undoMenuItem = new JMenuItem("Отменить действие");
         undoMenuItem.addActionListener(e -> fieldPanel.undo());
@@ -67,14 +69,13 @@ public class GameWindow extends JFrame {
         JMenuItem mixMenuItem = new JMenuItem("Перемешать");
         mixMenuItem.addActionListener(e -> fieldPanel.mixField());
 
-        JMenuItem settingsMenuItem = new JMenuItem("Настройки");
-        gameMenu.add(loadLessonMenuItem);
+
+        gameMenu.add(newGameMenuItem);
         gameMenu.add(saveMistakesMenuItem);
         gameMenu.add(undoMenuItem);
         gameMenu.add(mixMenuItem);
         fileMenu.add(loadGameMenuItem);
         fileMenu.add(saveGameMenuItem);
-        fileMenu.add(settingsMenuItem);
         fileMenu.addSeparator();
         fileMenu.add(exitMenuItem);
         menuBar.add(fileMenu);
@@ -105,6 +106,12 @@ public class GameWindow extends JFrame {
         Image image = Toolkit.getDefaultToolkit().createImage( getClass().getResource("/UI/StartWindow/icon.png") );
         setIconImage( image );
         setLocationRelativeTo(null);
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                System.out.println(fieldPanel.getField()[0][0].getSize().width + " " + fieldPanel.getField()[0][0].getSize().height);
+            }
+        });
     }
 
     public FieldPanel getFieldPanel() {

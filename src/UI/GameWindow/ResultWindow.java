@@ -4,13 +4,13 @@ import Logic.Game;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
 public class ResultWindow extends JFrame {
 
     private FieldPanel panel;
-    private int numberOfMistakes;
 
     public ResultWindow(FieldPanel panel, int numberOfMistakes, String timer) throws HeadlessException {
         this.panel = panel;
@@ -40,13 +40,21 @@ public class ResultWindow extends JFrame {
         constraints.gridy = 1;
         constraints.gridx = 0;
         JButton saveMistakesButton = new JButton("Сохранить ошибки");
+
         saveMistakesButton.addActionListener(e -> {
+            JFileChooser fileChooser = new JFileChooser();
+            int approval = fileChooser.showSaveDialog(this);
+
+            if(approval != JFileChooser.APPROVE_OPTION) {
+                return;
+            }
+            System.out.println(fileChooser.getCurrentDirectory() + File.separator + fileChooser.getSelectedFile().getName());
             try {
                 panel.getGame().SaveMistakes();
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
-            System.out.println(displayChooseWindow());
+
         });
         add(saveMistakesButton, constraints);
 
@@ -54,13 +62,13 @@ public class ResultWindow extends JFrame {
         constraints.gridx = 1;
         JButton startMistakesGameButton = new JButton("Работа над ошибками");
         startMistakesGameButton.addActionListener(e -> {
+            int choice = displayChooseWindow();
             try {
-                panel.getGame().MistakesToLesson(Game.NumMistakeType.BOTH);
+                panel.getGame().MistakesToLesson(Game.NumMistakeType.values()[choice]);
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
             panel.startMistakeGame();
-            System.out.println(displayChooseWindow());
             dispose();
         });
 
@@ -87,8 +95,8 @@ public class ResultWindow extends JFrame {
     }
 
     private int displayChooseWindow() {
-        Object[] options = {"Оба списка", "Левый список", "Правый список"};
-        String ret = (String)JOptionPane.showInputDialog(null, "Шо сохранять", "Mda", JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+        Object[] options = {"Левый список", "Правый список", "Оба списка"};
+        String ret = (String)JOptionPane.showInputDialog(panel.getWindow(), "Какой список ошибок запускать?", "Выбор", JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
         return Arrays.asList(options).indexOf(ret);
 
     }

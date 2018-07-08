@@ -343,7 +343,7 @@ public class Game {
      *
      * @param numType - загружаемый список ошибок
      */
-    public void MistakesToLesson(NumMistakeType numType) throws IOException {
+    public void  MistakesToLesson(NumMistakeType numType) throws IOException {
         StringBuilder build = new StringBuilder();
         build.append(curLesson.getLessonName());
         build.setLength(build.length() - 4);
