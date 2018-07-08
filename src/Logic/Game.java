@@ -1,5 +1,6 @@
 package Logic;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -106,7 +107,7 @@ public class Game {
      * @param file - файл-словарь
      * @throws IOException - Input/Output exception
      */
-    public boolean newLesson(File file) throws IOException {
+    public boolean newLesson(File file) {
 // ПРОВЕРКА ЗАГРУЗКИ
 //        LoadProgress("data/ex.savepr");
 //        return true;
@@ -203,9 +204,7 @@ public class Game {
                     mixField();
                 offset = offset + NumElem;
                 return true;
-            }
-            else
-            {
+            } else {
                 LoadFl = false;
             }
         }
@@ -308,28 +307,30 @@ public class Game {
 
     /**
      * Сохранение совершенных ошибок в файл
-     *
-     * @throws IOException - Input/Output exception
      */
-    public void SaveMistakes() throws IOException {
+    public void SaveMistakes(String fileName) {
         if (curLesson != null) {
             StringBuilder build = new StringBuilder();
-            build.append("data/");
+            build.append(fileName);
             build.append(curLesson.getLessonName());
             build.setLength(build.length() - 4);
-            MistakesToFile(LessonMistakes1, build.toString() + "(err1).txt");
-            MistakesToFile(LessonMistakes2, build.toString() + "(err2).txt");
+            try {
+                MistakesToFile(LessonMistakes1, build.toString() + "(err1).txt");
+                MistakesToFile(LessonMistakes2, build.toString() + "(err2).txt");
+            }
+            catch (IOException e)
+            {
+                JOptionPane.showMessageDialog(null, "Не удалось сохранить ошибки", "Ошибка сохранения ошибок", JOptionPane.ERROR_MESSAGE, null);
+            }
+
         }
     }
 
     /**
-     * Запись списка в файл
-     *
      * @param a        - сохраняемый список
      * @param fileName - имя файла
-     * @throws IOException - Input/Output Exception
      */
-    private void MistakesToFile(LinkedList<DictionaryPair> a, String fileName) throws IOException {
+    private void MistakesToFile(LinkedList<DictionaryPair> a, String fileName) throws IOException{
         if (a != null) {
             try (FileWriter out = new FileWriter(fileName)) {
                 for (DictionaryPair err : a)
@@ -343,7 +344,7 @@ public class Game {
      *
      * @param numType - загружаемый список ошибок
      */
-    public void MistakesToLesson(NumMistakeType numType) throws IOException {
+    public void MistakesToLesson(NumMistakeType numType) {
         StringBuilder build = new StringBuilder();
         build.append(curLesson.getLessonName());
         build.setLength(build.length() - 4);
@@ -389,12 +390,10 @@ public class Game {
     /**
      * Сохранение текущего прогресса, для дальнейшего продолжение
      * // принимает fileName поданное пользователем?
-     *           ПРОБЛЕМА - сохранение старых ошибок без сохранения старой "версии" словаря
-     *              - несохранение старых ошибок недопустимо => сохранение всего словаря
      */
-    public void SaveProgress(int TimeSec) {
+    public boolean SaveProgress(String fileName, int TimeSec) {
         StringBuilder build = new StringBuilder();
-        build.append("data/");
+        build.append(fileName);
         build.append(curLesson.getLessonName());
         build.setLength(build.length() - 4);
         build.append("(save).savepr");
@@ -438,8 +437,7 @@ public class Game {
                 else
                     save.write(curLesson.Dictionary.indexOf(cell.getPair()) + " 0 ");
                 save.write(cell.getPosition().toString() + " ");
-            }
-            else
+            } else
                 save.write("-1"); // В случае, если последнего хода нет
 //---
             save.write("\n");
@@ -500,8 +498,10 @@ public class Game {
 */
         } catch (IOException e) {
             // Сообщение о неудачном сохранении
-            System.out.println("Не удалось сохранить игру");
+            JOptionPane.showMessageDialog(null, "Не удалось сохранить прогресс текущего урока", "Ошибка сохранения прогресса", JOptionPane.ERROR_MESSAGE, null);
+            return false;
         }
+        return true;
     }
 
     /**
@@ -509,7 +509,7 @@ public class Game {
      * // принимает fileName поданное пользователем?
      */
     public int LoadProgress(String fileName) {
-        fileName = "data/ex(allerr)(save).savepr";//data/ex(save).savepr";
+        //fileName = "data/ex(allerr)(save).savepr";//data/ex(save).savepr";
         int TimeSec = 0;
         try (Scanner load = new Scanner(new File(fileName))) {
 // НЕ ЗАВИСИТ ОТ СЛОВАРЯ

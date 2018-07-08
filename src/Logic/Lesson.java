@@ -1,5 +1,6 @@
 package Logic;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -24,11 +25,18 @@ class Lesson {
                 DictionaryPair pair = DictionaryPair.readPair(scanner);
                 if (pair != null)
                 {
-                    Dictionary.add(pair);
+                    if (StrTransform.isFormatCorrect(pair.getFirst()) && StrTransform.isFormatCorrect(pair.getSecond()))
+                        Dictionary.add(pair);
+                    else {
+                        // Сообщение об ошибке в строке словаря ("\e")
+                        JOptionPane.showMessageDialog(null, "Неизвестная управляющая конструкция в строке №" + (Dictionary.size() + 1), "Ошибка чтения словаря", JOptionPane.ERROR_MESSAGE, null);
+                        return false;
+                    }
                 }
                 else
                 {
                     // Сообщение об ошибке в словаре
+                    JOptionPane.showMessageDialog(null, "Некорректная строка №" + (Dictionary.size() + 1), "Ошибка чтения словаря", JOptionPane.ERROR_MESSAGE, null);
                     System.out.println("Ошибка в словаре. Строка №" + (Dictionary.size() + 1) + "\n");
                     Dictionary.clear();
                     return false;
@@ -36,7 +44,7 @@ class Lesson {
             }
         } catch (FileNotFoundException e) {
             // Сообщение о ненайденном файле
-            System.out.println("Файл не найден");
+            JOptionPane.showMessageDialog(null, "Не удалось открыть файл словаря", "Ошибка открытия словаря", JOptionPane.ERROR_MESSAGE, null);
             return false;
         }
         setLessonName(file.getName());
