@@ -14,10 +14,10 @@ public class Game {
     private Position FieldSize;                                    // Размеры поля
     private Lesson curLesson;                                      // Текущий урок
     private int NumberOfSteps;                                     // Количество этапов в уроке
-    private LinkedList<DictionaryPair> LessonErr1;                 // Список ошибок (верные пары левых)
-    private LinkedList<DictionaryPair> LessonErr2;                 // Список ошибок (верные пары левых)
+    private LinkedList<DictionaryPair> LessonMistakes1;            // Список ошибок (верные пары левых)
+    private LinkedList<DictionaryPair> LessonMistakes2;            // Список ошибок (верные пары правых)
     private int NumCorrectAnsw;                                    // Кол-во верных ответов на уроке
-    private int localErrs;                                         // Кол-во ошибок на этапе
+    private int localMistakes;                                         // Кол-во ошибок на этапе
     private int offset;                                            // Смещение относительно начала словаря
     private LinkedList<Integer> NumElemOfMatrix;                   // Распределение элементов по матрицам
     private Move LastMove;                                         // Последный ход
@@ -53,15 +53,15 @@ public class Game {
     /**
      * @return - количество совершенных ошибок за этап
      */
-    public int getLocalErrs() {
-        return localErrs;
+    public int getLocalMistakes() {
+        return localMistakes;
     }
 
     /**
      * @return - количество совершенных ошибок за урок
      */
-    public int getNumErrors() {
-        return LessonErr1.size();
+    public int getNumMistakes() {
+        return LessonMistakes1.size();
     }
 
     /**
@@ -125,11 +125,11 @@ public class Game {
      * Подготовка урока к запуску
      */
     private void prepareLesson() {
-        LessonErr1 = new LinkedList<>();
-        LessonErr2 = new LinkedList<>();
+        LessonMistakes1 = new LinkedList<>();
+        LessonMistakes2 = new LinkedList<>();
         NumCorrectAnsw = 0;
         offset = 0;
-        localErrs = 0;
+        localMistakes = 0;
         NumElemOfMatrix = new LinkedList<>();
         NumberOfSteps = CalculateFields();  // рассчёт матричного заполнения
     }
@@ -255,15 +255,15 @@ public class Game {
             NumCorrectAnsw++;
             if (NumCorrectAnsw == NumElemOfMatrix.getFirst()) {
                 NumElemOfMatrix.removeFirst();
-                localErrs = 0;
+                localMistakes = 0;
                 NumCorrectAnsw = 0;
                 setLastMove(null);
                 return true;
             }
         } else {
-            localErrs++;
-            LessonErr1.addLast(first);
-            LessonErr2.addLast(second);
+            localMistakes++;
+            LessonMistakes1.addLast(first);
+            LessonMistakes2.addLast(second);
         }
         return compareFlag;
     }
@@ -276,7 +276,11 @@ public class Game {
      * @return - true - если пары совместимы
      */
     private boolean comparePair(DictionaryPair A, DictionaryPair B) {
-        return A.getFirst().equals(B.getFirst()) || A.getSecond().equals(B.getSecond());
+        String NormalA1 = StrTransform.toNormalString(A.getFirst());
+        String NormalA2 = StrTransform.toNormalString(A.getSecond());
+        String NormalB1 = StrTransform.toNormalString(B.getFirst());
+        String NormalB2 = StrTransform.toNormalString(B.getSecond());
+        return NormalA1.equals(NormalB1) || NormalA2.equals(NormalB2);
     }
 
     /**
@@ -293,9 +297,9 @@ public class Game {
             if (comparePair(LastMove.first.getPair(), LastMove.second.getPair())) {
                 NumCorrectAnsw--;
             } else {
-                LessonErr1.removeLast();
-                LessonErr2.removeLast();
-                localErrs--;
+                LessonMistakes1.removeLast();
+                LessonMistakes2.removeLast();
+                localMistakes--;
             }
             setLastMove(null);
         }
@@ -307,14 +311,14 @@ public class Game {
      *
      * @throws IOException - Input/Output exception
      */
-    public void SaveErrors() throws IOException {
+    public void SaveMistakes() throws IOException {
         if (curLesson != null) {
             StringBuilder build = new StringBuilder();
             build.append("data/");
             build.append(curLesson.getLessonName());
             build.setLength(build.length() - 4);
-            ErrorsToFile(LessonErr1, build.toString() + "(err1).txt");
-            ErrorsToFile(LessonErr2, build.toString() + "(err2).txt");
+            MistakesToFile(LessonMistakes1, build.toString() + "(err1).txt");
+            MistakesToFile(LessonMistakes2, build.toString() + "(err2).txt");
         }
     }
 
@@ -325,7 +329,7 @@ public class Game {
      * @param fileName - имя файла
      * @throws IOException - Input/Output Exception
      */
-    private void ErrorsToFile(LinkedList<DictionaryPair> a, String fileName) throws IOException {
+    private void MistakesToFile(LinkedList<DictionaryPair> a, String fileName) throws IOException {
         if (a != null) {
             try (FileWriter out = new FileWriter(fileName)) {
                 for (DictionaryPair err : a)
@@ -339,7 +343,7 @@ public class Game {
      *
      * @param numType - загружаемый список ошибок
      */
-    public void ErrorsToLesson(NumErrorType numType) throws IOException {
+    public void MistakesToLesson(NumMistakeType numType) throws IOException {
         StringBuilder build = new StringBuilder();
         build.append(curLesson.getLessonName());
         build.setLength(build.length() - 4);
@@ -347,18 +351,18 @@ public class Game {
         switch (numType) {
             case FIRST: {
                 build.append("(err1).txt");
-                LList = new LinkedList<>(LessonErr1);
+                LList = new LinkedList<>(LessonMistakes1);
                 break;
             }
             case SECOND: {
                 build.append("(err2).txt");
-                LList = new LinkedList<>(LessonErr2);
+                LList = new LinkedList<>(LessonMistakes2);
                 break;
             }
             case BOTH: {
                 build.append("(allerr).txt");
-                LList = new LinkedList<>(LessonErr1);
-                LList.addAll(LessonErr2);
+                LList = new LinkedList<>(LessonMistakes1);
+                LList.addAll(LessonMistakes2);
                 break;
             }
         }
@@ -366,7 +370,7 @@ public class Game {
         prepareLesson();
     }
 
-    public enum NumErrorType {
+    public enum NumMistakeType {
         FIRST,
         SECOND,
         BOTH
@@ -439,11 +443,11 @@ public class Game {
                 save.write("-1"); // В случае, если последнего хода нет
 //---
             save.write("\n");
-            save.write(TimeSec + " " + NumCorrectAnsw + " " + LessonErr1.size() + "\n");  // Значение таймера, кол-во верных ответов, ошибок
-            for (DictionaryPair a : LessonErr1) // Сохранение первого списка ошибок
+            save.write(TimeSec + " " + NumCorrectAnsw + " " + LessonMistakes1.size() + "\n");  // Значение таймера, кол-во верных ответов, ошибок
+            for (DictionaryPair a : LessonMistakes1) // Сохранение первого списка ошибок
                 save.write(curLesson.Dictionary.indexOf(a) + " ");
             save.write("\n");
-            for (DictionaryPair a : LessonErr2) // Сохранение второго списка ошибок
+            for (DictionaryPair a : LessonMistakes2) // Сохранение второго списка ошибок
                 save.write(curLesson.Dictionary.indexOf(a) + " ");
             save.write("\n");
 /*
@@ -485,11 +489,11 @@ public class Game {
             save.write(cell.getPosition().toString() + " ");
 //---
             save.write("\n");
-            save.write(TimeSec + " " + NumCorrectAnsw + " " + LessonErr1.size() + "\n");  // Значение таймера, кол-во верных ответов, ошибок
-            for (DictionaryPair a : LessonErr1) // Сохранение первого списка ошибок
+            save.write(TimeSec + " " + NumCorrectAnsw + " " + LessonMistakes1.size() + "\n");  // Значение таймера, кол-во верных ответов, ошибок
+            for (DictionaryPair a : LessonMistakes1) // Сохранение первого списка ошибок
                 save.write(curLesson.Dictionary.indexOf(a) + " ");
             save.write("\n");
-            for (DictionaryPair a : LessonErr2) // Сохранение второго списка ошибок
+            for (DictionaryPair a : LessonMistakes2) // Сохранение второго списка ошибок
                 save.write(curLesson.Dictionary.indexOf(a) + " ");
             save.write("\n");
 
@@ -566,12 +570,12 @@ public class Game {
             load.nextLine();
             TimeSec = load.nextInt();
             NumCorrectAnsw = load.nextInt();
-            int NumAllErr = load.nextInt();
-            for (int i = 0; i < NumAllErr; i++)                         // Загрука первого списка ошибок
-                LessonErr1.add(curLesson.Dictionary.get(load.nextInt()));
+            int NumAllMistakes = load.nextInt();
+            for (int i = 0; i < NumAllMistakes; i++)                         // Загрука первого списка ошибок
+                LessonMistakes1.add(curLesson.Dictionary.get(load.nextInt()));
             load.nextLine();
-            for (int i = 0; i < NumAllErr; i++)                         // Загрузка второго списка ошибок
-                LessonErr2.add(curLesson.Dictionary.get(load.nextInt()));
+            for (int i = 0; i < NumAllMistakes; i++)                         // Загрузка второго списка ошибок
+                LessonMistakes2.add(curLesson.Dictionary.get(load.nextInt()));
             LoadFl = true;
 /*
 // ЗАВИСИТ ОТ СЛОВАРЯ
@@ -622,15 +626,13 @@ public class Game {
             load.nextLine();
             int TimeSec = load.nextInt();
             NumCorrectAnsw = load.nextInt();
-            int NumAllErr = load.nextInt();
-            for (int i = 0; i < NumAllErr; i++)                         // Загрука первого списка ошибок
-                LessonErr1.add(curLesson.Dictionary.get(load.nextInt()));
-            for (int i = 0; i < NumAllErr; i++)                         // Загрузка второго списка ошибок
-                LessonErr2.add(curLesson.Dictionary.get(load.nextInt()));
+            int NumAllMistakes = load.nextInt();
+            for (int i = 0; i < NumAllMistakes; i++)                         // Загрука первого списка ошибок
+                LessonMistakes1.add(curLesson.Dictionary.get(load.nextInt()));
+            for (int i = 0; i < NumAllMistakes; i++)                         // Загрузка второго списка ошибок
+                LessonMistakes2.add(curLesson.Dictionary.get(load.nextInt()));
 */
-        } catch (IOException e) {
-            return -1;
-        } catch (InputMismatchException e) {
+        } catch (IOException | InputMismatchException e) {
             return -1;
         }
         return TimeSec;

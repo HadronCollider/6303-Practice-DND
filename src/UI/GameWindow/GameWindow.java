@@ -1,10 +1,6 @@
 package UI.GameWindow;
 
-import Logic.Game;
-
 import javax.swing.*;
-import javax.swing.filechooser.FileFilter;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
@@ -52,7 +48,7 @@ public class GameWindow extends JFrame {
         JMenuItem saveMistakesMenuItem = new JMenuItem("Сохранить ошибки");
         saveMistakesMenuItem.addActionListener(e -> {
             try {
-                fieldPanel.getGame().SaveErrors();
+                fieldPanel.getGame().SaveMistakes();
             } catch (IOException e1) {
                 e1.printStackTrace();
             }

@@ -61,7 +61,7 @@ public class FieldPanel extends JPanel {
         } else {
             selected.setWrong();
             checked.setWrong();
-            window.getInfoPanel().getErrorCounter().setNumberOfMistakes(game.getNumErrors());
+            window.getInfoPanel().getErrorCounter().setNumberOfMistakes(game.getNumMistakes());
         }
         setSelected(null);
         if (numberOfCorrectCells == rows * columns) {
@@ -72,7 +72,7 @@ public class FieldPanel extends JPanel {
                 window.getInfoPanel().getTimer().stop();
 
                 SwingUtilities.invokeLater(() -> {
-                    ResultWindow resultWindow = new ResultWindow(this, game.getNumErrors(), window.getInfoPanel().getTimer().getTextTime());
+                    ResultWindow resultWindow = new ResultWindow(this, game.getNumMistakes(), window.getInfoPanel().getTimer().getTextTime());
                     resultWindow.setVisible(true);
 
                 });
@@ -126,7 +126,7 @@ public class FieldPanel extends JPanel {
         window.getInfoPanel().startAll();
         window.getInfoPanel().getTimer().setTime(game.LoadProgress(filename));
         window.getInfoPanel().getProgress().setNumberOfSteps(game.getNumberOfSteps());
-        window.getInfoPanel().getErrorCounter().setNumberOfMistakes(game.getNumErrors());
+        window.getInfoPanel().getErrorCounter().setNumberOfMistakes(game.getNumMistakes());
         window.getInfoPanel().getProgress().setCurrentStep(game.getNumOfCurStep());
         game.nextField();
         displayField();
@@ -140,10 +140,10 @@ public class FieldPanel extends JPanel {
     }
 
     public void undo() {
-        int numberBefore = game.getNumErrors();
+        int numberBefore = game.getNumMistakes();
         game.undo();
-        if(game.getNumErrors() < numberBefore) {
-            window.getInfoPanel().getErrorCounter().setNumberOfMistakes(game.getNumErrors());
+        if(game.getNumMistakes() < numberBefore) {
+            window.getInfoPanel().getErrorCounter().setNumberOfMistakes(game.getNumMistakes());
         } else {
             displayField();
         }

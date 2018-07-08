@@ -5,7 +5,6 @@ import Logic.Game;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.Arrays;
 
 public class ResultWindow extends JFrame {
@@ -43,7 +42,7 @@ public class ResultWindow extends JFrame {
         JButton saveMistakesButton = new JButton("Сохранить ошибки");
         saveMistakesButton.addActionListener(e -> {
             try {
-                panel.getGame().SaveErrors();
+                panel.getGame().SaveMistakes();
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
@@ -56,7 +55,7 @@ public class ResultWindow extends JFrame {
         JButton startMistakesGameButton = new JButton("Работа над ошибками");
         startMistakesGameButton.addActionListener(e -> {
             try {
-                panel.getGame().ErrorsToLesson(Game.NumErrorType.BOTH);
+                panel.getGame().MistakesToLesson(Game.NumMistakeType.BOTH);
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
