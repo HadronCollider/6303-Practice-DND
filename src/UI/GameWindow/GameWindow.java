@@ -2,12 +2,9 @@ package UI.GameWindow;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.io.IOException;
 
 public class GameWindow extends JFrame {
 
@@ -17,12 +14,14 @@ public class GameWindow extends JFrame {
 
     private FieldPanel fieldPanel;
     private InfoPanel infoPanel;
-    private int vertical, horizontal;
+    private int vertical, horizontal, cellSizeX, cellXizeY;
 
 
-    public GameWindow(int vertical, int horizontal) {
+    public GameWindow(int vertical, int horizontal, int cellSizeX, int cellXizeY) {
         this.vertical = vertical;
         this.horizontal = horizontal;
+        this.cellSizeX = cellSizeX;
+        this.cellXizeY = cellXizeY;
         init();
         setMenuBars();
     }
@@ -115,18 +114,13 @@ public class GameWindow extends JFrame {
         this.infoPanel = infoPanel;
         panel.add(infoPanel, gridBagConstraints);
         setContentPane(panel);
-        setMinimumSize(new Dimension(600, 500));
+        setMinimumSize(new Dimension(cellSizeX * vertical + Toolkit.getDefaultToolkit().getScreenSize().height / 8, cellXizeY * horizontal));
+        setResizable(false);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("Kana");
         Image image = Toolkit.getDefaultToolkit().createImage( getClass().getResource("/UI/StartWindow/icon.png") );
         setIconImage( image );
         setLocationRelativeTo(null);
-        addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                fieldPanel.displayField();
-            }
-        });
     }
 
     public FieldPanel getFieldPanel() {

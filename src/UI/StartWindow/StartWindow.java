@@ -19,8 +19,8 @@ public class StartWindow extends JFrame {
 
     public int tableSizeX = 6;
     public int tableSizeY = 6;
-    public int cellSizeX = 0;
-    public int cellSizeY = 0;
+    public int cellSizeX = 200;
+    public int cellSizeY = 100;
 
     private void init() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); //получаем разрешение экрана
@@ -148,7 +148,7 @@ public class StartWindow extends JFrame {
                 tableSizeY = Integer.parseInt(tableSizeFieldY.getText());
                 //cellSizeY = Integer.parseInt(cellSizeFieldY.getText());
                 SwingUtilities.invokeLater(() ->{
-                    GameWindow gameWindow = new GameWindow(tableSizeY, tableSizeX);
+                    GameWindow gameWindow = new GameWindow(tableSizeY, tableSizeX, cellSizeX, cellSizeY);
                     gameWindow.setVisible(true);
                     //gameWindow.startGame();
                 });
@@ -173,7 +173,7 @@ public class StartWindow extends JFrame {
             game.LoadProgress(fileChooser.getCurrentDirectory() + File.separator + fileChooser.getSelectedFile().getName());
 
             SwingUtilities.invokeLater(() -> {
-                GameWindow gameWindow = new GameWindow(game.getFieldSize().getVertical(), game.getFieldSize().getHorizontal());
+                GameWindow gameWindow = new GameWindow(game.getFieldSize().getVertical(), game.getFieldSize().getHorizontal(), cellSizeX, cellSizeY);
                 gameWindow.setVisible(true);
                 gameWindow.getFieldPanel().continueGame(fileChooser.getCurrentDirectory() + File.separator + fileChooser.getSelectedFile().getName());
             });

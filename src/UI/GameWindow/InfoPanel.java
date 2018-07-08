@@ -69,10 +69,9 @@ public class InfoPanel extends JPanel {
         mixButton.addActionListener(e -> getWindow().getFieldPanel().mixField());
         add(mixButton, constraints);
 
-
         progress.setVisible(false);
         errorCounter.setVisible(false);
-        setMinimumSize(new Dimension(150, 300));
+        setMinimumSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize().height / 8, Toolkit.getDefaultToolkit().getScreenSize().height / 2));
     }
 
     private GameWindow getWindow() {
