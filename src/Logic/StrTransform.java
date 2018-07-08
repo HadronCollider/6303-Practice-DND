@@ -1,17 +1,16 @@
-package Logic;
-
 import java.lang.String;
 import java.awt.*;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import javax.swing.*;
 
 public class StrTransform {
 
-    public void transform(JButton button, String input){
+    public static void transform(JButton button, String input){
         toFormattedString(input);
         setLabelsToButton(button, createLabels());
     }
-    public String toNormalString(String inputString){
+    public static String toNormalString(String inputString){
         char[] input = inputString.toCharArray();
         String output="";
         char lastPushedSymb = ' ';
@@ -36,10 +35,10 @@ public class StrTransform {
         return output;
     }
 
-    public ArrayList <word> formattedWords = new ArrayList<word>();
-    public word bufferWord;
+    public static ArrayList <word> formattedWords = new ArrayList<word>();
+    public static word bufferWord;
 
-    public void formatSwitch(char c){
+    public static void formatSwitch(char c){
         switch (c){
             case '1': bufferWord.sizeMode = 1; break;
             case '2': bufferWord.sizeMode = 2;break;
@@ -53,16 +52,18 @@ public class StrTransform {
         }
     }
 
-    public String toFormattedString(String inputString){
+    public static String toFormattedString(String inputString){
         inputString += ' ';
         char[] input = inputString.toCharArray();
         String output="";
         char lastPushedSymb =' ';
         String text = "";
+        int count = 0;
         for (int i=0; i < inputString.length(); i++) {
             if (lastPushedSymb == '\\'){
                 if (bufferWord == null || bufferWord.isUsed) {
                     bufferWord = new word();
+                    bufferWord.setColor('ж');
                 }
                 formatSwitch(input[i]);
 
@@ -75,12 +76,15 @@ public class StrTransform {
                     continue;
                 }
                 if (bufferWord.sizeMode == 0){
-                    for (int j=formattedWords.size()-1;j > 0;j--){
-                        if (formattedWords.get(j).sizeMode != 0){
-                            bufferWord.sizeMode = formattedWords.get(j).sizeMode;
-                            break;
+                    if (formattedWords.size() != 0) {
+                        for (int j = formattedWords.size() - 1; j > 0; j--) {
+                            if (formattedWords.get(j).sizeMode != 0) {
+                                bufferWord.sizeMode = formattedWords.get(j).sizeMode;
+                                break;
+                            }
                         }
                     }
+                    else bufferWord.sizeMode = 6;
                 }
                 bufferWord.text = text;
                 text = "" ;
@@ -92,14 +96,34 @@ public class StrTransform {
                 continue;
             }
             if (input[i] == '\\'){
+                if (i > 0 && formattedWords.size() == 0){
+                    for (int j = 0; j < i; j++) {
+                        text += input[j];
+                    }
+                    word single = new word();
+                    single.text = text;
+                    single.sizeMode = 6;
+                    single.color = new Color(0,0,0);
+                    formattedWords.add(single);
+                    text = "";
+                    single.isUsed = true;
+                }
                 lastPushedSymb = input[i];
                 continue;
             }
+            count++;
+        }
+        if (count == inputString.length() && formattedWords.size() == 0){
+            word single = new word();
+            single.text = inputString;
+            single.sizeMode = 6;
+            single.color = new Color(0,0,0);
+            formattedWords.add(single);
         }
         return output;
     }
 
-    public ArrayList <JLabel> createLabels(){
+    public static ArrayList <JLabel> createLabels(){
         ArrayList <JLabel> labels = new ArrayList<JLabel>();
         for (int i = 0; i < formattedWords.size(); i++) {
             Font font;
@@ -114,13 +138,16 @@ public class StrTransform {
                 }
                 JLabel label = new JLabel(formattedWords.get(i).text);
                 label.setFont(font);
-                label.setForeground(formattedWords.get(i).color);
+                if (formattedWords.get(i).color == null)
+                    label.setForeground(new Color(0,0,0));
+                else
+                    label.setForeground(formattedWords.get(i).color);
                 labels.add(label);
         }
         return labels;
     }
 
-    public void setLabelsToButton(JButton button, ArrayList <JLabel> labels ){
+    public static void setLabelsToButton(JButton button, ArrayList <JLabel> labels ){
         GridBagLayout gb = new GridBagLayout();
         button.setLayout(gb);
         GridBagConstraints c = new GridBagConstraints();
