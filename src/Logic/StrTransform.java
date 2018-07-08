@@ -8,11 +8,15 @@ import javax.swing.*;
 
 public class StrTransform {
 
-    public static void transform(JButton button, String input){
+    private static int height;
+
+    public static void transform(JButton button, String input, int squareHeight) {
+        height = (int)(squareHeight * 0.9);
         toFormattedString(input);
         setLabelsToButton(button, createLabels());
         formattedWords.clear();
     }
+
     public static String toNormalString(String inputString){
         char[] input = inputString.toCharArray();
         String output="";
@@ -41,9 +45,9 @@ public class StrTransform {
     public static ArrayList <word> formattedWords = new ArrayList<word>();
     public static word bufferWord;
 
-    public static void formatSwitch(char c){
-        switch (c){
-            case '1': bufferWord.sizeMode = 1; break;
+    public static void formatSwitch(char c) {
+        switch (c) {
+            case '1': bufferWord.sizeMode = 1;break;
             case '2': bufferWord.sizeMode = 2;break;
             case '3': bufferWord.sizeMode = 3;break;
             case '4': bufferWord.sizeMode = 4;break;
@@ -78,7 +82,7 @@ public class StrTransform {
                     i++;
                     continue;
                 }
-                if (bufferWord.sizeMode == 0){
+                if (bufferWord.sizeMode == 0) {
                     if (formattedWords.size() != 0) {
                         for (int j = formattedWords.size() - 1; j > 0; j--) {
                             if (formattedWords.get(j).sizeMode != 0) {
@@ -131,12 +135,12 @@ public class StrTransform {
         for (int i = 0; i < formattedWords.size(); i++) {
             Font font;
                 switch (formattedWords.get(i).sizeMode){
-                    case 1: font = new Font("APJapanesefont", Font.PLAIN, 12);break;
-                    case 2: font = new Font("APJapanesefont", Font.PLAIN, 15);break;
-                    case 3: font = new Font("APJapanesefont", Font.PLAIN, 26);break;
-                    case 4: font = new Font("APJapanesefont", Font.PLAIN, 36);break;
-                    case 5: font = new Font("APJapanesefont", Font.PLAIN, 39);break;
-                    case 6: font = new Font("APJapanesefont", Font.PLAIN, 51);break;
+                    case 1: font = new Font("APJapanesefont", Font.PLAIN, (int) ((double)1/6 * height));break;
+                    case 2: font = new Font("APJapanesefont", Font.PLAIN, (int) ((double)2/6 * height));break;
+                    case 3: font = new Font("APJapanesefont", Font.PLAIN, (int) ((double)3/6 * height));break;
+                    case 4: font = new Font("APJapanesefont", Font.PLAIN, (int) ((double)4/6 * height));break;
+                    case 5: font = new Font("APJapanesefont", Font.PLAIN, (int) ((double)5/6 * height));break;
+                    case 6: font = new Font("APJapanesefont", Font.PLAIN, height);break;
                     default: font = new Font("APJapanesefont", Font.PLAIN, 36);break;
                 }
                 JLabel label = new JLabel(formattedWords.get(i).text);
@@ -158,7 +162,7 @@ public class StrTransform {
         int j=0;
         switch (labels.size()){
             case 1:
-                c.anchor = GridBagConstraints.NORTH;
+                c.anchor = GridBagConstraints.CENTER;
                 c.fill = GridBagConstraints.HORIZONTAL;
                 c.gridheight = 1;
                 c.gridwidth = 1;

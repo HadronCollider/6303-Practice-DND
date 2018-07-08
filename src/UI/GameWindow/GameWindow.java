@@ -28,7 +28,7 @@ public class GameWindow extends JFrame {
 
     private void setMenuBars() {
         JMenuBar menuBar = new JMenuBar();
-        JMenu fileMenu = new JMenu("Файл");
+        JMenu infoMenu = new JMenu("Справка");
         JMenu gameMenu = new JMenu("Игра");
         JMenuItem loadGameMenuItem = new JMenuItem("Продолжить игру");
         loadGameMenuItem.addActionListener(e -> {
@@ -57,7 +57,6 @@ public class GameWindow extends JFrame {
         });
 
         JMenuItem exitMenuItem = new JMenuItem("Выйти");
-
         exitMenuItem.addActionListener(e -> dispose());
 
         JMenuItem newGameMenuItem = new JMenuItem("Новая игра");
@@ -69,17 +68,24 @@ public class GameWindow extends JFrame {
         JMenuItem mixMenuItem = new JMenuItem("Перемешать");
         mixMenuItem.addActionListener(e -> fieldPanel.mixField());
 
+        JMenuItem infoMenuItem = new JMenuItem("Об авторах");
+        infoMenuItem.addActionListener(e -> JOptionPane.showMessageDialog(null, "Ну тут шото о нас"));
+
 
         gameMenu.add(newGameMenuItem);
+        gameMenu.add(loadGameMenuItem);
+        gameMenu.add(saveGameMenuItem);
+        gameMenu.addSeparator();
         gameMenu.add(saveMistakesMenuItem);
         gameMenu.add(undoMenuItem);
         gameMenu.add(mixMenuItem);
-        fileMenu.add(loadGameMenuItem);
-        fileMenu.add(saveGameMenuItem);
-        fileMenu.addSeparator();
-        fileMenu.add(exitMenuItem);
-        menuBar.add(fileMenu);
+        gameMenu.addSeparator();
+        gameMenu.add(exitMenuItem);
+
+        infoMenu.add(infoMenuItem);
+
         menuBar.add(gameMenu);
+        menuBar.add(infoMenu);
         setJMenuBar(menuBar);
     }
 
@@ -109,7 +115,7 @@ public class GameWindow extends JFrame {
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                System.out.println(fieldPanel.getField()[0][0].getSize().width + " " + fieldPanel.getField()[0][0].getSize().height);
+                fieldPanel.displayField();
             }
         });
     }

@@ -105,7 +105,7 @@ public class StartWindow extends JFrame {
         UIManager.put( "text", new Color( 230, 230, 230) );
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Metal".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
@@ -128,8 +128,6 @@ public class StartWindow extends JFrame {
             StartWindow startWindow = new StartWindow();
             startWindow.setVisible(true);
         });
-
-
 
 
     }
