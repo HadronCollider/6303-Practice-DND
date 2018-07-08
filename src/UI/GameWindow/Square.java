@@ -9,6 +9,7 @@ import java.awt.*;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 
 
 public class Square extends JButton {
@@ -136,6 +137,7 @@ public class Square extends JButton {
 
     public void setFinal() {
         type = SquareType.FINAL;
+        removeAll();
         setBackground(new Color(34, 139, 34));
         setText("");
     }
