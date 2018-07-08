@@ -34,12 +34,10 @@ public class Square extends JButton {
             this.position = cell.getPosition();
             if(cell.getFlag()) {
                 this.type = SquareType.RIGHT;
-                StrTransform transform = new StrTransform();
-                transform.transform(this, cell.getPair().getSecond());
+                StrTransform.transform(this, cell.getPair().getSecond());
             } else {
                 this.type = SquareType.LEFT;
-                StrTransform transform = new StrTransform();
-                transform.transform(this, cell.getPair().getFirst());
+                StrTransform.transform(this, cell.getPair().getFirst());
             }
 
         } else {
