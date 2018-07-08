@@ -5,23 +5,28 @@ import Logic.Game;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
+import java.lang.reflect.Array;
+import java.util.Arrays;
 
 public class ResultWindow extends JFrame {
 
     private FieldPanel panel;
     private int numberOfMistakes;
 
-    public ResultWindow(FieldPanel panel, int numberOfMistakes) throws HeadlessException {
+    public ResultWindow(FieldPanel panel, int numberOfMistakes, String timer) throws HeadlessException {
         this.panel = panel;
+        //Image image = Toolkit.getDefaultToolkit().createImage( getClass().getResource("icon.png") );
+        //setIconImage( image );
 
         setTitle("Победа!");
         GridBagLayout layout = new GridBagLayout();
         GridBagConstraints constraints = new GridBagConstraints();
         setLayout(layout);
 
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        setSize(new Dimension((int)screenSize.getWidth() / 3, screenSize.height / 8));
-        setResizable(false);
+        int verticalBorder = Toolkit.getDefaultToolkit().getScreenSize().height / 200;
+        int horizontalBorder = Toolkit.getDefaultToolkit().getScreenSize().width / 400;
+
+        constraints.insets = new Insets(verticalBorder, horizontalBorder, verticalBorder ,horizontalBorder);
 
         constraints.weightx = 1;
         constraints.weighty = 1;
@@ -29,10 +34,9 @@ public class ResultWindow extends JFrame {
         constraints.gridy = 0;
         constraints.gridx = 0;
         constraints.gridwidth = 3;
-        JLabel resultInfo = new JLabel("Поздравляем! Вы прошли игру и совершили " + numberOfMistakes + " ошибок.");
-        resultInfo.setFont(new Font("Verdana", Font.PLAIN, 17));
+        JLabel resultInfo = new JLabel("Поздравляем! Вы прошли игру за" + timer + "и совершили " + numberOfMistakes + " ошибок.");
         add(resultInfo, constraints);
-        
+
         constraints.gridwidth = 1;
         constraints.gridy = 1;
         constraints.gridx = 0;
@@ -43,7 +47,7 @@ public class ResultWindow extends JFrame {
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
-            //dispose();
+            System.out.println(displayChooseWindow());
         });
         add(saveMistakesButton, constraints);
 
@@ -57,6 +61,7 @@ public class ResultWindow extends JFrame {
                 e1.printStackTrace();
             }
             panel.startMistakeGame();
+            System.out.println(displayChooseWindow());
             dispose();
         });
 
@@ -75,8 +80,17 @@ public class ResultWindow extends JFrame {
             startMistakesGameButton.setEnabled(false);
             saveMistakesButton.setEnabled(false);
         }
+        pack();
+        setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+
+    }
+
+    private int displayChooseWindow() {
+        Object[] options = {"Оба списка", "Левый список", "Правый список"};
+        String ret = (String)JOptionPane.showInputDialog(null, "Шо сохранять", "Mda", JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
+        return Arrays.asList(options).indexOf(ret);
 
     }
 

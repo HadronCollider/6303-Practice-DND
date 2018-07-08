@@ -70,8 +70,9 @@ public class FieldPanel extends JPanel {
                 window.getInfoPanel().getProgress().increase();
             } else {
                 window.getInfoPanel().getTimer().stop();
+
                 SwingUtilities.invokeLater(() -> {
-                    ResultWindow resultWindow = new ResultWindow(this, game.getNumErrors());
+                    ResultWindow resultWindow = new ResultWindow(this, game.getNumErrors(), window.getInfoPanel().getTimer().getTextTime());
                     resultWindow.setVisible(true);
 
                 });
@@ -147,5 +148,7 @@ public class FieldPanel extends JPanel {
             displayField();
         }
     }
+
+
 
 }
