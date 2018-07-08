@@ -14,8 +14,6 @@ public class ResultWindow extends JFrame {
 
     public ResultWindow(FieldPanel panel, int numberOfMistakes, String timer) throws HeadlessException {
         this.panel = panel;
-        //Image image = Toolkit.getDefaultToolkit().createImage( getClass().getResource("icon.png") );
-        //setIconImage( image );
 
         setTitle("Победа!");
         GridBagLayout layout = new GridBagLayout();
@@ -23,7 +21,7 @@ public class ResultWindow extends JFrame {
         setLayout(layout);
 
         int verticalBorder = Toolkit.getDefaultToolkit().getScreenSize().height / 200;
-        int horizontalBorder = Toolkit.getDefaultToolkit().getScreenSize().width / 400;
+        int horizontalBorder = Toolkit.getDefaultToolkit().getScreenSize().height / 200;
 
         constraints.insets = new Insets(verticalBorder, horizontalBorder, verticalBorder ,horizontalBorder);
 
