@@ -173,6 +173,4 @@ public class Square extends JButton {
         FINAL
     }
 
-
-
 }

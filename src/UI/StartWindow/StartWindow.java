@@ -73,7 +73,7 @@ public class StartWindow extends JFrame {
         gb.setConstraints(tableSizeFieldX, c);
         tableSizeFieldX.setFont(new Font("Verdana", Font.PLAIN, 20));
         tableSizeFieldX.setText("6");
-        tableSizeFieldX.setToolTipText("Укажите ширину поля");
+        tableSizeFieldX.setToolTipText("Укажите ширину поля (>=3)");
         panel.add(tableSizeFieldX);
 
         c.anchor = GridBagConstraints.NORTH;
@@ -82,7 +82,7 @@ public class StartWindow extends JFrame {
         gb.setConstraints(tableSizeFieldY, c);
         tableSizeFieldY.setFont(new Font("Verdana", Font.PLAIN, 20));
         tableSizeFieldY.setText("6");
-        tableSizeFieldY.setToolTipText("Укажите высоту поля");
+        tableSizeFieldY.setToolTipText("Укажите высоту поля (>=3) ");
         panel.add(tableSizeFieldY);
 
         c.anchor = GridBagConstraints.NORTH;
@@ -99,7 +99,7 @@ public class StartWindow extends JFrame {
         gb.setConstraints(cellSizeFieldX, c);
         cellSizeFieldX.setFont(new Font("Verdana", Font.PLAIN, 20));
         cellSizeFieldX.setText("150");
-        cellSizeFieldX.setToolTipText("Укажите ширину ячейки");
+        cellSizeFieldX.setToolTipText("Укажите ширину ячейки (>0)");
         panel.add(cellSizeFieldX);
 
         c.anchor = GridBagConstraints.NORTH;
@@ -108,7 +108,7 @@ public class StartWindow extends JFrame {
         gb.setConstraints(cellSizeFieldY, c);
         cellSizeFieldY.setFont(new Font("Verdana", Font.PLAIN, 20));
         cellSizeFieldY.setText("75");
-        cellSizeFieldY.setToolTipText("Укажите высоту ячейки");
+        cellSizeFieldY.setToolTipText("Укажите высоту ячейки (>0)");
         panel.add(cellSizeFieldY);
 
         c.gridheight = 1;
@@ -167,7 +167,7 @@ public class StartWindow extends JFrame {
         });
 
         continueButton.addActionListener(e -> {
-            JFileChooser fileChooser = new JFileChooser();
+            JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir"));
             int approval = fileChooser.showDialog(null, "Открыть файл");
             if(approval != JFileChooser.APPROVE_OPTION) {
                 return;

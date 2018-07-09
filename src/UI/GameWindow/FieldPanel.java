@@ -104,9 +104,13 @@ public class FieldPanel extends JPanel {
         displayField();
     }
 
+    public void setGame(Game game) {
+        this.game = game;
+    }
+
     public void startGame() {
         this.selected = null;
-        JFileChooser fileDialog = new JFileChooser();
+        JFileChooser fileDialog = new JFileChooser(System.getProperty("user.dir"));
         int approval = fileDialog.showOpenDialog(this);
         if(approval != JFileChooser.APPROVE_OPTION) {
             return;
