@@ -1,6 +1,8 @@
 package Logic;
 
 
+import UI.GameWindow.Square;
+
 import java.lang.String;
 import java.awt.*;
 import java.util.ArrayList;
@@ -10,10 +12,10 @@ public class StrTransform {
 
     private static int height;
 
-    public static void transform(JButton button, String input, int squareHeight) {
+    public static void transform(Square button, String input, int squareHeight) {
         height = (int)(squareHeight * 0.9);
         toFormattedString(input);
-        setLabelsToButton(button, createLabels());
+        createButtons(button);
         formattedWords.clear();
     }
 
@@ -84,7 +86,7 @@ public class StrTransform {
                 }
                 if (bufferWord.sizeMode == 0) {
                     if (formattedWords.size() != 0) {
-                        for (int j = formattedWords.size() - 1; j > 0; j--) {
+                        for (int j = formattedWords.size()-1; j >= 0; j--) {
                             if (formattedWords.get(j).sizeMode != 0) {
                                 bufferWord.sizeMode = formattedWords.get(j).sizeMode;
                                 break;
@@ -130,7 +132,57 @@ public class StrTransform {
         return output;
     }
 
-    public static ArrayList <JLabel> createLabels(){
+    private static void createButtons(Square button){
+        int horizontal = 0;
+        int vertical = 0;
+       // ArrayList <JLabel> labels = new ArrayList<JLabel>();
+        GridBagLayout gb = new GridBagLayout();
+        button.setLayout(gb);
+        GridBagConstraints c = new GridBagConstraints();
+        for (int i = 0; i < formattedWords.size(); i++) {
+            Font font;
+            switch (formattedWords.get(i).sizeMode){
+                case 1: font = new Font("APJapanesefont", Font.PLAIN, (int) ((double)1/6 * height));break;
+                case 2: font = new Font("APJapanesefont", Font.PLAIN, (int) ((double)2/6 * height));break;
+                case 3: font = new Font("APJapanesefont", Font.PLAIN, (int) ((double)3/6 * height));break;
+                case 4: font = new Font("APJapanesefont", Font.PLAIN, (int) ((double)4/6 * height));break;
+                case 5: font = new Font("APJapanesefont", Font.PLAIN, (int) ((double)5/6 * height));break;
+                case 6: font = new Font("APJapanesefont", Font.PLAIN, height);break;
+                default: font = new Font("APJapanesefont", Font.PLAIN, height);break;
+            }
+            JLabel label = new JLabel(formattedWords.get(i).text);
+            label.setFont(font);
+            if (formattedWords.get(i).color == null)
+                label.setForeground(new Color(0,0,0));
+            else
+                label.setForeground(formattedWords.get(i).color);
+            //labels.add(label);
+            if (formattedWords.get(i).hasLineBreak){
+                vertical++;
+                horizontal = 0;
+            }
+            c.anchor = GridBagConstraints.NORTH;
+            c.fill = GridBagConstraints.HORIZONTAL;
+            c.gridheight = 1;
+            c.gridwidth = 1;
+            c.gridx = horizontal;
+            c.gridy = vertical;
+            c.insets = new Insets(0, 0, 0, 0);
+            c.ipadx = 0;
+            c.ipady = 0;
+            c.weightx = 0.0;
+            c.weighty = 0.0;
+            button.setAlignmentX(0.5f);
+            button.setAlignmentY(0.5f);
+            label.setAlignmentX(0.5f);
+            label.setAlignmentY(0.5f);
+            gb.setConstraints(label, c);
+            button.add(label);
+            horizontal++;
+        }
+    }
+
+    /*public static ArrayList <JLabel> createLabels(){
         ArrayList <JLabel> labels = new ArrayList<JLabel>();
         for (int i = 0; i < formattedWords.size(); i++) {
             Font font;
@@ -152,74 +204,16 @@ public class StrTransform {
                 labels.add(label);
         }
         return labels;
-    }
+    }*/
 
-    public static void setLabelsToButton(JButton button, ArrayList <JLabel> labels ){
+   /* public static void setLabelsToButton(JButton button, ArrayList <JLabel> labels ){
         GridBagLayout gb = new GridBagLayout();
         button.setLayout(gb);
         GridBagConstraints c = new GridBagConstraints();
         int i=0;
         int j=0;
-        switch (labels.size()){
-            case 1:
-                c.anchor = GridBagConstraints.CENTER;
-                c.fill = GridBagConstraints.HORIZONTAL;
-                c.gridheight = 1;
-                c.gridwidth = 1;
-                c.gridx = i;
-                c.gridy = j;
-                c.insets = new Insets(0, 0, 0, 0);
-                c.ipadx = 0;
-                c.ipady = 0;
-                c.weightx = 0.0;
-                c.weighty = 0.0;
-                gb.setConstraints(labels.get(0), c);
-                button.add(labels.get(0));
-                break;
-            case 2:
-                for (JLabel label: labels) {
-                    c.anchor = GridBagConstraints.NORTH;
-                    c.fill = GridBagConstraints.HORIZONTAL;
-                    c.gridheight = 1;
-                    c.gridwidth = 1;
-                    c.gridx = 0;
-                    c.gridy = j;
-                    c.insets = new Insets(0, 0, 0, 0);
-                    c.ipadx = 0;
-                    c.ipady = 0;
-                    c.weightx = 0.0;
-                    c.weighty = 0.0;
-                    gb.setConstraints(label, c);
-                    button.add(label);
-                    j++;
-                }
-                break;
-            case 3:
-                c.anchor = GridBagConstraints.NORTH;
-                c.fill = GridBagConstraints.HORIZONTAL;
-                c.gridheight = 1;
-                c.gridwidth = 2;
-                c.gridx = 0;
-                c.gridy = 0;
-                c.insets = new Insets(0, 0, 0, 0);
-                c.ipadx = 0;
-                c.ipady = 0;
-                c.weightx = 0.0;
-                c.weighty = 0.0;
-                gb.setConstraints(labels.get(0), c);
-                button.add(labels.get(0));
-                c.gridwidth = 1;
-                c.gridx = 0;
-                c.gridy = 1;
-                gb.setConstraints(labels.get(1), c);
-                button.add(labels.get(1));
-                c.gridx = 1;
-                c.gridy = 1;
-                gb.setConstraints(labels.get(2), c);
-                button.add(labels.get(2));
-                break;
-        }
-    }
+
+    }*/
 
     public static boolean isFormatCorrect(String inputString){
         inputString += ' ';
