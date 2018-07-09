@@ -105,6 +105,7 @@ public class FieldPanel extends JPanel {
     }
 
     public void startGame() {
+        this.selected = null;
         JFileChooser fileDialog = new JFileChooser();
         int approval = fileDialog.showOpenDialog(this);
         if(approval != JFileChooser.APPROVE_OPTION) {
@@ -125,6 +126,7 @@ public class FieldPanel extends JPanel {
     }
 
     public void continueGame(String filename) {
+        this.selected = null;
         int timer = game.LoadProgress(filename);
         rows = game.getFieldSize().getVertical();
         columns = game.getFieldSize().getHorizontal();
