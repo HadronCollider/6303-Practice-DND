@@ -279,6 +279,25 @@ public class Game {
         String NormalB2 = StrTransform.toNormalString(B.getSecond());
         return NormalA1.equals(NormalB1) || NormalA2.equals(NormalB2);
     }
+/*
+    private ArrayList<DictionaryPair> FindEntries(Cell first, Cell second)
+    {
+        ArrayList<DictionaryPair> array = new ArrayList<>();
+        for (int i = 0; i < curLesson.Dictionary.size(); i++)
+        {
+            String firstStr = StrTransform.toNormalString(curLesson.Dictionary.get(i).getFirst());
+            String secondStr = StrTransform.toNormalString(curLesson.Dictionary.get(i).getSecond());
+            if (str.equals(firstStr) || str.equals(secondStr) || str2.equals(firstStr) || str2.equals(secondStr) )
+            {
+                array.add(curLesson.Dictionary.get(i));
+            }
+        }
+        boolean f = 0;
+        for (int i = 0; i < array.size(); i++)
+        {
+            if ()
+        }
+    }*/
 
     /**
      * Отмена последнего хода
@@ -378,10 +397,8 @@ public class Game {
      * // принимает fileName поданное пользователем?
      */
     public boolean SaveProgress(String fileName, int TimeSec) {
-        StringBuilder build = new StringBuilder();
-        build.append(fileName);
-        build.append(".savepr");
-        try (FileWriter save = new FileWriter(build.toString())) {
+        String saveName = fileName + ".savepr";
+        try (FileWriter save = new FileWriter(saveName)) {
             save.write(curLesson.getLessonName() + "\n");                   // Название урока
             save.write(curLesson.Dictionary.size() + " " + offset + "\n");      // Кол-во слов словаря, смещение в словаре
             for (int i = 0; i < curLesson.Dictionary.size(); i++)          // Пары словарь
@@ -451,7 +468,7 @@ public class Game {
      * // принимает fileName поданное пользователем?
      */
     public int LoadProgress(String fileName) {
-        int TimeSec = 0;
+        int TimeSec;
         try (Scanner load = new Scanner(new File(fileName))) {
             curLesson = new Lesson();
             curLesson.setLessonName(load.nextLine());               // Название урока

@@ -53,7 +53,7 @@ public class Square extends JButton {
         if(type == SquareType.FINAL) {
             setBackground(new Color(34, 139, 34));
         } else if(type == SquareType.LEFT){
-            setBackground(Color.CYAN);
+            setBackground(new Color(150, 238, 238));
         } else {
             setBackground(Color.WHITE);
         }
@@ -130,7 +130,7 @@ public class Square extends JButton {
     private void unselect() {
         selected = false;
         if(type == SquareType.LEFT) {
-            setBackground(Color.CYAN);
+            setBackground(new Color(150, 238, 238));
         } else {
             setBackground(Color.WHITE);
         }
@@ -160,7 +160,7 @@ public class Square extends JButton {
         timer.stop();
         wrong = false;
         if(type == SquareType.LEFT) {
-            setBackground(Color.CYAN);
+            setBackground(new Color(150, 238, 238));
         } else {
             setBackground(Color.WHITE);
         }
