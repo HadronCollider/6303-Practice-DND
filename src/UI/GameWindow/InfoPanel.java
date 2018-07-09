@@ -48,7 +48,7 @@ public class InfoPanel extends JPanel {
         constraints.weighty = 0.5;
         undoButton = new JButton("Отменить ход");
         undoButton.setVisible(false);
-        undoButton.setFont(new Font("Arial", Font.BOLD, Toolkit.getDefaultToolkit().getScreenSize().height / 72));
+        undoButton.setFont(new Font("Arial", Font.BOLD, Toolkit.getDefaultToolkit().getScreenSize().height / 75));
         undoButton.addActionListener(e -> undo());
         add(undoButton, constraints);
 

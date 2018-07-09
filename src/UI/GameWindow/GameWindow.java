@@ -21,11 +21,11 @@ public class GameWindow extends JFrame {
     private int vertical, horizontal, cellSizeX, cellXizeY;
 
 
-    public GameWindow(int vertical, int horizontal, int cellSizeX, int cellXizeY) {
+    public GameWindow(int vertical, int horizontal, int cellSizeX, int cellSizeY) {
         this.vertical = vertical;
         this.horizontal = horizontal;
         this.cellSizeX = cellSizeX;
-        this.cellXizeY = cellXizeY;
+        this.cellXizeY = cellSizeY;
         init();
         setMenuBars();
     }
@@ -106,7 +106,6 @@ public class GameWindow extends JFrame {
             });
         });
 
-
         gameMenu.add(newGameMenuItem);
         gameMenu.add(loadGameMenuItem);
         gameMenu.add(saveGameMenuItem);
@@ -149,6 +148,23 @@ public class GameWindow extends JFrame {
         Image image = Toolkit.getDefaultToolkit().createImage( getClass().getResource("/UI/StartWindow/icon.png") );
         setIconImage( image );
         setLocationRelativeTo(null);
+    }
+
+    void resize(int fieldSizeX, int fieldSizeY, int cellSizeX, int cellSizeY) {
+        if(fieldPanel.isInProcess()) {
+            JOptionPane.showMessageDialog(null, "Нельзя изменить параметры размер поля пока идет игра!", "Ошибка", JOptionPane.ERROR_MESSAGE, null);
+            return;
+        }
+        this.vertical = fieldSizeY;
+        this.horizontal = fieldSizeX;
+        this.cellSizeX = cellSizeX;
+        this.cellXizeY = cellSizeY;
+        setResizable(true);
+        setMinimumSize(new Dimension(cellSizeX * horizontal + Toolkit.getDefaultToolkit().getScreenSize().height / 8, cellXizeY * vertical));
+
+        setSize(new Dimension(cellSizeX * horizontal + Toolkit.getDefaultToolkit().getScreenSize().height / 8, cellXizeY * vertical));
+        setResizable(false);
+        fieldPanel.resizeField(fieldSizeX, fieldSizeY);
     }
 
     public FieldPanel getFieldPanel() {

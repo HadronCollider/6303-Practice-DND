@@ -15,6 +15,8 @@ public class FieldPanel extends JPanel {
     private Square[][] field;
     private int numberOfCorrectCells;
     private GameWindow window;
+    private boolean inProcess = false;
+    private boolean doubleMistake = false;
 
     public Game getGame() {
         return game;
@@ -70,11 +72,15 @@ public class FieldPanel extends JPanel {
                 window.getInfoPanel().getProgress().increase();
             } else {
                 window.getInfoPanel().getTimer().stop();
-
+                this.inProcess = false;
+                if(doubleMistake) {
+                    game.MistakesToLesson(Game.NumMistakeType.SECOND);
+                    startMistakeGame(false);
+                    return;
+                }
                 SwingUtilities.invokeLater(() -> {
                     ResultWindow resultWindow = new ResultWindow(this, game.getNumMistakes(), window.getInfoPanel().getTimer().getTextTime());
                     resultWindow.setVisible(true);
-
                 });
             }
         }
@@ -104,17 +110,16 @@ public class FieldPanel extends JPanel {
         displayField();
     }
 
-    public void setGame(Game game) {
-        this.game = game;
-    }
 
     public void startGame() {
         this.selected = null;
+
         JFileChooser fileDialog = new JFileChooser(System.getProperty("user.dir"));
         int approval = fileDialog.showOpenDialog(this);
         if(approval != JFileChooser.APPROVE_OPTION) {
             return;
         }
+        this.inProcess = true;
         if (window.getInfoPanel().getMixCheckBox().isSelected()) {
             game.setMixFlag(true);
         }
@@ -131,6 +136,7 @@ public class FieldPanel extends JPanel {
 
     public void continueGame(String filename) {
         this.selected = null;
+        this.inProcess = true;
         int timer = game.LoadProgress(filename);
         rows = game.getFieldSize().getVertical();
         columns = game.getFieldSize().getHorizontal();
@@ -148,7 +154,10 @@ public class FieldPanel extends JPanel {
         updateUI();
     }
 
-    public void startMistakeGame() {
+    public void startMistakeGame(boolean isDouble) {
+        this.doubleMistake = isDouble;
+        this.selected = null;
+        this.inProcess = true;
         window.getInfoPanel().startAll();
         window.getInfoPanel().getProgress().setNumberOfSteps(game.getNumberOfSteps());
         game.nextField();
@@ -170,4 +179,15 @@ public class FieldPanel extends JPanel {
         return window;
     }
 
+    void resizeField(int fieldSizeX, int fieldSizeY) {
+
+        this.rows = fieldSizeY;
+        this.columns = fieldSizeX;
+        removeAll();
+        init();
+    }
+
+    public boolean isInProcess() {
+        return inProcess;
+    }
 }
