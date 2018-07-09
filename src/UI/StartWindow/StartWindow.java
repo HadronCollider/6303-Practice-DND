@@ -19,8 +19,8 @@ public class StartWindow extends JFrame {
 
     public int tableSizeX = 6;
     public int tableSizeY = 6;
-    public int cellSizeX = 200;
-    public int cellSizeY = 100;
+    public int cellSizeX = 150;
+    public int cellSizeY = 75;
 
     private void init() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); //получаем разрешение экрана
@@ -98,7 +98,7 @@ public class StartWindow extends JFrame {
         c.ipadx = 20;
         gb.setConstraints(cellSizeFieldX, c);
         cellSizeFieldX.setFont(new Font("Verdana", Font.PLAIN, 20));
-        cellSizeFieldX.setText("0");
+        cellSizeFieldX.setText("150");
         cellSizeFieldX.setToolTipText("Укажите ширину ячейки");
         panel.add(cellSizeFieldX);
 
@@ -107,7 +107,7 @@ public class StartWindow extends JFrame {
         c.gridy = 2;
         gb.setConstraints(cellSizeFieldY, c);
         cellSizeFieldY.setFont(new Font("Verdana", Font.PLAIN, 20));
-        cellSizeFieldY.setText("0");
+        cellSizeFieldY.setText("75");
         cellSizeFieldY.setToolTipText("Укажите высоту ячейки");
         panel.add(cellSizeFieldY);
 
@@ -144,21 +144,20 @@ public class StartWindow extends JFrame {
         startButton.addActionListener(e -> {
             if (isNumeric(tableSizeFieldX.getText()) &&  isNumeric(tableSizeFieldY.getText())) {
                 tableSizeX = Integer.parseInt(tableSizeFieldX.getText());
-                //cellSizeX = Integer.parseInt(cellSizeFieldX.getText());
+                cellSizeX = Integer.parseInt(cellSizeFieldX.getText());
                 tableSizeY = Integer.parseInt(tableSizeFieldY.getText());
-                //cellSizeY = Integer.parseInt(cellSizeFieldY.getText());
+                cellSizeY = Integer.parseInt(cellSizeFieldY.getText());
                 SwingUtilities.invokeLater(() ->{
                     GameWindow gameWindow = new GameWindow(tableSizeY, tableSizeX, cellSizeX, cellSizeY);
                     gameWindow.setVisible(true);
-                    //gameWindow.startGame();
                 });
                 this.dispose();
             } else {
                 JOptionPane.showMessageDialog(null, "Введите корректные данные.", "Ошибка данных", JOptionPane.ERROR_MESSAGE, null);
                 tableSizeFieldX.setText("6");
                 tableSizeFieldY.setText("6");
-                cellSizeFieldX.setText("0");
-                cellSizeFieldY.setText("0");
+                cellSizeFieldX.setText("150");
+                cellSizeFieldY.setText("75");
             }
         });
 
