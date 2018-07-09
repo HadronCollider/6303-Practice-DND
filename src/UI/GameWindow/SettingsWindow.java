@@ -8,14 +8,10 @@ import static UI.StartWindow.StartWindow.isNumeric;
 public class SettingsWindow extends JFrame {
 
     private GameWindow window;
-    private int fieldSizeX, fieldSizeY, cellSizeX, cellSizeY;
 
     public SettingsWindow(GameWindow window, int fieldSizeX, int fieldSizeY, int cellSizeX, int cellSizeY) throws HeadlessException {
         this.window = window;
-        this.fieldSizeX = fieldSizeX;
-        this.fieldSizeY = fieldSizeY;
-        this.cellSizeX = cellSizeX;
-        this.cellSizeY = cellSizeY;
+
 
         GridBagLayout layout = new GridBagLayout();
         GridBagConstraints constraints = new GridBagConstraints();
@@ -47,13 +43,23 @@ public class SettingsWindow extends JFrame {
 
         JTextField tableSizeFieldX = new JTextField();
         tableSizeFieldX.setFont(font);
-        setMinimumSize(new Dimension(screenSize / 15, screenSize / 50));
+        tableSizeFieldX.setText(String.valueOf(fieldSizeX));
+        tableSizeFieldX.setToolTipText("Укажите ширину поля (>=3) ");
+
         JTextField cellSizeFieldX = new JTextField();
         cellSizeFieldX.setFont(font);
+        cellSizeFieldX.setText(String.valueOf(cellSizeX));
+        cellSizeFieldX.setToolTipText("Укажите ширину ячейки (>=0) ");
+
         JTextField tableSizeFieldY = new JTextField();
         tableSizeFieldY.setFont(font);
+        tableSizeFieldY.setText(String.valueOf(fieldSizeY));
+        tableSizeFieldY.setToolTipText("Укажите высоту поля (>=3) ");
+
         JTextField cellSizeFieldY = new JTextField();
         cellSizeFieldY.setFont(font);
+        cellSizeFieldY.setText(String.valueOf(cellSizeY));
+        cellSizeFieldY.setToolTipText("Укажите высоту ячейки (>=0) ");
 
 
         constraints.fill = GridBagConstraints.HORIZONTAL;
@@ -83,16 +89,18 @@ public class SettingsWindow extends JFrame {
                 int ncellSizeX = Integer.parseInt(cellSizeFieldX.getText());
                 int nfieldSizeY = Integer.parseInt(tableSizeFieldY.getText());
                 int ncellSizeY = Integer.parseInt(cellSizeFieldY.getText());
-                SwingUtilities.invokeLater(() -> {
-
-                });
+                if(nfieldSizeX < 3 || nfieldSizeY < 3 || cellSizeX <= 0 || cellSizeY <= 0) {
+                    JOptionPane.showMessageDialog(null, "Введите корректные данные.", "Ошибка данных", JOptionPane.ERROR_MESSAGE, null);
+                    return;
+                }
+                window.resize(nfieldSizeX, nfieldSizeY, ncellSizeX, ncellSizeY);
                 this.dispose();
             } else {
                 JOptionPane.showMessageDialog(null, "Введите корректные данные.", "Ошибка данных", JOptionPane.ERROR_MESSAGE, null);
-                tableSizeFieldX.setText("6");
-                tableSizeFieldY.setText("6");
-                cellSizeFieldX.setText("150");
-                cellSizeFieldY.setText("75");
+                tableSizeFieldX.setText(String.valueOf(fieldSizeX));
+                tableSizeFieldY.setText(String.valueOf(fieldSizeY));
+                cellSizeFieldX.setText(String.valueOf(cellSizeX));
+                cellSizeFieldY.setText(String.valueOf(cellSizeY));
             }
         });
 

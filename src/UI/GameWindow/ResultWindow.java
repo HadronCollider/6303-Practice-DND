@@ -59,11 +59,12 @@ public class ResultWindow extends JFrame {
 
             if(choice != 3) {
                 panel.getGame().MistakesToLesson(Game.NumMistakeType.values()[choice]);
-                panel.startMistakeGame();
-                dispose();
+                panel.startMistakeGame(false);
             } else {
-
+                panel.getGame().MistakesToLesson(Game.NumMistakeType.FIRST);
+                panel.startMistakeGame(true);
             }
+            dispose();
         });
 
         add(startMistakesGameButton, constraints);
