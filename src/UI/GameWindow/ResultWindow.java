@@ -1,5 +1,6 @@
 package UI.GameWindow;
 
+import Logic.DictionaryPair;
 import Logic.Game;
 
 import javax.swing.*;
@@ -7,6 +8,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.LinkedList;
 
 public class ResultWindow extends JFrame {
 
@@ -57,12 +59,25 @@ public class ResultWindow extends JFrame {
         startMistakesGameButton.addActionListener(e -> {
             int choice = displayChooseWindow();
 
-            if(choice != 3) {
-                panel.getGame().MistakesToLesson(Game.NumMistakeType.values()[choice]);
-                panel.startMistakeGame(false);
-            } else {
-                panel.getGame().MistakesToLesson(Game.NumMistakeType.FIRST);
-                panel.startMistakeGame(true);
+            switch (choice){
+                case 0:
+                    panel.getGame().MistakesToLesson(panel.getGame().getLessonMistakes1(), Game.NumMistakeType.values()[choice]);
+                    panel.startMistakeGame(false, null);
+                    break;
+                case 1:
+                    panel.getGame().MistakesToLesson(panel.getGame().getLessonMistakes2(), Game.NumMistakeType.values()[choice]);
+                    panel.startMistakeGame(false, null);
+                    break;
+                case 2:
+                    LinkedList<DictionaryPair> list = new LinkedList<>(panel.getGame().getLessonMistakes1());
+                    list.addAll(panel.getGame().getLessonMistakes2());
+                    panel.getGame().MistakesToLesson(list, Game.NumMistakeType.values()[choice]);
+                    panel.startMistakeGame(false, null);
+                    break;
+                default:
+                    panel.getGame().MistakesToLesson((LinkedList<DictionaryPair>) panel.getGame().getLessonMistakes1().clone(), Game.NumMistakeType.FIRST);
+                    panel.startMistakeGame(true, panel.getGame().getLessonMistakes2());
+                    break;
             }
             dispose();
         });

@@ -1,10 +1,12 @@
 package UI.GameWindow;
 
 import Logic.Cell;
+import Logic.DictionaryPair;
 import Logic.Game;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.LinkedList;
 
 public class FieldPanel extends JPanel {
 
@@ -17,6 +19,7 @@ public class FieldPanel extends JPanel {
     private GameWindow window;
     private boolean inProcess = false;
     private boolean doubleMistake = false;
+    private LinkedList <DictionaryPair> rightMistakeList;
 
     public Game getGame() {
         return game;
@@ -74,8 +77,8 @@ public class FieldPanel extends JPanel {
                 window.getInfoPanel().getTimer().stop();
                 this.inProcess = false;
                 if(doubleMistake) {
-                    game.MistakesToLesson(Game.NumMistakeType.SECOND);
-                    startMistakeGame(false);
+                    game.MistakesToLesson(rightMistakeList, Game.NumMistakeType.SECOND);
+                    startMistakeGame(false, null);
                     return;
                 }
                 SwingUtilities.invokeLater(() -> {
@@ -154,8 +157,9 @@ public class FieldPanel extends JPanel {
         updateUI();
     }
 
-    public void startMistakeGame(boolean isDouble) {
+    public void startMistakeGame(boolean isDouble, LinkedList <DictionaryPair> right) {
         this.doubleMistake = isDouble;
+        rightMistakeList = right;
         this.selected = null;
         this.inProcess = true;
         window.getInfoPanel().startAll();
