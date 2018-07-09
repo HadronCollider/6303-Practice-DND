@@ -31,7 +31,6 @@ public class FieldPanel extends JPanel {
     private void init() {
         setLayout(new GridLayout(rows, columns));
 
-
         field = new Square[rows][columns];
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
@@ -62,7 +61,7 @@ public class FieldPanel extends JPanel {
         } else {
             selected.setWrong();
             checked.setWrong();
-            window.getInfoPanel().getErrorCounter().setNumberOfMistakes(game.getNumMistakes());
+            window.getInfoPanel().getMistakeCounter().setNumberOfMistakes(game.getNumMistakes());
         }
         setSelected(null);
         if (numberOfCorrectCells == rows * columns) {
@@ -93,6 +92,7 @@ public class FieldPanel extends JPanel {
                     numberOfCorrectCells++;
                 }
                 field[i][j].setCell(cellField[i][j]);
+                field[i][j].updateUI();
             }
         }
     }
@@ -115,7 +115,9 @@ public class FieldPanel extends JPanel {
             game.setMixFlag(true);
         }
 
-        game.newLesson(fileDialog.getSelectedFile());
+        if(!game.newLesson(fileDialog.getSelectedFile())) {
+            return;
+        }
 
         window.getInfoPanel().startAll();
         window.getInfoPanel().getProgress().setNumberOfSteps(game.getNumberOfSteps());
@@ -124,18 +126,21 @@ public class FieldPanel extends JPanel {
     }
 
     public void continueGame(String filename) {
-        game.LoadProgress(filename);
+        int timer = game.LoadProgress(filename);
         rows = game.getFieldSize().getVertical();
         columns = game.getFieldSize().getHorizontal();
         removeAll();
         init();
         window.getInfoPanel().startAll();
-        window.getInfoPanel().getTimer().setTime(game.LoadProgress(filename));
+        window.getInfoPanel().getTimer().setTime(timer);
         window.getInfoPanel().getProgress().setNumberOfSteps(game.getNumberOfSteps());
-        window.getInfoPanel().getErrorCounter().setNumberOfMistakes(game.getNumMistakes());
+        window.getInfoPanel().getMistakeCounter().setNumberOfMistakes(game.getNumMistakes());
         window.getInfoPanel().getProgress().setCurrentStep(game.getNumOfCurStep());
-        game.nextField();
+        //game.nextField();
         displayField();
+
+        //undo();
+        updateUI();
     }
 
     public void startMistakeGame() {
@@ -150,7 +155,7 @@ public class FieldPanel extends JPanel {
         int numberBefore = game.getNumMistakes();
         game.undo();
         if(game.getNumMistakes() < numberBefore) {
-            window.getInfoPanel().getErrorCounter().setNumberOfMistakes(game.getNumMistakes());
+            window.getInfoPanel().getMistakeCounter().setNumberOfMistakes(game.getNumMistakes());
         } else {
             displayField();
         }

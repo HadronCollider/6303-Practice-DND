@@ -1,10 +1,12 @@
 package UI.GameWindow;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.FileFilter;
 
 public class GameWindow extends JFrame {
 
@@ -33,29 +35,37 @@ public class GameWindow extends JFrame {
         JMenuItem loadGameMenuItem = new JMenuItem("Продолжить игру");
         loadGameMenuItem.addActionListener(e -> {
             JFileChooser fileChooser = new JFileChooser();
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("Save files", "savepr");
+            fileChooser.addChoosableFileFilter(filter);
             int approval = fileChooser.showOpenDialog(null);
             if(approval != JFileChooser.APPROVE_OPTION) {
                 return;
             }
             continueGame(fileChooser.getCurrentDirectory() + File.separator + fileChooser.getSelectedFile().getName());
         });
-
         loadGameMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
+
         JMenuItem saveGameMenuItem = new JMenuItem("Coxранить игру");
         saveGameMenuItem.addActionListener(e -> {
             JFileChooser fileChooser = new JFileChooser();
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("Save files", "savepr");
+            fileChooser.addChoosableFileFilter(filter);
             int approval = fileChooser.showSaveDialog(null);
             if(approval != JFileChooser.APPROVE_OPTION) {
                 return;
             }
-            fieldPanel.getGame().SaveProgress(fileChooser.getCurrentDirectory() + File.separator + fileChooser.getSelectedFile().getName(), infoPanel.getTimer().getTime());
+            if(!fieldPanel.getGame().SaveProgress(fileChooser.getCurrentDirectory() + File.separator + fileChooser.getSelectedFile().getName(), infoPanel.getTimer().getTime())) {
+                JOptionPane.showMessageDialog(null, "Не удалось сохранить файл", "Ошибка", JOptionPane.ERROR_MESSAGE);
+            }
         });
-
         saveGameMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, InputEvent.CTRL_MASK));
+
         JMenuItem saveMistakesMenuItem = new JMenuItem("Сохранить ошибки");
         saveMistakesMenuItem.addActionListener(e -> {
 
             JFileChooser fileChooser = new JFileChooser();
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("Text files", "txt");
+            fileChooser.addChoosableFileFilter(filter);
             int approval = fileChooser.showSaveDialog(null);
             if(approval != JFileChooser.APPROVE_OPTION) {
                 return;
@@ -70,14 +80,14 @@ public class GameWindow extends JFrame {
         JMenuItem newGameMenuItem = new JMenuItem("Новая игра");
         newGameMenuItem.addActionListener(e -> startGame());
 
-        JMenuItem undoMenuItem = new JMenuItem("Отменить действие");
+        JMenuItem undoMenuItem = new JMenuItem("Отменить ход");
         undoMenuItem.addActionListener(e -> fieldPanel.undo());
 
         JMenuItem mixMenuItem = new JMenuItem("Перемешать");
         mixMenuItem.addActionListener(e -> fieldPanel.mixField());
 
         JMenuItem infoMenuItem = new JMenuItem("Об авторах");
-        infoMenuItem.addActionListener(e -> JOptionPane.showMessageDialog(null, "Ну тут шото о нас"));
+        infoMenuItem.addActionListener(e -> JOptionPane.showMessageDialog(null, "Игра создана студентами гр. 6303 СПбГЭТУ \"ЛЭТИ\": \n Иванов Д.В. \n Ваганов Н.А \n Ильяшук Д.И. \n 2018г."));
 
 
         gameMenu.add(newGameMenuItem);

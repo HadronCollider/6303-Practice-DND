@@ -7,7 +7,7 @@ import java.awt.*;
 public class InfoPanel extends JPanel {
     private GameWindow window;
     private InfoTimer timer;
-    private InfoMistakeCounter errorCounter;
+    private InfoMistakeCounter mistakeCounter;
     private InfoProgress progress;
     private JCheckBox mixCheckBox;
     private JButton undoButton;
@@ -40,8 +40,8 @@ public class InfoPanel extends JPanel {
         constraints.anchor = GridBagConstraints.PAGE_END;
         constraints.gridy++;
         constraints.weighty = 0.5;
-        errorCounter = new InfoMistakeCounter();
-        add(errorCounter, constraints);
+        mistakeCounter = new InfoMistakeCounter();
+        add(mistakeCounter, constraints);
 
         constraints.anchor = GridBagConstraints.PAGE_START;
         constraints.gridy++;
@@ -70,7 +70,7 @@ public class InfoPanel extends JPanel {
         add(mixButton, constraints);
 
         progress.setVisible(false);
-        errorCounter.setVisible(false);
+        mistakeCounter.setVisible(false);
         setMinimumSize(new Dimension(Toolkit.getDefaultToolkit().getScreenSize().height / 8, Toolkit.getDefaultToolkit().getScreenSize().height / 2));
     }
 
@@ -78,8 +78,8 @@ public class InfoPanel extends JPanel {
         return window;
     }
 
-    public InfoMistakeCounter getErrorCounter() {
-        return errorCounter;
+    public InfoMistakeCounter getMistakeCounter() {
+        return mistakeCounter;
     }
 
     public InfoProgress getProgress() {
@@ -94,8 +94,8 @@ public class InfoPanel extends JPanel {
         undoButton.setVisible(true);
         progress.setVisible(true);
         progress.setCurrentStep(1);
-        errorCounter.setNumberOfMistakes(0);
-        errorCounter.setVisible(true);
+        mistakeCounter.setNumberOfMistakes(0);
+        mistakeCounter.setVisible(true);
         timer.restart();
     }
 
