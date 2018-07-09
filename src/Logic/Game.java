@@ -166,49 +166,45 @@ public class Game {
      */
     public boolean nextField() {
         if (!NumElemOfMatrix.isEmpty()) {
-            if (!LoadFl) {
-                Field = new Cell[FieldSize.vertical][FieldSize.horizontal];
-                int NumElem = NumElemOfMatrix.getFirst();                       // необходимое кол-во пар в текущей матрице
-                int i = 0;
-                if (!OddFlagForDistribution) {
-                    for (int j = 0; j < Field.length / 2; j++) {
-                        for (int k = 0; k < Field[j].length; k++) {
-                            if (i < NumElem) {
-                                Cell first = new Cell(curLesson.Dictionary.get(offset + i), new Position(j, k), false);
-                                Cell second = new Cell(curLesson.Dictionary.get(offset + i), new Position(Field.length / 2 + j, k), true); // Для второй(парной) ячейки в матрице
-                                i++;
-                                Field[j][k] = first;
-                                Field[Field.length / 2 + j][k] = second;
-                            } else
-                                break;
-                        }
-                    }
-                } else {
-                    int j = 0;
-                    while (j < FieldSize.vertical * FieldSize.horizontal) {
-                        int row1 = j / FieldSize.horizontal;
-                        int column1 = j % FieldSize.horizontal;
-                        j++;
-                        int row2 = j / FieldSize.horizontal;
-                        int column2 = j % FieldSize.horizontal;
-                        j++;
+            Field = new Cell[FieldSize.vertical][FieldSize.horizontal];
+            int NumElem = NumElemOfMatrix.getFirst();                       // необходимое кол-во пар в текущей матрице
+            int i = 0;
+            if (!OddFlagForDistribution) {
+                for (int j = 0; j < Field.length / 2; j++) {
+                    for (int k = 0; k < Field[j].length; k++) {
                         if (i < NumElem) {
-                            Cell first = new Cell(curLesson.Dictionary.get(offset + i), new Position(row1, column1), false);
-                            Cell second = new Cell(curLesson.Dictionary.get(offset + i), new Position(row2, column2), true); // Для второй(парной) ячейки в матрице
+                            Cell first = new Cell(curLesson.Dictionary.get(offset + i), new Position(j, k), false);
+                            Cell second = new Cell(curLesson.Dictionary.get(offset + i), new Position(Field.length / 2 + j, k), true); // Для второй(парной) ячейки в матрице
                             i++;
-                            Field[row1][column1] = first;
-                            Field[row2][column2] = second;
+                            Field[j][k] = first;
+                            Field[Field.length / 2 + j][k] = second;
                         } else
                             break;
                     }
                 }
-                if (MixFlag)
-                    mixField();
-                offset = offset + NumElem;
-                return true;
             } else {
-                LoadFl = false;
+                int j = 0;
+                while (j < FieldSize.vertical * FieldSize.horizontal) {
+                    int row1 = j / FieldSize.horizontal;
+                    int column1 = j % FieldSize.horizontal;
+                    j++;
+                    int row2 = j / FieldSize.horizontal;
+                    int column2 = j % FieldSize.horizontal;
+                    j++;
+                    if (i < NumElem) {
+                        Cell first = new Cell(curLesson.Dictionary.get(offset + i), new Position(row1, column1), false);
+                        Cell second = new Cell(curLesson.Dictionary.get(offset + i), new Position(row2, column2), true); // Для второй(парной) ячейки в матрице
+                        i++;
+                        Field[row1][column1] = first;
+                        Field[row2][column2] = second;
+                    } else
+                        break;
+                }
             }
+            if (MixFlag)
+                mixField();
+            offset = offset + NumElem;
+            return true;
         }
         return false;
     }

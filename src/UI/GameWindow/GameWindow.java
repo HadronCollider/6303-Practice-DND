@@ -1,5 +1,7 @@
 package UI.GameWindow;
 
+import Logic.Game;
+
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
@@ -41,7 +43,14 @@ public class GameWindow extends JFrame {
             if(approval != JFileChooser.APPROVE_OPTION) {
                 return;
             }
-            continueGame(fileChooser.getCurrentDirectory() + File.separator + fileChooser.getSelectedFile().getName());
+            Game game = new Game(2, 2);
+            game.LoadProgress(fileChooser.getCurrentDirectory() + File.separator + fileChooser.getSelectedFile().getName());
+            if(game.getFieldSize().getHorizontal() == horizontal && game.getFieldSize().getVertical() == vertical) {
+                continueGame(fileChooser.getCurrentDirectory() + File.separator + fileChooser.getSelectedFile().getName());
+            } else {
+                JOptionPane.showMessageDialog(null, "Размер поля сохранения не совпадает с текущим.\nИзмените рамер поля на " + game.getFieldSize().getHorizontal() + " x " + game.getFieldSize().getVertical(), "Несоответсвие размера поля", JOptionPane.ERROR_MESSAGE);
+            }
+
         });
         loadGameMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_O, InputEvent.CTRL_MASK));
 
@@ -124,7 +133,7 @@ public class GameWindow extends JFrame {
         this.infoPanel = infoPanel;
         panel.add(infoPanel, gridBagConstraints);
         setContentPane(panel);
-        setMinimumSize(new Dimension(cellSizeX * vertical + Toolkit.getDefaultToolkit().getScreenSize().height / 8, cellXizeY * horizontal));
+        setMinimumSize(new Dimension(cellSizeX * horizontal + Toolkit.getDefaultToolkit().getScreenSize().height / 8, cellXizeY * vertical));
         setResizable(false);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setTitle("Угадайка");

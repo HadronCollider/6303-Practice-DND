@@ -47,6 +47,12 @@ class Lesson {
             JOptionPane.showMessageDialog(null, "Не удалось открыть файл словаря", "Ошибка открытия словаря", JOptionPane.ERROR_MESSAGE, null);
             return false;
         }
+        if (Dictionary.isEmpty())
+        {
+            // Сообщение о ненайденном файле
+            JOptionPane.showMessageDialog(null, "Пустой словарь", "Ошибка словаря словаря", JOptionPane.ERROR_MESSAGE, null);
+            return false;
+        }
         setLessonName(file.getName());
         return true;
     }
