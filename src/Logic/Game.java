@@ -279,25 +279,87 @@ public class Game {
         String NormalB2 = StrTransform.toNormalString(B.getSecond());
         return NormalA1.equals(NormalB1) || NormalA2.equals(NormalB2);
     }
-/*
-    private ArrayList<DictionaryPair> FindEntries(Cell first, Cell second)
+
+    private boolean FindEntries(Cell first, Cell second)
     {
-        ArrayList<DictionaryPair> array = new ArrayList<>();
-        for (int i = 0; i < curLesson.Dictionary.size(); i++)
+        ArrayList<String> left = new ArrayList<>();
+        ArrayList<String> right = new ArrayList<>();
+        String firstStr;
+        String secondStr;
+        boolean flag1 = false;
+        boolean flag2 = false;
+        if (first.getFlag())
         {
-            String firstStr = StrTransform.toNormalString(curLesson.Dictionary.get(i).getFirst());
-            String secondStr = StrTransform.toNormalString(curLesson.Dictionary.get(i).getSecond());
-            if (str.equals(firstStr) || str.equals(secondStr) || str2.equals(firstStr) || str2.equals(secondStr) )
+            // Если первая ячейка отображает правое слово
+            firstStr = StrTransform.toNormalString(first.getPair().getSecond());
+            secondStr = StrTransform.toNormalString(second.getPair().getFirst());
+            for (int i = 0; i < curLesson.Dictionary.size(); i++)
             {
-                array.add(curLesson.Dictionary.get(i));
+                String str1 = StrTransform.toNormalString(curLesson.Dictionary.get(i).getFirst());
+                String str2 = StrTransform.toNormalString(curLesson.Dictionary.get(i).getSecond());
+                if (firstStr.equals(str2))
+                {
+                    left.add(curLesson.Dictionary.get(i).getFirst());
+                }
+                if (secondStr.equals(str1))
+                {
+                    right.add(curLesson.Dictionary.get(i).getSecond());
+                }
+            }
+            for (String a: left)
+            {
+                if (a.equals(secondStr)) {
+                    flag1 = true;
+                    break;
+                }
+                flag1 = false;
+            }
+            for (String a: right)
+            {
+                if (a.equals(firstStr)) {
+                    flag2 = true;
+                    break;
+                }
+                flag2 = false;
             }
         }
-        boolean f = 0;
-        for (int i = 0; i < array.size(); i++)
+        else
         {
-            if ()
+            // Если первая ячейка отображает левое слово
+            firstStr = StrTransform.toNormalString(first.getPair().getFirst());
+            secondStr = StrTransform.toNormalString(second.getPair().getSecond());
+            for (int i = 0; i < curLesson.Dictionary.size(); i++)
+            {
+                String str1 = StrTransform.toNormalString(curLesson.Dictionary.get(i).getFirst());
+                String str2 = StrTransform.toNormalString(curLesson.Dictionary.get(i).getSecond());
+                if (firstStr.equals(str1))
+                {
+                    right.add(curLesson.Dictionary.get(i).getSecond());
+                }
+                if (secondStr.equals(str2))
+                {
+                    left.add(curLesson.Dictionary.get(i).getFirst());
+                }
+            }
+            for (String a: left)
+            {
+                if (a.equals(firstStr)) {
+                    flag1 = true;
+                    break;
+                }
+                flag1 = false;
+            }
+            for (String a: right)
+            {
+                if (a.equals(secondStr)) {
+                    flag2 = true;
+                    break;
+                }
+                flag2 = false;
+            }
         }
-    }*/
+        return flag1 && flag2;
+    }
 
     /**
      * Отмена последнего хода
