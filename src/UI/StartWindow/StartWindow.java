@@ -181,7 +181,7 @@ public class StartWindow extends JFrame {
         });
 
         exitButton.addActionListener(e -> this.dispose());
-        setTitle("Kana");
+        setTitle("Угадайка");
 
         Image image = Toolkit.getDefaultToolkit().createImage( getClass().getResource("icon.png") );
         setIconImage( image );

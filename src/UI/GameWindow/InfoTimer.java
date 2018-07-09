@@ -10,7 +10,7 @@ public class InfoTimer extends JLabel {
     private Timer timer;
 
     public InfoTimer() {
-        setFont(new Font("Arial", Font.BOLD, 30));
+        setFont(new Font("Arial", Font.BOLD, Toolkit.getDefaultToolkit().getScreenSize().height / 36));
         timer = new Timer(1000, e -> increase());
         display();
     }

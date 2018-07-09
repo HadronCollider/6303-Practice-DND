@@ -92,7 +92,6 @@ public class FieldPanel extends JPanel {
                     numberOfCorrectCells++;
                 }
                 field[i][j].setCell(cellField[i][j]);
-                field[i][j].updateUI();
             }
         }
     }
@@ -129,8 +128,8 @@ public class FieldPanel extends JPanel {
         int timer = game.LoadProgress(filename);
         rows = game.getFieldSize().getVertical();
         columns = game.getFieldSize().getHorizontal();
-        removeAll();
-        init();
+        //removeAll();
+        //init();
         window.getInfoPanel().startAll();
         window.getInfoPanel().getTimer().setTime(timer);
         window.getInfoPanel().getProgress().setNumberOfSteps(game.getNumberOfSteps());

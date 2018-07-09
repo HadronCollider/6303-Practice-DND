@@ -57,6 +57,8 @@ public class Square extends JButton {
         } else {
             setBackground(Color.WHITE);
         }
+        updateUI();
+        update(getGraphics());
     }
 
 
