@@ -182,6 +182,7 @@ public class StartWindow extends JFrame {
 
         exitButton.addActionListener(e -> this.dispose());
         setTitle("Угадайка");
+        setLocationRelativeTo(null);
 
         Image image = Toolkit.getDefaultToolkit().createImage( getClass().getResource("icon.png") );
         setIconImage( image );
