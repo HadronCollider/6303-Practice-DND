@@ -10,7 +10,7 @@ public class InfoProgress extends JLabel {
 
     public InfoProgress() {
         currentStep = 1;
-        setFont(new Font("Arial", Font.BOLD, 20));
+        setFont(new Font("Arial", Font.BOLD, Toolkit.getDefaultToolkit().getScreenSize().height / 50));
         display();
     }
 

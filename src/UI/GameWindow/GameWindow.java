@@ -127,7 +127,7 @@ public class GameWindow extends JFrame {
         setMinimumSize(new Dimension(cellSizeX * vertical + Toolkit.getDefaultToolkit().getScreenSize().height / 8, cellXizeY * horizontal));
         setResizable(false);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Kana");
+        setTitle("Угадайка");
         Image image = Toolkit.getDefaultToolkit().createImage( getClass().getResource("/UI/StartWindow/icon.png") );
         setIconImage( image );
         setLocationRelativeTo(null);

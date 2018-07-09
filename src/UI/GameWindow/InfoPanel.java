@@ -48,7 +48,7 @@ public class InfoPanel extends JPanel {
         constraints.weighty = 0.5;
         undoButton = new JButton("Отменить ход");
         undoButton.setVisible(false);
-        undoButton.setFont(new Font("Arial", Font.BOLD, 15));
+        undoButton.setFont(new Font("Arial", Font.BOLD, Toolkit.getDefaultToolkit().getScreenSize().height / 70));
         undoButton.addActionListener(e -> undo());
         add(undoButton, constraints);
 
@@ -58,14 +58,14 @@ public class InfoPanel extends JPanel {
         constraints.weighty = 0.5;
         JCheckBox mixCheckBox = new JCheckBox("Перемешивать");
         this.mixCheckBox = mixCheckBox;
-        mixCheckBox.setFont(new Font("Arial", Font.BOLD ,13));
+        mixCheckBox.setFont(new Font("Arial", Font.BOLD ,Toolkit.getDefaultToolkit().getScreenSize().height / 83));
         add(mixCheckBox, constraints);
 
 
         constraints.gridy++;
         constraints.weighty = 0;
         JButton mixButton = new JButton("Перемешать");
-        mixButton.setFont(new Font("Arial", Font.BOLD, 15));
+        mixButton.setFont(new Font("Arial", Font.BOLD, Toolkit.getDefaultToolkit().getScreenSize().height / 72));
         mixButton.addActionListener(e -> getWindow().getFieldPanel().mixField());
         add(mixButton, constraints);
 
