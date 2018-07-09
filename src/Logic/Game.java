@@ -24,7 +24,6 @@ public class Game {
     private Move LastMove;                                         // Последный ход
     private boolean MixFlag;                                       // Флаг перемешивания (при загрузке этапа)
     private boolean OddFlagForDistribution;                        // Флаг "плохого" размера поля (нечетная вертикаль)
-    private boolean LoadFl;
 
     public Game(int vertical, int horizontal) {
         setSize(vertical, horizontal);
@@ -244,7 +243,7 @@ public class Game {
     public boolean compareCell(Position a, Position b) {
         DictionaryPair first = Field[a.vertical][a.horizontal].getPair();
         DictionaryPair second = Field[b.vertical][b.horizontal].getPair();
-        boolean compareFlag = comparePair(first, second);
+        boolean compareFlag = isCompatible(Field[a.vertical][a.horizontal], Field[b.vertical][b.horizontal]);
         setLastMove(new Move(Field[a.vertical][a.horizontal], Field[b.vertical][b.horizontal]));
         if (compareFlag) {
             Field[a.vertical][a.horizontal] = null;
@@ -266,91 +265,69 @@ public class Game {
     }
 
     /**
-     * Сравнение поданных пар
+     * Проверяет совместимость ячеек
      *
-     * @param A - первая пара
-     * @param B - вторая пара
-     * @return - true - если пары совместимы
+     * @param first  - первая ячейка
+     * @param second - вторая ячейка
+     * @return - true - если совместимы
      */
-    private boolean comparePair(DictionaryPair A, DictionaryPair B) {
-        String NormalA1 = StrTransform.toNormalString(A.getFirst());
-        String NormalA2 = StrTransform.toNormalString(A.getSecond());
-        String NormalB1 = StrTransform.toNormalString(B.getFirst());
-        String NormalB2 = StrTransform.toNormalString(B.getSecond());
-        return NormalA1.equals(NormalB1) || NormalA2.equals(NormalB2);
-    }
-
-    private boolean FindEntries(Cell first, Cell second)
-    {
+    private boolean isCompatible(Cell first, Cell second) {
         ArrayList<String> left = new ArrayList<>();
         ArrayList<String> right = new ArrayList<>();
         String firstStr;
         String secondStr;
         boolean flag1 = false;
         boolean flag2 = false;
-        if (first.getFlag())
-        {
+        if (first.getFlag()) {
             // Если первая ячейка отображает правое слово
             firstStr = StrTransform.toNormalString(first.getPair().getSecond());
             secondStr = StrTransform.toNormalString(second.getPair().getFirst());
-            for (int i = 0; i < curLesson.Dictionary.size(); i++)
-            {
+            for (int i = 0; i < curLesson.Dictionary.size(); i++) {
                 String str1 = StrTransform.toNormalString(curLesson.Dictionary.get(i).getFirst());
                 String str2 = StrTransform.toNormalString(curLesson.Dictionary.get(i).getSecond());
-                if (firstStr.equals(str2))
-                {
-                    left.add(curLesson.Dictionary.get(i).getFirst());
+                if (firstStr.equals(str2)) {
+                    left.add(str1);
                 }
-                if (secondStr.equals(str1))
-                {
-                    right.add(curLesson.Dictionary.get(i).getSecond());
+                if (secondStr.equals(str1)) {
+                    right.add(str2);
                 }
             }
-            for (String a: left)
-            {
+            for (String a : left) {
                 if (a.equals(secondStr)) {
                     flag1 = true;
                     break;
                 }
                 flag1 = false;
             }
-            for (String a: right)
-            {
+            for (String a : right) {
                 if (a.equals(firstStr)) {
                     flag2 = true;
                     break;
                 }
                 flag2 = false;
             }
-        }
-        else
-        {
+        } else {
             // Если первая ячейка отображает левое слово
             firstStr = StrTransform.toNormalString(first.getPair().getFirst());
             secondStr = StrTransform.toNormalString(second.getPair().getSecond());
-            for (int i = 0; i < curLesson.Dictionary.size(); i++)
-            {
+            for (int i = 0; i < curLesson.Dictionary.size(); i++) {
                 String str1 = StrTransform.toNormalString(curLesson.Dictionary.get(i).getFirst());
                 String str2 = StrTransform.toNormalString(curLesson.Dictionary.get(i).getSecond());
-                if (firstStr.equals(str1))
-                {
-                    right.add(curLesson.Dictionary.get(i).getSecond());
+                if (firstStr.equals(str1)) {
+                    right.add(str2);
                 }
-                if (secondStr.equals(str2))
-                {
-                    left.add(curLesson.Dictionary.get(i).getFirst());
+                if (secondStr.equals(str2)) {
+                    left.add(str1);
                 }
             }
-            for (String a: left)
-            {
+            for (String a : left) {
                 if (a.equals(firstStr)) {
                     flag1 = true;
                     break;
                 }
                 flag1 = false;
             }
-            for (String a: right)
-            {
+            for (String a : right) {
                 if (a.equals(secondStr)) {
                     flag2 = true;
                     break;
@@ -372,7 +349,7 @@ public class Game {
             Position s = LastMove.second.getPosition();
             Field[f.vertical][f.horizontal] = LastMove.first;
             Field[s.vertical][s.horizontal] = LastMove.second;
-            if (comparePair(LastMove.first.getPair(), LastMove.second.getPair())) {
+            if (isCompatible(LastMove.first, LastMove.second)) {
                 NumCorrectAnsw--;
             } else {
                 LessonMistakes1.removeLast();
@@ -574,7 +551,6 @@ public class Game {
             load.nextLine();
             for (int i = 0; i < NumAllMistakes; i++)                         // Загрузка второго списка ошибок
                 LessonMistakes2.add(curLesson.Dictionary.get(load.nextInt()));
-            LoadFl = true;
         } catch (IOException | InputMismatchException e) {
             return -1;
         }
