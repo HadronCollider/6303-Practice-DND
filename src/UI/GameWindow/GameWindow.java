@@ -36,7 +36,7 @@ public class GameWindow extends JFrame {
         JMenu gameMenu = new JMenu("Игра");
         JMenuItem loadGameMenuItem = new JMenuItem("Продолжить игру");
         loadGameMenuItem.addActionListener(e -> {
-            JFileChooser fileChooser = new JFileChooser();
+            JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir"));
             FileNameExtensionFilter filter = new FileNameExtensionFilter("Save files", "savepr");
             fileChooser.addChoosableFileFilter(filter);
             int approval = fileChooser.showOpenDialog(null);
@@ -56,7 +56,7 @@ public class GameWindow extends JFrame {
 
         JMenuItem saveGameMenuItem = new JMenuItem("Coxранить игру");
         saveGameMenuItem.addActionListener(e -> {
-            JFileChooser fileChooser = new JFileChooser();
+            JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir"));
             FileNameExtensionFilter filter = new FileNameExtensionFilter("Save files", "savepr");
             fileChooser.addChoosableFileFilter(filter);
             int approval = fileChooser.showSaveDialog(null);
@@ -72,7 +72,7 @@ public class GameWindow extends JFrame {
         JMenuItem saveMistakesMenuItem = new JMenuItem("Сохранить ошибки");
         saveMistakesMenuItem.addActionListener(e -> {
 
-            JFileChooser fileChooser = new JFileChooser();
+            JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir"));
             FileNameExtensionFilter filter = new FileNameExtensionFilter("Text files", "txt");
             fileChooser.addChoosableFileFilter(filter);
             int approval = fileChooser.showSaveDialog(null);
@@ -98,10 +98,19 @@ public class GameWindow extends JFrame {
         JMenuItem infoMenuItem = new JMenuItem("Об авторах");
         infoMenuItem.addActionListener(e -> JOptionPane.showMessageDialog(null, "Игра создана студентами гр. 6303 СПбГЭТУ \"ЛЭТИ\": \n Иванов Д.В. \n Ваганов Н.А \n Ильяшук Д.И. \n 2018г."));
 
+        JMenuItem settingsMenuItem = new JMenuItem("Настройки");
+        settingsMenuItem.addActionListener(e -> {
+            SwingUtilities.invokeLater(() -> {
+                SettingsWindow settingsWindow = new SettingsWindow(this, horizontal, vertical, cellSizeX, cellXizeY);
+                settingsWindow.setVisible(true);
+            });
+        });
+
 
         gameMenu.add(newGameMenuItem);
         gameMenu.add(loadGameMenuItem);
         gameMenu.add(saveGameMenuItem);
+        gameMenu.add(settingsMenuItem);
         gameMenu.addSeparator();
         gameMenu.add(saveMistakesMenuItem);
         gameMenu.add(undoMenuItem);

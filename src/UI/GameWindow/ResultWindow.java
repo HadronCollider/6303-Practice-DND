@@ -57,10 +57,13 @@ public class ResultWindow extends JFrame {
         startMistakesGameButton.addActionListener(e -> {
             int choice = displayChooseWindow();
 
-            panel.getGame().MistakesToLesson(Game.NumMistakeType.values()[choice]);
+            if(choice != 3) {
+                panel.getGame().MistakesToLesson(Game.NumMistakeType.values()[choice]);
+                panel.startMistakeGame();
+                dispose();
+            } else {
 
-            panel.startMistakeGame();
-            dispose();
+            }
         });
 
         add(startMistakesGameButton, constraints);
@@ -86,7 +89,7 @@ public class ResultWindow extends JFrame {
     }
 
     private int displayChooseWindow() {
-        Object[] options = {"Левый список", "Правый список", "Оба списка"};
+        Object[] options = {"Левый список", "Правый список", "Оба списка сразу", "Оба списка по очереди"};
         String ret = (String)JOptionPane.showInputDialog(panel.getWindow(), "Какой список ошибок запускать?", "Выбор", JOptionPane.PLAIN_MESSAGE, null, options, options[0]);
         return Arrays.asList(options).indexOf(ret);
 
