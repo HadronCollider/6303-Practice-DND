@@ -4,11 +4,7 @@ import javax.swing.*;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Random;
-import java.util.Scanner;
-import java.util.InputMismatchException;
+import java.util.*;
 
 public class Game {
     private Cell[][] Field;                                        // Поле
@@ -51,13 +47,6 @@ public class Game {
     }
 
     /**
-     * @return - количество совершенных ошибок за этап
-     */
-    public int getLocalMistakes() {
-        return localMistakes;
-    }
-
-    /**
      * @return - количество совершенных ошибок за урок
      */
     public int getNumMistakes() {
@@ -65,10 +54,17 @@ public class Game {
     }
 
     /**
-     * @return - список распределений пар по этапам
+     * @return - список пар левых ошибок
      */
-    public LinkedList<Integer> getNumElemOfMatrix() {
-        return NumElemOfMatrix;
+    public LinkedList<DictionaryPair> getLessonMistakes1() {
+        return LessonMistakes1;
+    }
+
+    /**
+     * @return - список пар правых ошибок
+     */
+    public LinkedList<DictionaryPair> getLessonMistakes2() {
+        return LessonMistakes2;
     }
 
     /**
@@ -394,34 +390,29 @@ public class Game {
     }
 
     /**
-     * Создание урока из совершенных ошибок
-     *
-     * @param numType - загружаемый список ошибок
+     * Создает урок из поданного списка
+     * @param list - список для создания урока
+     * @param numType - тип списка
      */
-    public void MistakesToLesson(NumMistakeType numType) {
+    public void MistakesToLesson(LinkedList<DictionaryPair> list, NumMistakeType numType) {
         StringBuilder build = new StringBuilder();
         build.append(curLesson.getLessonName());
         build.setLength(build.length() - 4);
-        LinkedList<DictionaryPair> LList = null;
         switch (numType) {
             case FIRST: {
                 build.append("(err1).txt");
-                LList = new LinkedList<>(LessonMistakes1);
                 break;
             }
             case SECOND: {
                 build.append("(err2).txt");
-                LList = new LinkedList<>(LessonMistakes2);
                 break;
             }
             case BOTH: {
                 build.append("(allerr).txt");
-                LList = new LinkedList<>(LessonMistakes1);
-                LList.addAll(LessonMistakes2);
                 break;
             }
         }
-        curLesson.LessonFromList(LList, build.toString());
+        curLesson.LessonFromList(list, build.toString());
         prepareLesson();
     }
 
