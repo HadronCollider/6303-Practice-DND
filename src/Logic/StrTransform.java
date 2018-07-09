@@ -187,8 +187,8 @@ public class StrTransform {
                     c.insets = new Insets(0, 0, 0, 0);
                     c.ipadx = 0;
                     c.ipady = 0;
-                    c.weightx = 1.0;
-                    c.weighty = 1.0;
+                    c.weightx = 0.0;
+                    c.weighty = 0.0;
                     gb.setConstraints(label, c);
                     button.add(label);
                     j++;
@@ -204,8 +204,8 @@ public class StrTransform {
                 c.insets = new Insets(0, 0, 0, 0);
                 c.ipadx = 0;
                 c.ipady = 0;
-                c.weightx = 1.0;
-                c.weighty = 1.0;
+                c.weightx = 0.0;
+                c.weighty = 0.0;
                 gb.setConstraints(labels.get(0), c);
                 button.add(labels.get(0));
                 c.gridwidth = 1;

@@ -143,10 +143,15 @@ public class StartWindow extends JFrame {
 
         startButton.addActionListener(e -> {
             if (isNumeric(tableSizeFieldX.getText()) &&  isNumeric(tableSizeFieldY.getText())) {
+
                 tableSizeX = Integer.parseInt(tableSizeFieldX.getText());
                 cellSizeX = Integer.parseInt(cellSizeFieldX.getText());
                 tableSizeY = Integer.parseInt(tableSizeFieldY.getText());
                 cellSizeY = Integer.parseInt(cellSizeFieldY.getText());
+                if(tableSizeX < 3 || tableSizeY < 3 || cellSizeX <= 0 || cellSizeY <= 0) {
+                    JOptionPane.showMessageDialog(null, "Введите корректные данные.", "Ошибка данных", JOptionPane.ERROR_MESSAGE, null);
+                    return;
+                }
                 SwingUtilities.invokeLater(() ->{
                     GameWindow gameWindow = new GameWindow(tableSizeY, tableSizeX, cellSizeX, cellSizeY);
                     gameWindow.setVisible(true);
