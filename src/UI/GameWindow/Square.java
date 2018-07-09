@@ -62,8 +62,6 @@ public class Square extends JButton {
 
     private void init() {
         setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2));
-        setDoubleBuffered(true);
-
         addMouseListener(new MouseListener() {
             @Override
             public void mouseClicked(MouseEvent e) {

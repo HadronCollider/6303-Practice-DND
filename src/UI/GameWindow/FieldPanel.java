@@ -40,7 +40,6 @@ public class FieldPanel extends JPanel {
                 field[i][j] = square;
             }
         }
-        setMinimumSize(new Dimension(400, 300));
     }
 
     public boolean isSelectedExists() {
@@ -117,7 +116,6 @@ public class FieldPanel extends JPanel {
         }
 
         game.newLesson(fileDialog.getSelectedFile());
-
 
         window.getInfoPanel().startAll();
         window.getInfoPanel().getProgress().setNumberOfSteps(game.getNumberOfSteps());
