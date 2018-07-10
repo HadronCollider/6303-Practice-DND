@@ -143,13 +143,13 @@ public class StrTransform {
         for (int i = 0; i < formattedWords.size(); i++) {
             Font font;
             switch (formattedWords.get(i).sizeMode){
-                case 1: font = new Font("APJapanesefont", Font.PLAIN, (int) ((double)1/6 * height));break;
-                case 2: font = new Font("APJapanesefont", Font.PLAIN, (int) ((double)2/6 * height));break;
-                case 3: font = new Font("APJapanesefont", Font.PLAIN, (int) ((double)3/6 * height));break;
-                case 4: font = new Font("APJapanesefont", Font.PLAIN, (int) ((double)4/6 * height));break;
-                case 5: font = new Font("APJapanesefont", Font.PLAIN, (int) ((double)5/6 * height));break;
-                case 6: font = new Font("APJapanesefont", Font.PLAIN, height);break;
-                default: font = new Font("APJapanesefont", Font.PLAIN, height);break;
+                case 1: font = new Font("MingLiU", Font.PLAIN, (int) ((double)1/6 * height));break;
+                case 2: font = new Font("MingLiU", Font.PLAIN, (int) ((double)2/6 * height));break;
+                case 3: font = new Font("MingLiU", Font.PLAIN, (int) ((double)3/6 * height));break;
+                case 4: font = new Font("MingLiU", Font.PLAIN, (int) ((double)4/6 * height));break;
+                case 5: font = new Font("MingLiU", Font.PLAIN, (int) ((double)5/6 * height));break;
+                case 6: font = new Font("MingLiU", Font.PLAIN, height);break;
+                default: font = new Font("MingLiU", Font.PLAIN, height);break;
             }
             JLabel label = new JLabel(formattedWords.get(i).text);
             label.setVerticalAlignment(SwingConstants.BOTTOM);
