@@ -363,7 +363,7 @@ public class Game {
     public void SaveMistakes(String fileName) {
         if (curLesson != null) {
             StringBuilder build = new StringBuilder();
-            build.append(fileName);
+            build.append(fileName + "-");
             build.append(curLesson.getLessonName());
             build.setLength(build.length() - 4);
             try {
@@ -372,7 +372,6 @@ public class Game {
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(null, "Не удалось сохранить ошибки", "Ошибка сохранения ошибок", JOptionPane.ERROR_MESSAGE, null);
             }
-
         }
     }
 

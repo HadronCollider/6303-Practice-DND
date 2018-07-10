@@ -254,7 +254,7 @@ class word {
             case 'г': color = new Color(0,184,217); break;
             case 'с': color = new Color(0,0,255); break;
             case 'ф': color = new Color(148,0,211); break;
-            case 'е': color = new Color(71,74,81); break;
+            case 'е': color = new Color(138,138,138); break;
             default: color = new Color(0,0,0); break;
         }
     }
