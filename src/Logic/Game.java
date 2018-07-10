@@ -236,9 +236,9 @@ public class Game {
      * @return - true - если ячейки совместимы
      */
     public boolean compareCell(Position a, Position b) {
-        DictionaryPair first = Field[a.vertical][a.horizontal].getPair();
-        DictionaryPair second = Field[b.vertical][b.horizontal].getPair();
-        boolean compareFlag = isCompatible(Field[a.vertical][a.horizontal], Field[b.vertical][b.horizontal]);
+        Cell first = Field[a.vertical][a.horizontal];
+        Cell second = Field[b.vertical][b.horizontal];
+        boolean compareFlag = isCompatible(first, second);
         setLastMove(new Move(Field[a.vertical][a.horizontal], Field[b.vertical][b.horizontal]));
         if (compareFlag) {
             Field[a.vertical][a.horizontal] = null;
@@ -253,8 +253,16 @@ public class Game {
             }
         } else {
             localMistakes++;
-            LessonMistakes1.addLast(first);
-            LessonMistakes2.addLast(second);
+            if (first.getFlag())
+            {
+                LessonMistakes1.addLast(second.getPair());
+                LessonMistakes2.addLast(first.getPair());
+            }
+            else
+            {
+                LessonMistakes1.addLast(first.getPair());
+                LessonMistakes2.addLast(second.getPair());
+            }
         }
         return compareFlag;
     }
