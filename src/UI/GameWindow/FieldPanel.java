@@ -5,7 +5,9 @@ import Logic.DictionaryPair;
 import Logic.Game;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
+import java.io.File;
 import java.util.LinkedList;
 
 public class FieldPanel extends JPanel {
@@ -77,6 +79,28 @@ public class FieldPanel extends JPanel {
                 window.getInfoPanel().getTimer().stop();
                 this.inProcess = false;
                 if(doubleMistake) {
+                    if(game.getNumMistakes() > 0) {
+
+                        Object[] options = {"Сохранить ошибки и продолжитть",
+                                "Продолжить без сохранения"};
+                        int n = JOptionPane.showOptionDialog(window,
+                                "Первый список ошибок пройден!",
+                                "Ошибки",
+                                JOptionPane.YES_NO_CANCEL_OPTION,
+                                JOptionPane.QUESTION_MESSAGE,
+                                null,
+                                options,
+                                options[1]);
+                        if(n == 0) {
+                            JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir"));
+                            FileNameExtensionFilter filter = new FileNameExtensionFilter("Text files", "txt");
+                            fileChooser.addChoosableFileFilter(filter);
+                            int approval = fileChooser.showSaveDialog(null);
+                            if(approval == JFileChooser.APPROVE_OPTION) {
+                                game.SaveMistakes(fileChooser.getCurrentDirectory() + File.separator + fileChooser.getSelectedFile().getName());
+                            }
+                        }
+                    }
                     game.MistakesToLesson(rightMistakeList, Game.NumMistakeType.SECOND);
                     startMistakeGame(false, null);
                     return;
@@ -187,6 +211,7 @@ public class FieldPanel extends JPanel {
 
         this.rows = fieldSizeY;
         this.columns = fieldSizeX;
+        this.game = new Game(rows, columns);
         removeAll();
         init();
     }
