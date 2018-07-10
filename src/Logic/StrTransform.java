@@ -13,7 +13,7 @@ public class StrTransform {
     private static int height;
 
     public static void transform(Square button, String input, int squareHeight) {
-        height = (int)(squareHeight * 0.9);
+        height = (int)(squareHeight * 0.8);
         toFormattedString(input);
         createButtons(button);
         formattedWords.clear();
