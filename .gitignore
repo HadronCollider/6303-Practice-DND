@@ -10,3 +10,4 @@ Kana.iml
 *.txt
 *.savepr
 src/Logic/Game.java
+src/META-INF/MANIFEST.MF

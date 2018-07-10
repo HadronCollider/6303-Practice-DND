@@ -371,7 +371,6 @@ public class Game {
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(null, "Не удалось сохранить ошибки", "Ошибка сохранения ошибок", JOptionPane.ERROR_MESSAGE, null);
             }
-
         }
     }
 
