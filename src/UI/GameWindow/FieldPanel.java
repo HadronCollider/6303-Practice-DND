@@ -244,13 +244,6 @@ public class FieldPanel extends JPanel {
     }
 
     public void redraw() {
-        /*for (int i = 0; i < field.length; i++) {
-            for (int j = 0; j < field[i].length; j++) {
-                field[i][j].redraw();
-            }
-
-        }
-        window.getInfoPanel().getMistakeCounter().setNumberOfMistakes(game.getNumMistakes());*/
         removeAll();
         field = new Square[rows][columns];
         for (int i = 0; i < rows; i++) {
@@ -260,9 +253,6 @@ public class FieldPanel extends JPanel {
                 field[i][j] = square;
             }
         }
-        Move move = new Move(game.getLastMove());
-        undo();
-        game.setLastMove(move);
         displayField();
         updateUI();
     }
@@ -283,9 +273,8 @@ public class FieldPanel extends JPanel {
         inProcess = false;
         doubleMistake = false;
         rightMistakeList = null;
-        undo();
-        init();
         displayField();
+        init();
         updateUI();
     }
 }
