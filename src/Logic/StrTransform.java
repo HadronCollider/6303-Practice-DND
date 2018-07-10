@@ -67,7 +67,10 @@ public class StrTransform {
         }
     }
 
+    static Color defColor;
     public static String toFormattedString(String inputString){
+        Color black = new Color(0,0,0);
+        defColor = new Color(0,0,0);
         inputString += ' ';
         char[] input = inputString.toCharArray();
         String output="";
@@ -78,7 +81,7 @@ public class StrTransform {
             if (lastPushedSymb == '\\'){
                 if (bufferWord == null || bufferWord.isUsed) {
                     bufferWord = new word();
-                    bufferWord.setColor('ж');
+                    bufferWord.setColor(defColor);
                 }
                 formatSwitch(input[i]);
 
@@ -100,6 +103,16 @@ public class StrTransform {
                         }
                     }
                     else bufferWord.sizeMode = 6;
+
+//                    if (formattedWords.size() != 0) {
+//                        for (int j = formattedWords.size()-1; j >= 0; j--) {
+//                            if (formattedWords.get(j).color != black) {
+//                                bufferWord.color = formattedWords.get(j).color;
+//                                break;
+//                            }
+//                        }
+//                    }
+//                    else bufferWord.color = new Color(0,0,0);
                 }
                 bufferWord.text = text;
                 text = "" ;
@@ -264,8 +277,13 @@ class word {
             case 'ф': color = new Color(148,0,211); break;
             case 'е': color = new Color(138,138,138); break;
             case 'к': color = new Color(138,0,0); break;
-            default: color = new Color(0,0,0); break;
+         //   default: color = new Color(0,0,0); break;
         }
+        StrTransform.defColor = color;
+    }
+
+    public void setColor (Color col){
+        color = col;
     }
 
 }

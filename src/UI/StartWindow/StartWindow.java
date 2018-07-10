@@ -44,7 +44,7 @@ public class StartWindow extends JFrame {
         c.gridwidth = 3;
         c.gridx = 0;
         c.gridy = 0;
-        c.insets = new Insets(10, 10, 5, 10);
+        c.insets = new Insets(10, 5, 5, 0);
         c.ipadx = 0;
         c.ipady = 0;
         c.weightx = 0.0;
@@ -71,6 +71,7 @@ public class StartWindow extends JFrame {
         c.gridwidth = 1;
         c.gridx = 1;
         c.gridy = 1;
+        c.ipadx = 0;
         gb.setConstraints(tableSizeFieldX, c);
         tableSizeFieldX.setFont(new Font("Verdana", Font.PLAIN, 20));
         tableSizeFieldX.setText("6");
