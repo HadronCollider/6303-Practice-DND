@@ -42,7 +42,7 @@ public class ResultWindow extends JFrame {
         JButton saveMistakesButton = new JButton("Сохранить ошибки");
 
         saveMistakesButton.addActionListener(e -> {
-            JFileChooser fileChooser = new JFileChooser();
+            JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir"));
             int approval = fileChooser.showSaveDialog(this);
 
             if(approval != JFileChooser.APPROVE_OPTION) {
@@ -75,8 +75,9 @@ public class ResultWindow extends JFrame {
                     panel.startMistakeGame(false, null);
                     break;
                 default:
-                    panel.getGame().MistakesToLesson((LinkedList<DictionaryPair>) panel.getGame().getLessonMistakes1().clone(), Game.NumMistakeType.FIRST);
-                    panel.startMistakeGame(true, panel.getGame().getLessonMistakes2());
+                    LinkedList<DictionaryPair> list2 = (LinkedList<DictionaryPair>) panel.getGame().getLessonMistakes2().clone();
+                    panel.getGame().MistakesToLesson(panel.getGame().getLessonMistakes1(), Game.NumMistakeType.FIRST);
+                    panel.startMistakeGame(true, list2);
                     break;
             }
             dispose();
