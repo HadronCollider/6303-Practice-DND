@@ -151,18 +151,22 @@ public class StrTransform {
                 default: font = new Font("APJapanesefont", Font.PLAIN, height);break;
             }
             JLabel label = new JLabel(formattedWords.get(i).text);
+            label.setVerticalAlignment(SwingConstants.BOTTOM);
             label.setFont(font);
             if (formattedWords.get(i).color == null)
                 label.setForeground(new Color(0,0,0));
             else
                 label.setForeground(formattedWords.get(i).color);
             //labels.add(label);
+           // c.anchor = GridBagConstraints.CENTER;
             if (formattedWords.get(i).hasLineBreak){
                 vertical++;
                 horizontal = 0;
+                //label.setHorizontalAlignment(SwingConstants.LEFT);
+
             }
-            c.anchor = GridBagConstraints.NORTH;
-            c.fill = GridBagConstraints.HORIZONTAL;
+            c.anchor = GridBagConstraints.WEST;
+            c.fill = GridBagConstraints.NONE;
             c.gridheight = 1;
             c.gridwidth = 1;
             c.gridx = horizontal;
@@ -171,11 +175,7 @@ public class StrTransform {
             c.ipadx = 0;
             c.ipady = 0;
             c.weightx = 0.0;
-            c.weighty = 0.0;
-            button.setAlignmentX(0.5f);
-            button.setAlignmentY(0.5f);
-            label.setAlignmentX(0.5f);
-            label.setAlignmentY(0.5f);
+            c.weighty = 1;
             gb.setConstraints(label, c);
             button.add(label);
             horizontal++;
