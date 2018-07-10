@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.Random;
 import java.util.Scanner;
 
-class Lesson {
+public class Lesson {
     ArrayList<DictionaryPair> Dictionary;
     private String LessonName;
 
@@ -61,7 +61,7 @@ class Lesson {
         LessonName = lessonName;
     }
 
-    String getLessonName() {
+    public String getLessonName() {
         return LessonName;
     }
 

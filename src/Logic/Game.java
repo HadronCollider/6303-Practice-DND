@@ -75,12 +75,17 @@ public class Game {
         MixFlag = mixFlag;
     }
 
+    public Move getLastMove() {
+        return LastMove;
+    }
+
     /**
      * Сеттер последнего хода
      *
      * @param lastMove - последний ход
      */
-    private void setLastMove(Move lastMove) {
+    public void setLastMove(Move lastMove) {
+
         LastMove = lastMove;
     }
 
@@ -388,9 +393,14 @@ public class Game {
         }
     }
 
+    public Lesson getCurLesson() {
+        return curLesson;
+    }
+
     /**
      * Создает урок из поданного списка
      * @param list - список для создания урока
+
      * @param numType - тип списка
      */
     public void MistakesToLesson(LinkedList<DictionaryPair> list, NumMistakeType numType) {

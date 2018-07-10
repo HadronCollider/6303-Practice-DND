@@ -3,6 +3,7 @@ package UI.GameWindow;
 import Logic.Cell;
 import Logic.DictionaryPair;
 import Logic.Game;
+import Logic.Move;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -96,12 +97,34 @@ public class FieldPanel extends JPanel {
                                 options,
                                 options[1]);
                         if(n == 0) {
-                            JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir"));
-                            FileNameExtensionFilter filter = new FileNameExtensionFilter("Text files", "txt");
-                            fileChooser.addChoosableFileFilter(filter);
-                            int approval = fileChooser.showSaveDialog(null);
-                            if(approval == JFileChooser.APPROVE_OPTION) {
-                                game.SaveMistakes(fileChooser.getCurrentDirectory() + File.separator + fileChooser.getSelectedFile().getName());
+                            JFileChooser fileChooser;
+                            while (true) {
+                                fileChooser = new JFileChooser(System.getProperty("user.dir"));
+                                FileNameExtensionFilter filter = new FileNameExtensionFilter("Text files", "txt");
+                                fileChooser.addChoosableFileFilter(filter);
+                                int approval = fileChooser.showSaveDialog(null);
+                                if (approval != JFileChooser.APPROVE_OPTION) {
+                                    return;
+                                }
+                                File file1 = new File(fileChooser.getCurrentDirectory() + File.separator + fileChooser.getSelectedFile().getName() + "-" + getGame().getCurLesson().getLessonName().subSequence(0, getGame().getCurLesson().getLessonName().length() - 4) + "(err1).txt");
+                                File file2 = new File(fileChooser.getCurrentDirectory() + File.separator + fileChooser.getSelectedFile().getName() + "-" + getGame().getCurLesson().getLessonName().subSequence(0, getGame().getCurLesson().getLessonName().length() - 4) + "(err2).txt");
+                                if (file1.exists() || file2.exists()) {
+                                    Object[] options1 = {"Да",
+                                            "Нет"};
+                                    int n2 = JOptionPane.showOptionDialog(this,
+                                            "Вы действительно хотите перезаписать файлы?",
+                                            "Подтверждение",
+                                            JOptionPane.YES_NO_CANCEL_OPTION,
+                                            JOptionPane.QUESTION_MESSAGE,
+                                            null,
+                                            options1,
+                                            options1[1]);
+                                    if(n2 == 0) {
+                                        break;
+                                    }
+                                }
+                                else
+                                    break;
                             }
                         }
                     }
@@ -220,7 +243,49 @@ public class FieldPanel extends JPanel {
         init();
     }
 
+    public void redraw() {
+        /*for (int i = 0; i < field.length; i++) {
+            for (int j = 0; j < field[i].length; j++) {
+                field[i][j].redraw();
+            }
+
+        }
+        window.getInfoPanel().getMistakeCounter().setNumberOfMistakes(game.getNumMistakes());*/
+        removeAll();
+        field = new Square[rows][columns];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                Square square = new Square(this, null);
+                add(square);
+                field[i][j] = square;
+            }
+        }
+        Move move = new Move(game.getLastMove());
+        undo();
+        game.setLastMove(move);
+        displayField();
+        updateUI();
+    }
+
     public boolean isInProcess() {
         return inProcess;
+    }
+
+    public void stopGame() {
+        if(!inProcess) {
+            return;
+        }
+        removeAll();
+        setSelected(null);
+        window.getInfoPanel().getTimer().stop();
+        game = new Game(rows, columns);
+        numberOfCorrectCells = 0;
+        inProcess = false;
+        doubleMistake = false;
+        rightMistakeList = null;
+        undo();
+        init();
+        displayField();
+        updateUI();
     }
 }

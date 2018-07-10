@@ -72,16 +72,37 @@ public class GameWindow extends JFrame {
 
         JMenuItem saveMistakesMenuItem = new JMenuItem("Сохранить ошибки");
         saveMistakesMenuItem.addActionListener(e -> {
+            JFileChooser fileChooser;
+            while (true) {
+                fileChooser = new JFileChooser(System.getProperty("user.dir"));
+                FileNameExtensionFilter filter = new FileNameExtensionFilter("Text files", "txt");
+                fileChooser.addChoosableFileFilter(filter);
+                int approval = fileChooser.showSaveDialog(null);
+                if (approval != JFileChooser.APPROVE_OPTION) {
+                    return;
+                }
+                File file1 = new File(fileChooser.getCurrentDirectory() + File.separator + fileChooser.getSelectedFile().getName() + "-" + fieldPanel.getGame().getCurLesson().getLessonName().subSequence(0, fieldPanel.getGame().getCurLesson().getLessonName().length() - 4) + "(err1).txt");
+                File file2 = new File(fileChooser.getCurrentDirectory() + File.separator + fileChooser.getSelectedFile().getName() + "-" + fieldPanel.getGame().getCurLesson().getLessonName().subSequence(0, fieldPanel.getGame().getCurLesson().getLessonName().length() - 4) + "(err2).txt");
+                if (file1.exists() || file2.exists()) {
+                    Object[] options = {"Да",
+                            "Нет"};
+                    int n = JOptionPane.showOptionDialog(this,
+                            "Вы действительно хотите перезаписать файлы?",
+                            "Подтверждение",
+                            JOptionPane.YES_NO_CANCEL_OPTION,
+                            JOptionPane.QUESTION_MESSAGE,
+                            null,
+                            options,
+                            options[1]);
+                    if(n == 0) {
+                        break;
+                    }
 
-            JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir"));
-            FileNameExtensionFilter filter = new FileNameExtensionFilter("Text files", "txt");
-            fileChooser.addChoosableFileFilter(filter);
-            int approval = fileChooser.showSaveDialog(null);
-            if(approval != JFileChooser.APPROVE_OPTION) {
-                return;
+                }
+                else
+                    break;
             }
             fieldPanel.getGame().SaveMistakes(fileChooser.getCurrentDirectory() + File.separator + fileChooser.getSelectedFile().getName());
-
         });
 
         JMenuItem exitMenuItem = new JMenuItem("Выйти");
@@ -95,6 +116,24 @@ public class GameWindow extends JFrame {
 
         JMenuItem mixMenuItem = new JMenuItem("Перемешать");
         mixMenuItem.addActionListener(e -> fieldPanel.mixField());
+
+        JMenuItem stopGameMenuItem = new JMenuItem("Прервать игру");
+        stopGameMenuItem.addActionListener(e -> {
+            Object[] options = {"Да",
+                    "Отмена"};
+            int n = JOptionPane.showOptionDialog(this,
+                    "Вы действительно хотите прервать игру?",
+                    "Подтверждение",
+                    JOptionPane.YES_NO_CANCEL_OPTION,
+                    JOptionPane.QUESTION_MESSAGE,
+                    null,
+                    options,
+                    options[1]);
+            if(n == 0) {
+                stopGame();
+            }
+
+        });
 
         JMenuItem infoMenuItem = new JMenuItem("Об авторах");
         infoMenuItem.addActionListener(e -> JOptionPane.showMessageDialog(null, "Игра создана студентами гр. 6303 СПбГЭТУ \"ЛЭТИ\": \n Иванов Д.В. \n Ваганов Н.А \n Ильяшук Д.И. \n 2018г."));
@@ -115,6 +154,7 @@ public class GameWindow extends JFrame {
         gameMenu.add(saveMistakesMenuItem);
         gameMenu.add(undoMenuItem);
         gameMenu.add(mixMenuItem);
+        gameMenu.add(stopGameMenuItem);
         gameMenu.addSeparator();
         gameMenu.add(exitMenuItem);
 
@@ -152,10 +192,12 @@ public class GameWindow extends JFrame {
     }
 
     void resize(int fieldSizeX, int fieldSizeY, int cellSizeX, int cellSizeY) {
-        if(fieldPanel.isInProcess()) {
+        boolean fieldSizeChanged = (vertical != fieldSizeY || horizontal != fieldSizeX);
+        if(fieldPanel.isInProcess() && fieldSizeChanged) {
             JOptionPane.showMessageDialog(null, "Нельзя изменить параметры размер поля пока идет игра!", "Ошибка", JOptionPane.ERROR_MESSAGE, null);
             return;
         }
+
         this.vertical = fieldSizeY;
         this.horizontal = fieldSizeX;
         this.cellSizeX = cellSizeX;
@@ -165,7 +207,10 @@ public class GameWindow extends JFrame {
 
         setSize(new Dimension(cellSizeX * horizontal + Toolkit.getDefaultToolkit().getScreenSize().height / 8, cellXizeY * vertical));
         setResizable(false);
-        fieldPanel.resizeField(fieldSizeX, fieldSizeY);
+        if(fieldSizeChanged) {
+            fieldPanel.resizeField(fieldSizeX, fieldSizeY);
+        }
+        fieldPanel.redraw();
     }
 
     public FieldPanel getFieldPanel() {
@@ -174,6 +219,9 @@ public class GameWindow extends JFrame {
 
     public void startGame() {
         fieldPanel.startGame();
+    }
+    private void stopGame() {
+        fieldPanel.stopGame();
     }
 
     public void continueGame(String filename) {

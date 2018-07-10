@@ -20,6 +20,7 @@ public class Square extends JButton {
     private FieldPanel parent;
     private Position position;
     private Timer timer;
+    private Cell cell = null;
 
 
     public Square(FieldPanel parent, Cell cell) {
@@ -29,6 +30,7 @@ public class Square extends JButton {
     }
 
     public void setCell(Cell cell) {
+        this.cell = cell;
         this.removeAll();
         if(cell != null) {
             this.position = cell.getPosition();
@@ -49,14 +51,18 @@ public class Square extends JButton {
     }
 
 
-    private void redraw() {
+    void redraw() {
+        removeAll();
         if(type == SquareType.FINAL) {
             setBackground(new Color(34, 139, 34));
         } else if(type == SquareType.LEFT){
             setBackground(new Color(150, 238, 238));
+            StrTransform.transform(this, cell.getPair().getFirst(), getHeight());
         } else {
             setBackground(Color.WHITE);
+            StrTransform.transform(this, cell.getPair().getSecond(), (int)(getHeight() * 0.9));
         }
+
         updateUI();
         update(getGraphics());
     }

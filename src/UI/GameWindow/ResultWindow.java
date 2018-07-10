@@ -4,6 +4,7 @@ import Logic.DictionaryPair;
 import Logic.Game;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -42,11 +43,34 @@ public class ResultWindow extends JFrame {
         JButton saveMistakesButton = new JButton("Сохранить ошибки");
 
         saveMistakesButton.addActionListener(e -> {
-            JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir"));
-            int approval = fileChooser.showSaveDialog(this);
-
-            if(approval != JFileChooser.APPROVE_OPTION) {
-                return;
+            JFileChooser fileChooser;
+            while (true) {
+                fileChooser = new JFileChooser(System.getProperty("user.dir"));
+                FileNameExtensionFilter filter = new FileNameExtensionFilter("Text files", "txt");
+                fileChooser.addChoosableFileFilter(filter);
+                int approval = fileChooser.showSaveDialog(null);
+                if (approval != JFileChooser.APPROVE_OPTION) {
+                    return;
+                }
+                File file1 = new File(fileChooser.getCurrentDirectory() + File.separator + fileChooser.getSelectedFile().getName() + "-" + panel.getGame().getCurLesson().getLessonName().subSequence(0, panel.getGame().getCurLesson().getLessonName().length() - 4) + "(err1).txt");
+                File file2 = new File(fileChooser.getCurrentDirectory() + File.separator + fileChooser.getSelectedFile().getName() + "-" + panel.getGame().getCurLesson().getLessonName().subSequence(0, panel.getGame().getCurLesson().getLessonName().length() - 4) + "(err2).txt");
+                if (file1.exists() || file2.exists()) {
+                    Object[] options = {"Да",
+                            "Нет"};
+                    int n = JOptionPane.showOptionDialog(this,
+                            "Вы действительно хотите перезаписать файлы?",
+                            "Подтверждение",
+                            JOptionPane.YES_NO_CANCEL_OPTION,
+                            JOptionPane.QUESTION_MESSAGE,
+                            null,
+                            options,
+                            options[1]);
+                    if(n == 0) {
+                        break;
+                    }
+                }
+                else
+                    break;
             }
             panel.getGame().SaveMistakes(fileChooser.getCurrentDirectory() + File.separator + fileChooser.getSelectedFile().getName());
 

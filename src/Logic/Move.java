@@ -2,7 +2,7 @@ package Logic;
 
 import java.util.Scanner;
 
-class Move {
+public class Move {
     Cell first;
     Cell second;
 
@@ -12,5 +12,10 @@ class Move {
     Move(Cell a, Cell b) {
         first = a;
         second = b;
+    }
+
+    public Move(Move a) {
+        first = a.first;
+        second = a.second;
     }
 }
