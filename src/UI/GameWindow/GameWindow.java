@@ -1,6 +1,7 @@
 package UI.GameWindow;
 
 import Logic.Game;
+import Logic.StrTransform;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -141,8 +142,24 @@ public class GameWindow extends JFrame {
         JMenuItem settingsMenuItem = new JMenuItem("Настройки");
         settingsMenuItem.addActionListener(e -> {
             SwingUtilities.invokeLater(() -> {
-                SettingsWindow settingsWindow = new SettingsWindow(this, horizontal, vertical, cellSizeX, cellXizeY);
-                settingsWindow.setVisible(true);
+                if(fieldPanel.isInProcess()) {
+                    JOptionPane.showMessageDialog(null, "Нельзя изменить параметры размер поля/ячейки пока идет игра!", "Ошибка", JOptionPane.ERROR_MESSAGE, null);
+                }
+                else {
+                    SettingsWindow settingsWindow = new SettingsWindow(this, horizontal, vertical, cellSizeX, cellXizeY);
+                    settingsWindow.setVisible(true);
+                }
+            });
+        });
+
+        JMenuItem fontMenuItem = new JMenuItem("Задать шрифт");
+        fontMenuItem.addActionListener(e -> {
+            SwingUtilities.invokeLater(() -> {
+                if(fieldPanel.isInProcess()) {
+                    JOptionPane.showMessageDialog(null, "Нельзя изменить шрифт пока идет игра!", "Ошибка", JOptionPane.ERROR_MESSAGE, null);
+                }
+                else
+                    StrTransform.setFontName(JOptionPane.showInputDialog("Введите название шрифта"));
             });
         });
 
@@ -150,6 +167,7 @@ public class GameWindow extends JFrame {
         gameMenu.add(loadGameMenuItem);
         gameMenu.add(saveGameMenuItem);
         gameMenu.add(settingsMenuItem);
+        gameMenu.add(fontMenuItem);
         gameMenu.addSeparator();
         gameMenu.add(saveMistakesMenuItem);
         gameMenu.add(undoMenuItem);
@@ -193,10 +211,10 @@ public class GameWindow extends JFrame {
 
     void resize(int fieldSizeX, int fieldSizeY, int cellSizeX, int cellSizeY) {
         boolean fieldSizeChanged = (vertical != fieldSizeY || horizontal != fieldSizeX);
-        if(fieldPanel.isInProcess() && fieldSizeChanged) {
-            JOptionPane.showMessageDialog(null, "Нельзя изменить параметры размер поля пока идет игра!", "Ошибка", JOptionPane.ERROR_MESSAGE, null);
-            return;
-        }
+//        if(fieldPanel.isInProcess() && fieldSizeChanged) {
+//            JOptionPane.showMessageDialog(null, "Нельзя изменить параметры размер поля пока идет игра!", "Ошибка", JOptionPane.ERROR_MESSAGE, null);
+//            return;
+//        }
 
         this.vertical = fieldSizeY;
         this.horizontal = fieldSizeX;

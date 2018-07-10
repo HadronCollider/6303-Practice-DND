@@ -11,6 +11,11 @@ import javax.swing.*;
 public class StrTransform {
 
     private static int height;
+    private static String fontName;
+
+    public static void setFontName(String fontName) {
+        StrTransform.fontName = fontName;
+    }
 
     public static void transform(Square button, String input, int squareHeight) {
         System.setProperty("file.encoding", "UTF-8");
@@ -28,7 +33,7 @@ public class StrTransform {
             if (lastPushedSymb == '\\'){
                 switch (input[i]) {
                     case '1': case '2': case '3': case '4': case '5': case '6':
-                    case 'р': case 'о': case 'з': case 'г': case 'с': case 'ф': case 'ч': case 'е':
+                    case 'р': case 'о': case 'з': case 'г': case 'с': case 'ф': case 'ч': case 'е': case 'к':
                     case '\\':
                        // if (i != 1 && input[i+1] != '\\')
                             //output += '';
@@ -56,7 +61,7 @@ public class StrTransform {
             case '4': bufferWord.sizeMode = 4;break;
             case '5': bufferWord.sizeMode = 5;break;
             case '6': bufferWord.sizeMode = 6;break;
-            case 'р': case 'о': case 'з': case 'г': case 'с': case 'ф': case 'ч': case 'е':
+            case 'р': case 'о': case 'з': case 'г': case 'с': case 'ф': case 'ч': case 'е': case 'к':
                 bufferWord.setColor(c); break;
             case '\\': bufferWord.hasLineBreak = true; break;
         }
@@ -143,14 +148,16 @@ public class StrTransform {
         for (int i = 0; i < formattedWords.size(); i++) {
             Font font;
             switch (formattedWords.get(i).sizeMode){
-                case 1: font = new Font("MingLiU", Font.PLAIN, (int) ((double)1/6 * height));break;
-                case 2: font = new Font("MingLiU", Font.PLAIN, (int) ((double)2/6 * height));break;
-                case 3: font = new Font("MingLiU", Font.PLAIN, (int) ((double)3/6 * height));break;
-                case 4: font = new Font("MingLiU", Font.PLAIN, (int) ((double)4/6 * height));break;
-                case 5: font = new Font("MingLiU", Font.PLAIN, (int) ((double)5/6 * height));break;
-                case 6: font = new Font("MingLiU", Font.PLAIN, height);break;
-                default: font = new Font("MingLiU", Font.PLAIN, height);break;
+                case 1: font = new Font(fontName, Font.PLAIN, (int) ((double)1/6 * height));break;
+                case 2: font = new Font(fontName, Font.PLAIN, (int) ((double)2/6 * height));break;
+                case 3: font = new Font(fontName, Font.PLAIN, (int) ((double)3/6 * height));break;
+                case 4: font = new Font(fontName, Font.PLAIN, (int) ((double)4/6 * height));break;
+                case 5: font = new Font(fontName, Font.PLAIN, (int) ((double)5/6 * height));break;
+                case 6: font = new Font(fontName, Font.PLAIN, height);break;
+                default: font = new Font(fontName, Font.PLAIN, height);break;
             }
+            //java.awt.Font[family=Dialog,name=Default,style=plain,size=23]
+            //java.awt.Font[family=Arial,name=Arial,style=plain,size=23]
             JLabel label = new JLabel(formattedWords.get(i).text);
             label.setVerticalAlignment(SwingConstants.BOTTOM);
             label.setFont(font);
@@ -224,7 +231,7 @@ public class StrTransform {
             if (lastPushedSymb == '\\'){
                 switch (input[i]){
                     case '1': case '2': case '3': case '4': case '5': case '6':
-                    case 'р': case 'о': case 'з': case 'г': case 'с': case 'ф': case 'ч': case 'е':
+                    case 'р': case 'о': case 'з': case 'г': case 'с': case 'ф': case 'ч': case 'е': case 'к':
                     case '\\':
                         lastPushedSymb = ' ';
                         continue;
@@ -256,6 +263,7 @@ class word {
             case 'с': color = new Color(0,0,255); break;
             case 'ф': color = new Color(148,0,211); break;
             case 'е': color = new Color(138,138,138); break;
+            case 'к': color = new Color(138,0,0); break;
             default: color = new Color(0,0,0); break;
         }
     }
