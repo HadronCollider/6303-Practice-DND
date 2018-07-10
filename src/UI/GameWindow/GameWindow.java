@@ -31,6 +31,7 @@ public class GameWindow extends JFrame {
     }
 
     private void setMenuBars() {
+        System.setProperty("file.encoding", "UTF-8");
         JMenuBar menuBar = new JMenuBar();
         JMenu infoMenu = new JMenu("Справка");
         JMenu gameMenu = new JMenu("Игра");

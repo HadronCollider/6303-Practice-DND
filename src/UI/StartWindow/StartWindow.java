@@ -23,6 +23,7 @@ public class StartWindow extends JFrame {
     public int cellSizeY = 75;
 
     private void init() {
+        System.setProperty("file.encoding", "UTF-8");
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize(); //получаем разрешение экрана
         JButton startButton = new JButton("Начать игру");
         JButton continueButton = new JButton("Продолжить игру");

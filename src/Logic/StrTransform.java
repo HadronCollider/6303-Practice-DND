@@ -13,6 +13,7 @@ public class StrTransform {
     private static int height;
 
     public static void transform(Square button, String input, int squareHeight) {
+        System.setProperty("file.encoding", "UTF-8");
         height = (int)(squareHeight * 0.8);
         toFormattedString(input);
         createButtons(button);

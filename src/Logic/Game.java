@@ -1,9 +1,8 @@
 package Logic;
 
 import javax.swing.*;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class Game {
@@ -363,7 +362,7 @@ public class Game {
     public void SaveMistakes(String fileName) {
         if (curLesson != null) {
             StringBuilder build = new StringBuilder();
-            build.append(fileName);
+            build.append(fileName + "-");
             build.append(curLesson.getLessonName());
             build.setLength(build.length() - 4);
             try {
@@ -382,7 +381,8 @@ public class Game {
      */
     private void MistakesToFile(LinkedList<DictionaryPair> a, String fileName) throws IOException {
         if (a != null) {
-            try (FileWriter out = new FileWriter(fileName)) {
+            //BufferedWriter out = null;
+            try(Writer out = new OutputStreamWriter(new FileOutputStream(fileName), StandardCharsets.UTF_8)) {
                 for (DictionaryPair err : a)
                     out.write(err.getFirst() + "\t" + err.getSecond() + "\n");
             }
@@ -428,7 +428,7 @@ public class Game {
      */
     public boolean SaveProgress(String fileName, int TimeSec) {
         String saveName = fileName + ".savepr";
-        try (FileWriter save = new FileWriter(saveName)) {
+        try(Writer save = new OutputStreamWriter(new FileOutputStream(saveName), StandardCharsets.UTF_8)) {
             save.write(curLesson.getLessonName() + "\n");                   // Название урока
             save.write(curLesson.Dictionary.size() + " " + offset + "\n");      // Кол-во слов словаря, смещение в словаре
             for (int i = 0; i < curLesson.Dictionary.size(); i++)          // Пары словарь
@@ -475,7 +475,7 @@ public class Game {
      * @param save - FileWriter
      * @throws IOException - Input/Output Exception
      */
-    private void SaveLastMove(FileWriter save) throws IOException {
+    private void SaveLastMove(Writer save) throws IOException {
         if (LastMove != null) {
             Cell cell = LastMove.first;
             if (cell.getFlag())
@@ -499,7 +499,7 @@ public class Game {
      */
     public int LoadProgress(String fileName) {
         int TimeSec;
-        try (Scanner load = new Scanner(new File(fileName))) {
+        try (Scanner load = new Scanner(new File(fileName), "UTF-8")) {
             curLesson = new Lesson();
             curLesson.setLessonName(load.nextLine());               // Название урока
             curLesson.Dictionary = new ArrayList<>();

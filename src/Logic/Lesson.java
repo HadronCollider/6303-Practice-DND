@@ -19,7 +19,7 @@ class Lesson {
      * @return - удачная инициализация - true
      */
     boolean Init(File file) {
-        try (Scanner scanner = new Scanner(file)) {
+        try (Scanner scanner = new Scanner(file, "UTF-8")) {
             Dictionary = new ArrayList<>();
             while (scanner.hasNext()) {
                 DictionaryPair pair = DictionaryPair.readPair(scanner);

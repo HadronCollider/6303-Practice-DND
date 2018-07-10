@@ -36,6 +36,7 @@ public class FieldPanel extends JPanel {
     }
 
     private void init() {
+        System.setProperty("file.encoding", "UTF-8");
         setLayout(new GridLayout(rows, columns));
 
         field = new Square[rows][columns];
