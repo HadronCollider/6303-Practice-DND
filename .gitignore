@@ -1,4 +1,10 @@
+/data
 
 /out
+
 /.idea
-Kana.iml
+
+*.iml
+*.txt
+*.savepr
+src/META-INF/MANIFEST.MF
