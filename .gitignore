@@ -4,7 +4,16 @@
 
 /.idea
 
+<<<<<<< HEAD
 *.iml
 *.txt
 *.savepr
+=======
+Kana.iml
+
+*.iml
+*.txt
+*.savepr
+src/Logic/Game.java
+>>>>>>> dev
 src/META-INF/MANIFEST.MF
